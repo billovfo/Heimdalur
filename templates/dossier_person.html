@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+
+{% block title %}Due Diligence Dossier: {{ entity.display_name }} — Heimdal{% endblock %}
+
+{% block main %}
+<div class="dossier-container">
+  {{ m.report_header(entity, generated_at, 'HEIMDAL DUE DILIGENCE DOSSIER') }}
+  {# T3.3: primær fund-summary → eksport-actions → sektioner → appendiks #}
+  {{ m.report_summary_line(
+       m.pluralize(outgoing.rows|length, 'registreret direkte ejerskab', 'registrerede direkte ejerskaber')
+       ~ ' · ' ~ m.pluralize(roles.STJORN|length + roles.NEVND|length, 'registreret rolle', 'registrerede roller')
+       ~ ' · ' ~ m.pluralize(control.registrations|length, 'kontrolregistrering', 'kontrolregistreringer')) }}
+
+  <div class="dossier-actions no-print flex-between align-center mb-6">
+    <div>
+      <a href="/persons/{{ entity.canonical_entity_id }}" class="btn btn-outline">← Tilbage til personprofil</a>
+    </div>
+    <div class="flex gap-2">
+      <button type="button" class="btn btn-primary" data-action="print"><svg class="icon-inline" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-printer"></use></svg> Udskriv Dossier (Print/PDF)</button>
+    </div>
+  </div>
+
+  <div class="stats-grid mt-4">
+    <div class="stat-card">
+      <div class="stat-label">Entitetstype</div>
+      <div class="stat-value text-base">Person</div>
+    </div>
+      <div class="stat-card">
+        <div class="stat-label">Entitetstype</div>
+        <div class="stat-value text-base">Person</div>
+      </div>
+    <div class="stat-card">
+      <div class="stat-label">Direkte ejerskab</div>
+      <div class="stat-value text-base">{{ m.pluralize(outgoing.rows|length, 'selskab', 'selskaber') }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Roller</div>
+      <div class="stat-value text-base">{{ m.pluralize(roles.STJORN|length + roles.NEVND|length, 'post', 'poster') }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Kontrolregistreringer</div>
+      <div class="stat-value text-base">{{ m.pluralize(control.registrations|length, 'selskab', 'selskaber') }}</div>
+    </div>
+  </div>
+  <div class="card mb-6" style="border-left: 3px solid var(--warning); background: rgba(245, 158, 11, 0.06); padding: 0.85rem 1.25rem;">
+    <div class="text-sm">
+      <strong>Kildeforbehold (Skráseting Føroya):</strong> Skráseting Føroya har selv oplyst, at det færøske selskabsregisters IT-system fortsat er under opbygning og ikke er færdigudviklet. Nedenstående besiddelser og roller afspejler kildens aktuelle snapshot og kan være ufuldstændige.
+    </div>
+  </div>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>1. Direkte ejerskab</h2>
+    </div>
+    <div class="card-body">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Virksomhed</th>
+            <th>Ejerandel</th>
+            <th>Kildens registrering</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in outgoing.rows %}
+          <tr>
+            <td>
+              <a href="/companies/{{ r.owned_id }}" class="entity-link entity-company"><strong>{{ r.owned_name }}</strong></a>
+            </td>
+            <td class="font-mono">
+              {% if r.parsed_percentage %}{{ r.parsed_percentage|pct }} %{% else %}<span class="text-muted">—</span>{% endif %}
+            </td>
+            <td class="text-sm text-muted">{{ r.raw_percentage_label }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="text-center text-muted">Ingen direkte selskabsbesiddelser registreret.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>2. Roller i virksomheder</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <h3 class="font-bold text-sm mb-2">Ledelse</h3>
+          <ul class="list-disc pl-5">
+            {% for r in roles.STJORN %}
+              <li><a href="/companies/{{ r.company_id }}">{{ r.company_name }}</a> — <span class="text-muted">{{ r.canonical_role_label|product_role }}</span></li>
+            {% else %}
+              <li class="text-muted">Ingen ledelsesposter.</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-sm mb-2">Bestyrelse</h3>
+          <ul class="list-disc pl-5">
+            {% for r in roles.NEVND %}
+              <li><a href="/companies/{{ r.company_id }}">{{ r.company_name }}</a> — <span class="text-muted">{{ r.canonical_role_label|product_role }}</span></li>
+            {% else %}
+              <li class="text-muted">Ingen bestyrelsesposter.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>3. Registreret som reel ejer / kontrolaktør</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-disc pl-5">
+        {% for reg in control.registrations %}
+          <li><strong><a href="/companies/{{ reg.registered_id }}">{{ reg.registered_name }}</a></strong> — {{ reg.raw_source_relation_label|product_role }}</li>
+        {% else %}
+          <li class="text-muted">Ikke registreret som formel kontrolaktør for nogen virksomhed.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  {{ m.report_provenance_appendix(entity, provenance) }}
+</div>
+{% endblock %}

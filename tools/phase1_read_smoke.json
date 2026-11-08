@@ -1,0 +1,1 @@
+{"type_counts": {"DIRECT_OWNERSHIP": 6699, "OTHER_SOURCE_RELATION": 7783, "REGISTERED_CONTROL_ACTOR": 5311}, "v_direct_ownership": 6699, "v_control_registration": 5311, "v_role_relation": 7775, "v_source_anomaly": 8, "contexts": {"person": 20560, "company": 35649}, "cycle_groups": 74}

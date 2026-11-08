@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+
+{% block title %}Koncerner — Heimdal{% endblock %}
+
+{% block main %}
+<header class="page-header">
+  <h1>Koncerner</h1>
+  <p class="lead">Moderselskaber og deres datterselskaber, grupperet efter flertal (&gt; 50 % af kapital eller stemmer).</p>
+</header>
+
+{# T5.3 (F-16): søgning + pagination — alle moderselskaber er nåbare. #}
+<form method="get" action="/groups" class="groups-search mb-4" role="search">
+  <label class="text-xs muted" for="groups-q">Søg i moderselskaber (registreret navn eller reg.nr.)</label>
+  <div class="flex" style="gap:.5rem;">
+    <input type="search" id="groups-q" name="q" value="{{ q }}" class="input"
+           placeholder="f.eks. Varðin eller S3690" style="min-width:280px;">
+    <button type="submit" class="btn btn-outline btn-sm">Søg</button>
+    {% if q %}<a href="/groups" class="btn btn-outline btn-sm">Nulstil</a>{% endif %}
+  </div>
+</form>
+
+<section class="card mb-6">
+  <div class="card-header flex-between">
+    <div>
+      <h2>Koncerner i Færøsk Erhvervsliv</h2>
+      <span class="muted">{% if q %}{{ groups|length }} af {{ total_groups }} registrerede moderselskaber (filtreret på "{{ q }}"){% else %}{{ groups|length }} af {{ total_groups }} registrerede moderselskaber{% endif %}</span>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Moderselskab</th>
+            <th>Type</th>
+            <th>Reg.nr.</th>
+            <th class="num">Datterselskaber (&gt; 50 %)</th>
+            <th>Handling</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for g in groups %}
+          <tr>
+            <td>
+              <a href="/groups/{{ g.parent_id }}" class="entity-link entity-company">
+                <strong>{{ g.parent_name }}</strong>
+              </a>
+            </td>
+            <td>
+              <span class="badge badge-info">{{ m.KIND.get(g.parent_kind, m.KIND['UNKNOWN_ENTITY']).label }}</span>
+            </td>
+            <td>
+              {% if g.parent_regnr %}
+                <span class="regnr-pill">{{ g.parent_regnr }}</span>
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+            <td class="num">
+              <span class="font-bold text-primary">{{ g.subsidiary_count }}</span>
+            </td>
+            <td>
+              <a href="/groups/{{ g.parent_id }}" class="btn btn-xs btn-outline">Se diagram →</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="text-center py-6 text-muted">
+              Ingen koncerner fundet.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if total_pages > 1 %}
+    <nav class="pagination mt-4" aria-label="Koncerner pagination" style="display:flex; gap:.5rem; align-items:center; justify-content:center; padding:0 1rem 1rem;">
+      {% if page > 1 %}
+        <a href="/groups?page={{ page - 1 }}{% if q %}&q={{ q|urlencode }}{% endif %}" class="btn btn-sm btn-outline">Forrige</a>
+      {% endif %}
+      <span class="page-info text-xs text-muted">Side {{ page }} af {{ total_pages }}</span>
+      {% if page < total_pages %}
+        <a href="/groups?page={{ page + 1 }}{% if q %}&q={{ q|urlencode }}{% endif %}" class="btn btn-sm btn-outline">Næste</a>
+      {% endif %}
+    </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

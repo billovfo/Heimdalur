@@ -1,0 +1,29 @@
+{
+ "before": {
+  "obs": 12059,
+  "periods": 3207,
+  "pairs": 5894,
+  "groups": 2825,
+  "gobs": 8425,
+  "junction": 90092,
+  "recurring": 1845,
+  "core": 980,
+  "active_build": 13,
+  "content_hash": "5ada242a6298c13e6a9efd3bc0a70f06",
+  "status": "ACTIVE"
+ },
+ "after": {
+  "obs": 12059,
+  "periods": 3207,
+  "pairs": 5894,
+  "groups": 2825,
+  "gobs": 8425,
+  "junction": 90092,
+  "recurring": 1845,
+  "core": 980,
+  "active_build": 13,
+  "content_hash": "5ada242a6298c13e6a9efd3bc0a70f06",
+  "status": "ACTIVE"
+ },
+ "identical": true
+}

@@ -1,0 +1,402 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}{{ entity.display_name }} · Heimdal{% endblock %}
+
+{# Bjælkens indhold. Kun spring-links til de paragraffer, der faktisk står
+   på siden. Product UX consolidation (§25): interne paragraf-numre er ikke
+   længere user-facing labels — de findes kun som data-clause attributes
+   til fejlsøgning. #}
+
+{% block main %}
+
+{# --- Sidehovedet (ejerbeslutning 2026-08-15): navn, type og veje videre.
+   Kildeinformation er samlet i Kilder & dokumentation (§51). #}
+<header class="card record hero">
+  <h1 class="record-name">{{ entity.display_name }}</h1>
+  <p class="record-badges">{{ m.kind_mark(entity.entity_kind) }}
+    <a class="btn" href="{{ url_for('graph.person_network', canonical_entity_id=entity.canonical_entity_id) }}">Netværk →</a>
+    <button type="button" class="btn btn-outline btn-watchlist" data-watch-id="{{ entity.canonical_entity_id }}" data-watch-kind="PERSON" title="Føj til Overvågningscenter"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-star"></use></svg> Overvåg</button>
+    <details class="btn-menu"><summary class="btn btn-secondary">Mere ▾</summary>
+      <div class="btn-menu-dropdown">
+        <a href="/persons/{{ entity.canonical_entity_id }}/dossier">Dossier</a>
+      </div>
+    </details>
+  </p>
+  {% if pep or (structure_status and structure_status.has_observations) or registration_patterns %}
+  <p class="record-flags">
+    {% for p in pep %}
+      <span class="flag-pep" title="PEP"><svg class="icon-inline" width="12" height="12" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-landmark"></use></svg> PEP: {{ p.office_title }}</span>
+    {% endfor %}
+    {% if structure_status and structure_status.has_observations %}
+      <a href="/compliance?q={{ entity.display_name }}" class="flag-link">Registerobservation ({{ structure_status.observation_count }})</a>
+    {% endif %}
+    {% if registration_patterns %}
+      <a href="/compliance?q={{ entity.display_name }}" class="flag-link">Registreringsmønster</a>
+    {% endif %}
+  </p>
+  {% endif %}
+</header>
+
+<div class="advanced-toggle-row">
+  <label class="advanced-toggle"><input type="checkbox" id="adv-toggle"> Vis kildedetaljer</label>
+  <span class="advanced-hint">Kildens egne ord og tal, som de står i snapshotet</span>
+</div>
+<div class="tablist-wrap">
+<div class="tablist">
+<div class="tablist-tabs" role="tablist" aria-label="Personsektioner">
+  {# Product UX consolidation (§38): Overblik er standard og først.
+     Historik er ENTITY-scoped: ét primært historik-view = personens
+     historikside (§44). Skráseting er kildevisning i Kilder & dokumentation. #}
+  <button role="tab" aria-selected="true" data-tab="overblik">Overblik</button>
+  <button role="tab" data-tab="roller">Roller</button>
+  <button role="tab" data-tab="ejerskab">Ejerskab</button>
+  <button role="tab" data-tab="relationer">Relationer</button>
+  {% if analytics_enabled() %}<button role="tab" data-tab="analyse">Analyse</button>{% endif %}
+  <button role="tab" data-tab="netvaerk">Netværk</button>
+  <button role="tab" data-tab="kilder">Kilder</button>
+</div>
+  <a class="tab-route-link" data-route-tab="historik" href="{{ url_for('entities.person_history', canonical_entity_id=entity.canonical_entity_id) }}">Historik →</a>
+</div>
+</div>
+
+{# ============================ OVERBLIK (standard) ======================== #}
+<div class="tab-panel is-active" data-panel="overblik" role="tabpanel" id="panel-overblik">
+<div id="overblik-om"></div>
+
+{# --- §40: current roles — KUN Felag authoritative snapshot. #}
+{% set pov = person_overview %}
+<section class="card section" id="overblik-roller" aria-labelledby="h-pov-roles">
+  <div class="section-head">
+    <h2 id="h-pov-roles" class="section-title">Aktuelle roller</h2>
+    {{ m.stamp('kilde') }}
+    <span class="badge badge-sm muted">Aktuel status (Felag)</span>
+  </div>
+  <div class="section-body">
+    {% if pov and pov.current_roles %}
+    <ul class="actors">
+      {% for r in pov.current_roles %}
+      <li class="actor">
+        {{ m.entity_link(r.company_id, r.company_name, 'COMPANY') }}
+        <span class="badge badge-sm">{{ r.role }}</span>
+        <span class="text-xs advanced-only" title="Kildens egen rollebetegnelse">{{ r.source_role }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% if pov.current_roles_total > pov.current_roles|length %}
+    <p class="text-xs mt-2">+ {{ pov.current_roles_total - pov.current_roles|length }} øvrige registrerede roller.</p>
+    {% endif %}
+    {% else %}
+    <p class="text-muted text-sm">Ingen registrerede nuværende roller i dette snapshot.</p>
+    {% endif %}
+    <p class="text-xs mt-2"><a href="#roller">Se alle roller →</a></p>
+  </div>
+</section>
+
+{# --- §41: history summary — tæller sikkert kædede registreringer; ingen
+   opfundet funktionstid (§43-princippet bevares i Roller/Analyse). #}
+<section class="card section" id="overblik-historik" aria-labelledby="h-pov-hist">
+  <div class="section-head">
+    <h2 id="h-pov-hist" class="section-title">Historik</h2>
+    {{ m.stamp('beregnet') }}
+  </div>
+  <div class="section-body">
+    <ul class="gloss-list">
+      <li>{{ pov.role_count if pov else 0 }} observerede roller i nuværende snapshot</li>
+      {% if skraseting_allowed() %}<li>{{ pov.skraseting_event_count if pov else 0 }} registrerede historiske hændelser (Skráseting, sikkert kædet)</li>{% else %}<li class="text-muted">Skráseting-historikken er ikke aktiv.</li>{% endif %}
+      {% if pov and pov.first_observed %}<li>Første observerede registrering: <time datetime="{{ pov.first_observed }}">{{ pov.first_observed[8:10] }}.{{ pov.first_observed[5:7] }}.{{ pov.first_observed[:4] }}</time></li>{% endif %}
+    </ul>
+    <p class="text-xs mt-2"><a href="{{ url_for('entities.person_history', canonical_entity_id=entity.canonical_entity_id) }}">Se fuld historik →</a></p>
+  </div>
+</section>
+
+{# --- §39: ownership + samarbejdspartnere i kort format. #}
+<section class="card section" id="overblik-ejerskab" aria-labelledby="h-pov-own">
+  <div class="section-head">
+    <h2 id="h-pov-own" class="section-title">Ejerskab i kort</h2>
+  </div>
+  <div class="section-body">
+    {% if pov and (pov.holdings_direct or pov.holdings_indirect) %}
+    <p class="text-sm">Personen ejer <strong>{{ pov.holdings_direct }}</strong> direkte {{ 'virksomhed' if pov.holdings_direct == 1 else 'virksomheder' }}{% if pov.holdings_indirect %} og har registrerede andele i <strong>{{ pov.holdings_indirect }}</strong> {{ 'virksomhed' if pov.holdings_indirect == 1 else 'virksomheder' }} via indirekte kæder{% endif %}.</p>
+      {% if pov.top_holdings %}
+      <ul class="actors">
+        {% for h in pov.top_holdings %}
+        <li class="actor">{{ m.entity_link(h.company_id, h.company_name, 'COMPANY') }}{% if h.pct %} <span class="mono">{{ h.pct }}</span>{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    {% else %}
+    <p class="text-muted text-sm">Ingen registrerede ejede virksomheder i dette snapshot.</p>
+    {% endif %}
+    <p class="text-xs mt-2"><a href="#besiddelser">Se ejerskab →</a></p>
+  </div>
+</section>
+</div>{# /overblik #}
+
+<div class="tab-panel" data-panel="roller" role="tabpanel" id="panel-roller">
+{# --- Roller i virksomheder (§42): aktuelle roller først (Felag current),
+   historiske roller adskilt under egen overskrift (udledt lag, aldrig
+   current membership). Eigarar (Atkvøðurættur) forbliver et separat begreb. #}
+<section class="card section" id="roller" aria-labelledby="h-roller">
+  <div class="section-head">
+    <h2 id="h-roller" class="section-title">Roller i virksomheder</h2>
+    {{ m.stamp('beregnet') }}
+    {{ m.help('Gruppering i Bestyrelse/Ledelse/Øvrige følger kildens relationstekst. Kildens egen tekst pr. række står i Vis kilde.', 'Om rollernes gruppering') }}
+  </div>
+
+  <div class="section-body">
+    {% set all_roles = roles.NEVND + roles.STJORN + roles.ANNAD %}
+    {% if all_roles %}
+      <h3 class="sub-title">Aktuelle roller</h3>
+      <div class="gov-summary">
+        {% if roles.NEVND %}
+        <h4 class="sub-title text-sm">Bestyrelse</h4>
+        <ul class="actors">
+          {% for row in roles.NEVND %}
+          <li class="actor">
+            {{ m.entity_link(row.company_id, row.company_name, 'COMPANY') }}
+            <span class="badge badge-sm">{{ row.canonical_role_label|product_role }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if roles.STJORN %}
+        <h4 class="sub-title text-sm">Ledelse</h4>
+        <ul class="actors">
+          {% for row in roles.STJORN %}
+          <li class="actor">
+            {{ m.entity_link(row.company_id, row.company_name, 'COMPANY') }}
+            <span class="badge badge-sm">{{ row.canonical_role_label|product_role }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if roles.ANNAD %}
+        <h4 class="sub-title text-sm">Øvrige registrerede roller</h4>
+        <ul class="actors">
+          {% for row in roles.ANNAD %}
+          <li class="actor">
+            {{ m.entity_link(row.company_id, row.company_name, 'COMPANY') }}
+            <span class="badge badge-sm">{{ row.canonical_role_label|product_role }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="empty-state"><div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div><p class="empty-state-title">Ingen data i snapshot</p><p class="empty-state-body">Kilden har ingen registrerede relationer i dette snapshot.</p></div>
+    {% endif %}
+  </div>
+</section>
+
+{% if voting_rights %}
+{# --- Atkvøðurættur: selvstændigt begreb, aldrig en rolle. #}
+<section class="card section" id="stemmerettigheder" aria-labelledby="h-stemme">
+  <div class="section-head">
+    <h2 id="h-stemme" class="section-title">Stemmerettigheder</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+  <p class="section-lede advanced-only" style="font-size:.82rem;color:var(--text-2);margin:0 0 .6rem;">Atkvøðurættur er et selvstændigt begreb i kilden — ikke ejerskab og ikke en Nevnd/Stjórn/Annað-rolle.</p>
+
+  <div class="section-body">
+    <div class="table-scroll">
+    <table class="ledger">
+      <caption class="sr-only">Stemmerettigheder for denne person</caption>
+      <thead>
+        <tr>
+          <th scope="col">Virksomhed</th>
+          <th scope="col">Rolle</th>
+          <th scope="col">Kilde</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in voting_rights %}
+        <tr>
+          <td data-sort="{{ row.company_name }}">{{ m.entity_link(row.company_id, row.company_name, 'COMPANY') }}</td>
+          <td>{{ row.canonical_role_label|product_role }}</td>
+          <td>{{ m.raw(row.raw_source_relation_label, 'Kildens betegnelse') }}
+            {{ m.confidence(row.semantic_direction_confidence) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+{% endif %}
+</div>{# /roller #}
+
+<div class="tab-panel" data-panel="ejerskab" role="tabpanel" id="panel-ejerskab">
+{# --- Direkte ejerskab (to adskilte tabeller — direkte for sig, indirekte
+   for sig; en person kan ikke "ejes", §17.1 findes ikke). #}
+<section class="card section" id="besiddelser" aria-labelledby="h-direkte">
+  <div class="section-head">
+    <h2 id="h-direkte" class="section-title">Direkte ejerskab</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+
+  <div class="section-body">
+    {{ m.direct_table(outgoing, 'OUTGOING', 'person') }}
+  </div>
+</section>
+
+<section class="card section" id="indirekte" aria-labelledby="h-indirekte">
+  <div class="section-head">
+    <h2 id="h-indirekte" class="section-title">Indirekte ejerskab</h2>
+    {{ m.stamp('beregnet') }}
+  </div>
+
+  <div class="section-body">
+    {% if cycle %}{{ m.cycle_explainer(cycle, entity) }}{% endif %}
+    {{ m.indirect_block(outgoing.indirect, 'OUTGOING', cycle is not none, outgoing.withheld) }}
+  </div>
+</section>
+</div>{# /ejerskab #}
+
+<div class="tab-panel" data-panel="relationer" role="tabpanel" id="panel-relationer">
+{# --- Relation til andre personer (humaniserede labels, §28) #}
+<section class="card section" id="personrelationer" aria-labelledby="h-personrelationer">
+  <div class="section-head">
+    <h2 id="h-personrelationer" class="section-title">Relation til andre personer</h2>
+    {{ m.stamp('beregnet') }}
+  </div>
+
+  <div class="section-body">
+    {% if person_relations %}
+      {% set analytics_supplement = analytics_relation_supplement(entity.canonical_entity_id, person_relations | map(attribute='peer_id') | list) %}
+      {% for peer in person_relations %}
+        {{ m.relation_breakdown(peer, person_basis_labels, total_companies=true) }}
+        {% if analytics_supplement and analytics_supplement.get(peer.peer_id) %}
+          {% with sup = analytics_supplement[peer.peer_id] %}
+          <p class="text-xs" style="color:var(--text-2);margin:-.4rem 0 .8rem;">
+            <span class="badge badge-sm" title="Udledt analyse (build {{ analytics_supplement._build_run_id }})">Analyse</span>
+            Observeret samarbejde: {{ sup.shared_company_count }} fælles {{ 'virksomhed' if sup.shared_company_count == 1 else 'virksomheder' }}
+            {% for cb in sup.context_breakdown %} · {{ cb.label }}: {{ cb.count }}{% endfor %}
+            {% if sup.known_overlap_days %} · kendt overlap: {{ sup.known_overlap_days }} dage{% endif %}
+          </p>
+          {% endwith %}
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="empty-state"><div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div><p class="empty-state-title">Ingen data i snapshot</p><p class="empty-state-body">Kilden har ingen registrerede relationer i dette snapshot.</p></div>
+    {% endif %}
+  </div>
+</section>
+</div>{# /relationer #}
+
+{% if analytics_enabled() %}
+{% set analytics_section = analytics_person_section(entity.canonical_entity_id) %}
+<div class="tab-panel" data-panel="analyse" role="tabpanel" id="panel-analyse">
+{% if analytics_section %}{% with section = analytics_section %}{% include "_analytics_person_section.html" %}{% endwith %}{% else %}<p class="text-muted text-sm">Ingen aktiv analytics-build.</p>{% endif %}
+</div>{# /analyse #}
+{% endif %}
+
+<div class="tab-panel" data-panel="netvaerk" role="tabpanel" id="panel-netvaerk">
+{# --- §36/§37: compact preview + summary; fuld interaktiv graf kun på
+   /persons/:id/network (ingen kapabilitetstab, ingen duplikering). #}
+{% set nps = network_preview_summary(entity.canonical_entity_id, 'PERSON') %}
+{{ m.network_preview(entity.canonical_entity_id, 'PERSON',
+                     url_for('graph.person_network', canonical_entity_id=entity.canonical_entity_id),
+                     nps) }}
+</div>{# /netvaerk #}
+
+<div class="tab-panel" data-panel="kilder" role="tabpanel" id="panel-kilder">
+{# --- §51: Kilder & dokumentation — her må tekniske facts stå
+   (kontrolregistrering, kildeinformation, Skráseting/PDF-sektionen). #}
+<section class="card section control" id="kontrol" aria-labelledby="h-ctrl">
+  <div class="section-head">
+    <h2 id="h-ctrl" class="section-title">Kontrolregistrering</h2>
+    {% if control.state == 'NO_CONTROL_DATA' %}{{ m.stamp('ingen') }}
+    {% else %}{{ m.stamp('kilde') }}{% endif %}
+    {{ m.help('Kildens særskilte register. Ikke ejerskab, ingen ejerandel, ingen procent.', 'Om kontrolregistrering') }}
+  </div>
+
+  <div class="section-body">
+    {% if control.state == 'REGISTERED_ACTORS' %}
+      <div class="control-banner state-actors">
+        <span class="marker" aria-hidden="true"></span>
+        <div>
+          <p class="control-state">Registreret som kontrolaktør</p>
+          <p class="control-sub">{{ control.registrations|length }}
+            {{ 'registrering' if control.registrations|length == 1 else 'registreringer' }}
+            i kildens register.</p>
+        </div>
+      </div>
+      <ul class="actors">
+        {% for r in control.registrations %}
+        <li class="actor">
+          {{ m.entity_link(r.registered_id, r.registered_name, 'COMPANY') }}
+          {{ m.raw(r.raw_source_relation_label, 'Kildens betegnelse') }}
+          {{ m.confidence(r.semantic_direction_confidence) }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% call m.note() %}
+        En virksomhed, hvor kilden har placeret denne person i sin særskilte
+        kontrolregistrering. Registreringen er <strong>ikke nødvendigvis</strong> det samme
+        som direkte ejerskab, en ejerandel, en ledelsesrolle eller uafhængigt verificeret
+        kontrol.
+      {% endcall %}
+
+    {% elif control.state == 'NO_REGISTERED_CONTROL_ACTOR' %}
+      <div class="control-banner state-none">
+        <span class="marker" aria-hidden="true"></span>
+        <div>
+          <p class="control-state">Ingen registreret kontrolaktør</p>
+          <p class="control-sub">Kilden har selv registreret denne status.
+            {{ m.raw(control.raw_status_label, 'Kildens status') }}</p>
+        </div>
+      </div>
+      {% call m.note() %}
+        Kilden oplyser, at der ikke er registreret nogen kontrolaktør-relation for denne
+        person i dette snapshot. Det betyder <strong>ikke</strong>:
+        <ul class="gloss-list">
+          <li>at personen ikke ejer andele, sidder i en bestyrelse eller ledelse</li>
+          <li>at personen ikke har indflydelse</li>
+          <li>at Heimdal uafhængigt har bekræftet fraværet</li>
+        </ul>
+        Kilden kan også være fejlbehæftet eller mangelfuld.
+      {% endcall %}
+
+    {% else %}
+      <div class="control-banner state-nodata">
+        <span class="marker" aria-hidden="true"></span>
+        <div>
+          <p class="control-state">Ingen kontrolregistrering i dette snapshot</p>
+          <p class="control-sub">Hverken en registrering af denne person som kontrolaktør,
+            eller en status om fravær af én.</p>
+        </div>
+      </div>
+      {% call m.note() %}
+        Data <strong>mangler</strong>. Det er ikke den samme påstand som
+        <q>Ingen registreret kontrolaktør</q>, som kilden selv registrerer.
+      {% endcall %}
+    {% endif %}
+  </div>
+</section>
+
+{% set skraseting_section = skraseting_person_section(entity.canonical_entity_id) %}
+{% if skraseting_section %}{% with section = skraseting_section %}{% include "_skraseting_person_section.html" %}{% endwith %}{% endif %}
+
+<section class="card section" id="kilder-dok" aria-labelledby="h-kilder">
+  <div class="section-head">
+    <h2 id="h-kilder" class="section-title">Kilder &amp; dokumentation</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+  <div class="section-body">
+    <ul class="actors">
+      <li class="actor"><strong>Kontrolregistrering</strong> — kildens særskilte register, vist i dette panel</li>
+      <li class="actor"><strong>Tekniske kildedetaljer</strong> —
+        <a href="{{ url_for('entities.sourceinfo', canonical_entity_id=entity.canonical_entity_id) }}">Kildeinformation</a>
+        <span class="text-xs text-muted">status i beholdning, kildens type, ID'er og hentningsdetaljer</span></li>
+      <li class="actor"><strong>Dossier</strong> —
+        <a href="/persons/{{ entity.canonical_entity_id }}/dossier">Samlet dossier</a></li>
+    </ul>
+  </div>
+</section>
+</div>{# /kilder #}
+
+<footer class="colophon">
+  <p>Heimdal gengiver kilden <span class="mono">sg.vs.fo</span> som gemt lokalt. Ingen tal rettes,
+    ingen huller udfyldes.</p>
+</footer>
+{% endblock %}

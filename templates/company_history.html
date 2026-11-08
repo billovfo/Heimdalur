@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}{{ entity.display_name }} · Historik · Heimdal{% endblock %}
+
+{# ======================================================================
+   ENTITY-SCOPED VIRKSOMHEDSHISTORIK (owner defect task section 3-7).
+   Virksomheden er parent: samme sidehoved, samme entity-navigation,
+   Historik aktiv. Kilderne forbliver adskilte (Heimdal snapshot vs.
+   Skráseting Føroya). Global /aendringer-log er et ANDET koncept og
+   er aldrig destinationen herfra.
+   ====================================================================== #}
+{% block main %}
+
+<header class="card record hero">
+  <h1 class="record-name">{{ entity.display_name }}</h1>
+  <p class="record-badges">{{ m.kind_mark(entity.entity_kind) }}
+    <span class="badge">Historik</span>
+    <a class="btn" href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}">Tilbage til virksomheden →</a>
+  </p>
+</header>
+
+<div class="tablist-wrap">
+<nav class="tablist" aria-label="Virksomhedssektioner">
+  <a class="tab-route-link" href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}">Overblik</a>
+  <a class="tab-route-link" href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}#roller">Personer</a>
+  <a class="tab-route-link" href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}#ejere">Ejerskab</a>
+  <a class="tab-route-link is-current" aria-current="page" href="{{ url_for('entities.company_history', canonical_entity_id=entity.canonical_entity_id) }}">Historik</a>
+  <a class="tab-route-link" href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}#virksomhedsrelationer">Relationer</a>
+  {% if analytics_enabled() %}<a class="tab-route-link" href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}#panel-analyse">Analyse</a>{% endif %}
+  <a class="tab-route-link" href="{{ url_for('graph.company_network', canonical_entity_id=entity.canonical_entity_id) }}">Netværk</a>
+  <a class="tab-route-link" href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}#kilder-dok">Kilder</a>
+  {% if skraseting_allowed() %}<a class="tab-route-link" href="{{ url_for('skraseting.skraseting', canonical_entity_id=entity.canonical_entity_id) }}">Skráseting</a>{% endif %}
+</nav>
+</div>
+
+<section class="card section" id="entity-historik" aria-labelledby="h-enthist">
+  <div class="section-head">
+    <h2 id="h-enthist" class="section-title">Historik for {{ entity.display_name }}</h2>
+    <span class="badge badge-sm">{{ timeline|length }} registrerede {{ 'hændelse' if timeline|length == 1 else 'hændelser' }}</span>
+    {% if timeline|length > 10 and not history_all %}<a class="btn btn-xs btn-outline" href="{{ request.path }}?history=all#entity-historik">Vis alle {{ timeline|length }}</a>{% elif history_all and timeline|length > 10 %}<a class="btn btn-xs btn-outline" href="{{ request.path }}#entity-historik">Vis seneste 10</a>{% endif %}
+    {% if skraseting_truncated %}<span class="badge badge-sm" title="Skráseting-historikken er afgrænset til de nyeste 100 registreringer">Skráseting: de nyeste 100 registreringer vises</span>{% endif %}
+  </div>
+  <div class="section-body">
+    {% if not skraseting_allowed() %}<p class="text-xs text-muted mb-2">Skráseting-historikken er ikke aktiv; kun Heimdal-snapshotloggen vises.</p>{% endif %}
+
+    {% if not timeline %}
+    <div class="empty-state">
+      <div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div>
+      <p class="empty-state-title">Ingen historik registreret for denne virksomhed.</p>
+      <p class="empty-state-body">{% if skraseting_allowed() %}Hverken Heimdal-snapshotloggen eller Skráseting Føroya har{% else %}Heimdal-snapshotloggen har ingen{% endif %} historiske hændelser for {{ entity.display_name }}.</p>
+    </div>
+    {% else %}
+
+    {% if heimdal_count %}
+    <p class="text-xs text-muted mb-2">{{ heimdal_count }} {{ 'hændelse' if heimdal_count == 1 else 'hændelser' }} fra Heimdal-snapshotloggen · {{ skraseting_count }} fra Skráseting Føroya. Kilderne vises sammen, men skelnes altid.</p>
+    {% endif %}
+
+    {% set visible_timeline = timeline if history_all else timeline[:10] %}
+    {% set ns = namespace(cur='', same_day=0) %}
+    {% for ev in visible_timeline %}
+      {% set d = ev.date or '' %}
+      {% if d != ns.cur %}
+        {% if ns.same_day > 1 %}<p class="text-xs text-muted same-day-note">Rækkefølgen mellem registreringer samme dag kan ikke fastslås.</p>{% endif %}
+        {% if not loop.first %}</div></div>{% endif %}
+        <div class="history-date-group">
+          <div class="date-group">
+            <span class="date-label">{% if ev.date %}<time datetime="{{ ev.date }}">{{ ev.date_display }}</time>{% else %}Ukendt dato{% endif %}</span>
+          </div>
+          <div class="history-day-list">
+        {% set ns.cur = d %}
+        {% set ns.same_day = 0 %}
+      {% endif %}
+      {% set ns.same_day = ns.same_day + 1 %}
+      <div class="history-row">
+        <div class="history-event">
+          <strong>{{ ev.title }}</strong>
+          {# T5.1 (F-14): entitetskontekst KUN via fodens sikre canonical-reference.
+             Unresolved → neutral source-beskrivelse. #}
+          {% if ev.related_entity_id and ev.related_kind and ev.related_display_name %}
+            <span class="history-actor"> — aktør:
+              {% if ev.related_kind == 'PERSON' %}
+                <a href="{{ url_for('entities.person', canonical_entity_id=ev.related_entity_id) }}" class="entity-link entity-person">{{ ev.related_display_name }}</a>
+              {% else %}
+                <a href="{{ url_for('entities.company', canonical_entity_id=ev.related_entity_id) }}" class="entity-link entity-company">{{ ev.related_display_name }}</a>
+              {% endif %}
+            </span>
+          {% endif %}
+          {% if ev.detail %}<span class="text-xs text-muted history-detail">{{ ev.detail }}</span>{% endif %}
+          {% if ev.source_kind == 'skraseting' and ev.company_canonical_entity_id and ev.company_display_name %}
+            <span class="text-xs"> — <a href="{{ url_for('entities.company', canonical_entity_id=ev.company_canonical_entity_id) }}">{{ ev.company_display_name }}</a></span>
+          {% endif %}
+        </div>
+        <div class="history-meta">
+          {% if ev.source_kind == 'skraseting' %}
+          <span class="badge badge-sm badge-source" title="Skráseting Føroya — historisk Lysing-registrering">Skráseting</span>
+          {% else %}
+          <span class="badge badge-sm badge-heimdal" title="Heimdal-snapshot: ændringslog">Heimdal</span>
+          {% endif %}
+          {% if ev.source_document_id %}<span class="mono text-xs text-muted">dok. {{ ev.source_document_id }}</span>{% endif %}
+          <span class="sr-only">Kilde: {{ ev.source }}</span>
+        </div>
+      </div>
+      {% if loop.last %}{% if ns.same_day > 1 %}<p class="text-xs text-muted same-day-note">Rækkefølgen mellem registreringer samme dag kan ikke fastslås.</p>{% endif %}</div></div>{% endif %}
+    {% endfor %}
+    {% if not history_all and timeline|length > 10 %}
+    <p class="text-xs text-muted history-budget-note" style="margin-top:.6rem;">Viser de seneste 10 hændelser · <a href="{{ request.path }}?history=all#entity-historik">Vis alle {{ timeline|length }}</a> · ældste registrering først — brug Vis alle + browser-søg for specifik dato.</p>
+    {% endif %}
+
+    <details class="source-details mt-2">
+      <summary>Vis kildeoplysninger</summary>
+      <p class="spine-note">Heimdal-delen: snapshot-ændringslog for denne virksomhed (samme semantik som den globale ændringslog, men afgrænset til {{ entity.display_name }}).
+      Skráseting-delen: historiske Lysing-registreringer for den linkede virksomhed via Skráseting Føroya (FelagPdf) — vises adskilt og ændrer aldrig snapshot-authoritative oplysninger.</p>
+    </details>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}{{ title }} · Heimdal{% endblock %}
+
+{% block main %}
+{% set qs = '&q=' ~ listing.query if listing.query else '' %}
+{% set qs_sort = qs ~ ('&sort=' ~ listing.sort if listing.sort != 'name' else '') %}
+<header class="page-header" style="padding:0 0 1rem;">
+    <h1>{{ title }}</h1>
+  </header>
+<section class="card section" id="liste" aria-labelledby="h-liste">
+  <div class="section-head">
+    <h2 id="h-liste" class="section-title">Søgning og filtre</h2>
+    {{ m.stamp('kilde') }}
+    <p class="section-lede">{{ lede }}</p>
+  </div>
+
+  <div class="section-body">
+    <form class="finder flex-wrap gap-2 align-center" method="get" action="{{ path }}" role="search" id="finder">
+      <label class="finder-label" for="q">Filtrér på navn</label>
+      <input class="finder-input" type="search" id="q" name="q" value="{{ listing.query }}"
+             autocomplete="off" placeholder="del af navnet el. regnr (f.eks. Bardur / S3690)">
+      
+      {% if path == '/companies' %}
+      <select name="kind" class="finder-select text-xs" aria-label="Enhedstype">
+        <option value="">Alle enhedstyper</option>
+        <option value="COMPANY" {% if listing.kind == 'COMPANY' %}selected{% endif %}>Selskaber (Sp/f, P/F)</option>
+        <option value="ORGANIZATION" {% if listing.kind == 'ORGANIZATION' %}selected{% endif %}>Organisationer</option>
+        <option value="PUBLIC_AUTHORITY" {% if listing.kind == 'PUBLIC_AUTHORITY' %}selected{% endif %}>Offentlige myndigheder</option>
+      </select>
+
+      <select name="ownership_band" class="finder-select text-xs" aria-label="Ejerandel">
+        <option value="">Alle ejerandele</option>
+        <option value="100" {% if listing.ownership_band == '100' %}selected{% endif %}>100% Ejet</option>
+        <option value="50-99" {% if listing.ownership_band == '50-99' %}selected{% endif %}>Flertal (50-99%)</option>
+        <option value="25-49" {% if listing.ownership_band == '25-49' %}selected{% endif %}>Betydelig (25-49%)</option>
+        <option value="10-24" {% if listing.ownership_band == '10-24' %}selected{% endif %}>Mindre (10-24%)</option>
+        <option value="1-9" {% if listing.ownership_band == '1-9' %}selected{% endif %}>Minoritet (1-9%)</option>
+      </select>
+      {% endif %}
+
+      <button class="finder-go" type="submit">Søg / Filtrér</button>
+      {% if listing.query or listing.kind or listing.ownership_band %}<a class="finder-clear" href="{{ path }}">Nulstil filtre</a>{% endif %}
+    </form>
+    {% if listing.kind or listing.ownership_band or listing.query %}<div class="chip-group">{% if listing.query %}<span class="chip">Søg: “{{ listing.query }}” <a href="{{ path }}?{% if listing.kind %}kind={{ listing.kind }}{% endif %}{% if listing.ownership_band %}&ownership_band={{ listing.ownership_band }}{% endif %}" class="chip-close" aria-label="Fjern søgning">×</a></span>{% endif %}{% if listing.kind %}<span class="chip">Type: {{ m.KIND.get(listing.kind, m.KIND["UNKNOWN_ENTITY"]).label }} <a href="{{ path }}?{% if listing.query %}q={{ listing.query }}{% endif %}{% if listing.ownership_band %}&ownership_band={{ listing.ownership_band }}{% endif %}" class="chip-close" aria-label="Fjern filter">×</a></span>{% endif %}{% if listing.ownership_band %}<span class="chip">Ejerandel: {{ listing.ownership_band }} <a href="{{ path }}?{% if listing.query %}q={{ listing.query }}{% endif %}{% if listing.kind %}&kind={{ listing.kind }}{% endif %}" class="chip-close" aria-label="Fjern filter">×</a></span>{% endif %}</div>{% endif %}
+
+    <p class="count">
+      <strong class="mono">{{ '{:,}'.format(listing.total).replace(',', '.') }}</strong>
+      {{ 'træf' if listing.query else 'i alt' }}
+      {%- if listing.pages > 1 %} · side {{ listing.page }} af {{ listing.pages }}{% endif %}
+      {% if path == '/persons' %}
+        · <a class="network-link" href="/persons/relationer">Relationer mellem personer →</a>
+      {% endif %}
+    </p>
+
+    <div class="skeleton-ledger" aria-busy="true" aria-hidden="true" style="display:none">
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+    </div>
+    {% if listing.rows %}
+    <div class="table-scroll {% if not regnr %}ledger-hybrid{% endif %}">
+      <table class="ledger">
+        <caption class="sr-only">{{ title }}</caption>
+        <thead>
+          <tr>
+            {{ m.sort_header(path, qs, listing, 'name', 'Navn') }}
+            {% if regnr %}
+              <th scope="col">Reg.nr.</th><th scope="col">Beholdning</th>
+            {% else %}
+              {{ m.sort_header(path, qs, listing, 'direct', 'Direkte') }}
+              {{ m.sort_header(path, qs, listing, 'combined', 'Samlet') }}
+              {{ m.sort_header(path, qs, listing, 'nevn', 'Ledelse') }}
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in listing.rows %}
+          <tr>
+            <td data-sort="{{ r.display_name }}">{{ m.entity_link(r.canonical_entity_id, r.display_name, r.entity_kind) }}</td>
+            {% if regnr %}
+            <td class="mono">{{ r.registration_number or '—' }}</td>
+            <td>{% if r.inventory_status %}<span class="badge badge-sm" title="Teknisk hentningsstatus (beholdning)">{{ r.inventory_status|inventory_status }}</span>
+                {% else %}<span class="absent">ikke i registeret</span>{% endif %}</td>
+            {% else %}
+            <td class="num {{ r.direct_count|heatband }}">{{ r.direct_count }}</td>
+            <td class="num {{ r.combined_count|heatband }}">{{ r.combined_count }}</td>
+            <td class="num {{ (r.nevn_count + r.stjorn_count)|heatband }}">{{ r.nevn_count + r.stjorn_count }}<span class="text-xs text-muted" style="margin-left:.4rem;">{{ r.nevn_count }} Bestyrelse · {{ r.stjorn_count }} Ledelse</span></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state"><div class="empty-state-icon"><svg width="24" height="24" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-search"></use></svg></div><p class="empty-state-title">Ingen resultater</p><p class="empty-state-body">Ingen navne matcher “{{ listing.query }}”. Prøv at fjerne filtre eller søg på del af navn/reg.nr.</p><a class="btn btn-secondary" href="{{ path }}">Nulstil filtre</a></div>
+    {% endif %}
+
+    {% if listing.pages > 1 %}
+    <nav class="pager" aria-label="Sideinddeling">
+      {% if listing.page > 1 %}
+        <a href="{{ path }}?page=1{{ qs_sort }}">Første</a>
+        <a href="{{ path }}?page={{ listing.page - 1 }}{{ qs_sort }}">Forrige</a>
+      {% else %}<span class="pager-off">Første</span><span class="pager-off">Forrige</span>{% endif %}
+      <span class="pager-at mono">{{ listing.page }} / {{ listing.pages }}</span>
+      {% if listing.page < listing.pages %}
+        <a href="{{ path }}?page={{ listing.page + 1 }}{{ qs_sort }}">Næste</a>
+        <a href="{{ path }}?page={{ listing.pages }}{{ qs_sort }}">Sidste</a>
+      {% else %}<span class="pager-off">Næste</span><span class="pager-off">Sidste</span>{% endif %}
+    </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

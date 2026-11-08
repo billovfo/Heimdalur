@@ -1,0 +1,341 @@
+{
+ "started_at": "2026-09-01T16:49:33.273022+00:00",
+ "stages": {
+  "0_preconditions": {
+   "advisory_locks": 0,
+   "active_sessions": 0,
+   "cutover_window_verified": true
+  },
+  "1_pre_cutover_inventory": {
+   "canonical_relation": {
+    "constraints": {
+     "c": 7,
+     "f": 1,
+     "p": 1,
+     "u": 1
+    },
+    "indexes": 5,
+    "count": 19793
+   },
+   "indirect_ownership": {
+    "constraints": {
+     "p": 1,
+     "u": 1
+    },
+    "indexes": 4,
+    "count": 5983
+   },
+   "ownership_cycle_member": {
+    "constraints": {
+     "p": 1
+    },
+    "indexes": 1,
+    "count": 79
+   },
+   "person_relation_context": {
+    "constraints": {
+     "c": 1,
+     "f": 2,
+     "p": 1
+    },
+    "indexes": 4,
+    "count": 20560
+   },
+   "company_relation_context": {
+    "constraints": {
+     "c": 2,
+     "f": 1,
+     "p": 1
+    },
+    "indexes": 4,
+    "count": 35649
+   }
+  },
+  "2_create_target_schema": {
+   "rewired_fks": [],
+   "columns_parity": "verified for all 5 tables"
+  },
+  "3_shadow_population": {
+   "relation_rows": 19793,
+   "sequence": {
+    "max_id": 21533,
+    "src_seq_last_value": 21533,
+    "setval_to": 21533,
+    "is_called": true,
+    "next_generated": 21534
+   },
+   "indirect_ownership": 5983,
+   "person_relation_context": 20560,
+   "company_relation_context": 35649,
+   "ownership_cycle_member": 79,
+   "evidence_pointer_rows": 19793,
+   "evidence_null_sha256": 0
+  },
+  "4_reconciliation": {
+   "checks": {
+    "relation_count": {
+     "src": 19793,
+     "tgt": 19793,
+     "equal": true
+    },
+    "relation_id_set_equality": {
+     "src": 0,
+     "tgt": 0,
+     "equal": true
+    },
+    "content_hash": {
+     "src": "1495092e1ffe34cf8052c1ce82cff99a",
+     "tgt": "1495092e1ffe34cf8052c1ce82cff99a",
+     "equal": true
+    },
+    "indirect_ownership_count": {
+     "src": 5983,
+     "tgt": 5983,
+     "equal": true
+    },
+    "person_relation_context_count": {
+     "src": 20560,
+     "tgt": 20560,
+     "equal": true
+    },
+    "company_relation_context_count": {
+     "src": 35649,
+     "tgt": 35649,
+     "equal": true
+    },
+    "ownership_cycle_member_count": {
+     "src": 79,
+     "tgt": 79,
+     "equal": true
+    },
+    "person_relation_context_row_equality": {
+     "src": 0,
+     "tgt": 0,
+     "equal": true
+    },
+    "company_relation_context_row_equality": {
+     "src": 0,
+     "tgt": 0,
+     "equal": true
+    },
+    "indirect_row_equality": {
+     "src": 0,
+     "tgt": 0,
+     "equal": true
+    },
+    "context_fk_violations": {
+     "src": 0,
+     "tgt": 0,
+     "equal": true
+    },
+    "percentage_fields_equal": {
+     "src": 6699,
+     "tgt": 6699,
+     "equal": true
+    },
+    "canonical_subject_object_equal": {
+     "src": 12010,
+     "tgt": 12010,
+     "equal": true
+    },
+    "evidence_pointer_coverage": {
+     "src": 19793,
+     "tgt": 19793,
+     "equal": true
+    }
+   }
+  },
+  "5_view_retarget": {
+   "views": {
+    "v_direct_ownership": {
+     "tables_swapped": [
+      "canonical_relation"
+     ],
+     "depends_on_canonical_relation": true,
+     "depends_on_entity_change_event": false
+    },
+    "v_control_registration": {
+     "tables_swapped": [
+      "canonical_relation"
+     ],
+     "depends_on_canonical_relation": true,
+     "depends_on_entity_change_event": false
+    },
+    "v_role_relation": {
+     "tables_swapped": [
+      "canonical_relation"
+     ],
+     "depends_on_canonical_relation": true,
+     "depends_on_entity_change_event": false
+    },
+    "v_source_anomaly": {
+     "tables_swapped": [
+      "canonical_relation"
+     ],
+     "depends_on_canonical_relation": true,
+     "depends_on_entity_change_event": false
+    },
+    "v_ownership_cycle_observations": {
+     "tables_swapped": [
+      "ownership_cycle_member"
+     ],
+     "depends_on_canonical_relation": false,
+     "depends_on_entity_change_event": false
+    }
+   },
+   "post_retort_snapshot": {
+    "v_direct_ownership": {
+     "count": 6699,
+     "hash": "084cc1f41b2744a55f46343dff57bc21"
+    },
+    "v_control_registration": {
+     "count": 5311,
+     "hash": "9a125d6db5f2f6a7ed607e3e0134e9db"
+    },
+    "v_role_relation": {
+     "count": 7775,
+     "hash": "21d18e4b0e2b5b31821ff4a96445c6a1"
+    },
+    "v_source_anomaly": {
+     "count": 8,
+     "hash": "296e4989e7643d8211024bd0704445a9"
+    },
+    "v_ownership_cycle_observations": {
+     "count": 79,
+     "hash": "822715c9a2cd9084bad1e0e7cb926a2f"
+    }
+   },
+   "view_output_reconciliation": "IDENTICAL"
+  },
+  "6_legacy_rename": {
+   "renamed": {
+    "canonical_relation": "canonical_relation_legacy",
+    "indirect_ownership": "indirect_ownership_legacy",
+    "ownership_cycle_member": "ownership_cycle_member_legacy",
+    "person_relation_context": "person_relation_context_legacy",
+    "company_relation_context": "company_relation_context_legacy"
+   },
+   "legacy_preserved": true,
+   "destructive_cleanup": "NONE (B31)"
+  },
+  "7_smoke_tests": {
+   "identity_fixture": {
+    "generated_id": 21534,
+    "previous_max": 21533,
+    "generated_gt_prev_max": true,
+    "row_not_left_behind": true
+   },
+   "collector_on_conflict": {
+    "rows_inserted_on_existing_edge": 0,
+    "on_conflict_works": true,
+    "fk_to_shared_request_attempt": "verified via source_attempt_id in fixture"
+   },
+   "post_smoke_row_count": 19793
+  },
+  "8_source_separation_assertions": {
+   "registry_ownership_tables": [
+    "build_meta",
+    "company_relation_context",
+    "indirect_ownership",
+    "ownership_cycle_member",
+    "person_relation_context",
+    "relation",
+    "relation_evidence_pointer"
+   ],
+   "no_pdf_tables_in_registry_ownership": true,
+   "canonical_entity_in_public": true,
+   "entity_status_in_public": true,
+   "entity_change_event_in_public": true,
+   "request_attempt_in_public": true,
+   "response_content_in_public": true,
+   "collection_run_in_public": true
+  }
+ },
+ "pre_business_baseline": {
+  "v_direct_ownership": {
+   "count": 6699,
+   "hash": "084cc1f41b2744a55f46343dff57bc21"
+  },
+  "v_control_registration": {
+   "count": 5311,
+   "hash": "9a125d6db5f2f6a7ed607e3e0134e9db"
+  },
+  "v_role_relation": {
+   "count": 7775,
+   "hash": "21d18e4b0e2b5b31821ff4a96445c6a1"
+  },
+  "v_source_anomaly": {
+   "count": 8,
+   "hash": "296e4989e7643d8211024bd0704445a9"
+  },
+  "v_ownership_cycle_observations": {
+   "count": 79,
+   "hash": "822715c9a2cd9084bad1e0e7cb926a2f"
+  },
+  "relation_type_counts": {
+   "DIRECT_OWNERSHIP": 6699,
+   "OTHER_SOURCE_RELATION": 7783,
+   "REGISTERED_CONTROL_ACTOR": 5311
+  },
+  "indirect": {
+   "count": 5983
+  },
+  "cycles": {
+   "groups": 74
+  },
+  "contexts": {
+   "person": 20560,
+   "company": 35649
+  },
+  "sample_company10_direct": 5,
+  "sample_company10_control": 0,
+  "sample_person_roles": 33
+ },
+ "pre_table_inventory": {
+  "canonical_relation": {
+   "constraints": {
+    "c": 7,
+    "f": 1,
+    "p": 1,
+    "u": 1
+   },
+   "indexes": 5,
+   "count": 19793
+  },
+  "indirect_ownership": {
+   "constraints": {
+    "p": 1,
+    "u": 1
+   },
+   "indexes": 4,
+   "count": 5983
+  },
+  "ownership_cycle_member": {
+   "constraints": {
+    "p": 1
+   },
+   "indexes": 1,
+   "count": 79
+  },
+  "person_relation_context": {
+   "constraints": {
+    "c": 1,
+    "f": 2,
+    "p": 1
+   },
+   "indexes": 4,
+   "count": 20560
+  },
+  "company_relation_context": {
+   "constraints": {
+    "c": 2,
+    "f": 1,
+    "p": 1
+   },
+   "indexes": 4,
+   "count": 35649
+  }
+ },
+ "transaction": "single transaction, COMMITTED",
+ "finished_at": "2026-09-01T16:49:35.232598+00:00"
+}

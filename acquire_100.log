@@ -1,0 +1,10 @@
+acquisition run 10 — 4386 queued, fetching 100 at level=1
+  25/100  last=131 edges=6
+  50/100  last=199 edges=3
+  75/100  last=264 edges=6
+  100/100  last=312 edges=4
+
+inventory status:
+  QUEUED           4286
+  FETCHED          243
+  DISCOVERED       2

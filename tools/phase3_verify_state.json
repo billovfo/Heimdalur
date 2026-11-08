@@ -1,0 +1,1599 @@
+{
+ "active_build": 13,
+ "content_hash": "5ada242a6298c13e6a9efd3bc0a70f06",
+ "phase0_pin": "docs/phase0_scale_measurement.json#sha256:b414392918111fc47e76c9f4eda88eea4d0c332e0d3a18c56d855e4c58c200d5",
+ "policy": {
+  "source": "docs/phase0_scale_measurement.json#recommended_parameters",
+  "core_threshold": 0.75,
+  "group_size_cap": 8,
+  "company_threshold": 2,
+  "episode_threshold": 2
+ },
+ "completeness_gates": {
+  "violations": {},
+  "pass": true
+ },
+ "sample_audits": {
+  "same_snapshot": [
+   {
+    "pair": [
+     1,
+     3186
+    ],
+    "company": 2071,
+    "context": "MANAGEMENT",
+    "snapshot_document": 31284,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     2,
+     3196
+    ],
+    "company": 5716,
+    "context": "BOARD",
+    "snapshot_document": 31902,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     3,
+     21
+    ],
+    "company": 9369,
+    "context": "BOARD",
+    "snapshot_document": 32940,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     3,
+     1353
+    ],
+    "company": 9369,
+    "context": "BOARD",
+    "snapshot_document": 32940,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     3,
+     7223
+    ],
+    "company": 9369,
+    "context": "BOARD",
+    "snapshot_document": 32940,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     3,
+     9506
+    ],
+    "company": 9369,
+    "context": "BOARD",
+    "snapshot_document": 32940,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     5,
+     4552
+    ],
+    "company": 1730,
+    "context": "BOARD",
+    "snapshot_document": 15784,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     5,
+     7214
+    ],
+    "company": 1730,
+    "context": "BOARD",
+    "snapshot_document": 15784,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     5,
+     7393
+    ],
+    "company": 1730,
+    "context": "BOARD",
+    "snapshot_document": 15784,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   },
+   {
+    "pair": [
+     5,
+     8753
+    ],
+    "company": 1730,
+    "context": "BOARD",
+    "snapshot_document": 15784,
+    "cpr_run": 4,
+    "both_persons_in_snapshot": true,
+    "observation_count": 2
+   }
+  ],
+  "same_event": [
+   {
+    "pair": [
+     14,
+     2210
+    ],
+    "company": 5266,
+    "context": "BOARD",
+    "shared_source_event_id": 15522,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     14,
+     4677
+    ],
+    "company": 5266,
+    "context": "BOARD",
+    "shared_source_event_id": 15522,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     38,
+     4395
+    ],
+    "company": 7082,
+    "context": "BOARD",
+    "shared_source_event_id": 11471,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     89,
+     569
+    ],
+    "company": 601,
+    "context": "BOARD",
+    "shared_source_event_id": 26774,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     89,
+     5768
+    ],
+    "company": 601,
+    "context": "BOARD",
+    "shared_source_event_id": 26774,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     92,
+     1307
+    ],
+    "company": 273,
+    "context": "BOARD",
+    "shared_source_event_id": 13733,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     92,
+     2140
+    ],
+    "company": 273,
+    "context": "BOARD",
+    "shared_source_event_id": 13733,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     92,
+     5389
+    ],
+    "company": 273,
+    "context": "BOARD",
+    "shared_source_event_id": 13733,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     92,
+     6419
+    ],
+    "company": 273,
+    "context": "MANAGEMENT",
+    "shared_source_event_id": 13733,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   },
+   {
+    "pair": [
+     92,
+     6429
+    ],
+    "company": 273,
+    "context": "BOARD",
+    "shared_source_event_id": 13733,
+    "both_in_event": true,
+    "shared_event_count": 1,
+    "stored_same_source_event_count": 1,
+    "count_matches": true
+   }
+  ],
+  "known_overlap": [
+   {
+    "pair": [
+     80,
+     7261
+    ],
+    "company": 965,
+    "context": "BOARD",
+    "known_overlap_days": 230,
+    "recomputed_days": 230,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     306,
+     2364
+    ],
+    "company": 362,
+    "context": "BOARD",
+    "known_overlap_days": 1283,
+    "recomputed_days": 1283,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     457,
+     4302
+    ],
+    "company": 9566,
+    "context": "BOARD",
+    "known_overlap_days": 2546,
+    "recomputed_days": 2546,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     457,
+     7811
+    ],
+    "company": 9566,
+    "context": "BOARD",
+    "known_overlap_days": 451,
+    "recomputed_days": 451,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     769,
+     6546
+    ],
+    "company": 7912,
+    "context": "MANAGEMENT",
+    "known_overlap_days": 817,
+    "recomputed_days": 817,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     1058,
+     2364
+    ],
+    "company": 362,
+    "context": "BOARD",
+    "known_overlap_days": 1470,
+    "recomputed_days": 1470,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     1118,
+     2495
+    ],
+    "company": 2130,
+    "context": "MANAGEMENT",
+    "known_overlap_days": 2553,
+    "recomputed_days": 2553,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     2311,
+     8461
+    ],
+    "company": 5093,
+    "context": "BOARD",
+    "known_overlap_days": 580,
+    "recomputed_days": 580,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     2321,
+     7658
+    ],
+    "company": 279,
+    "context": "BOARD",
+    "known_overlap_days": 148,
+    "recomputed_days": 148,
+    "days_match": true,
+    "period_openers_resolve": true
+   },
+   {
+    "pair": [
+     2668,
+     8537
+    ],
+    "company": 5532,
+    "context": "BOARD",
+    "known_overlap_days": 735,
+    "recomputed_days": 735,
+    "days_match": true,
+    "period_openers_resolve": true
+   }
+  ],
+  "ownership_same_obs": [
+   {
+    "pair": [
+     679,
+     2566
+    ],
+    "company": 566,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 9972,
+    "response_sha256": "f38a83cd7ffbb0ce",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     683,
+     759
+    ],
+    "company": 6228,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 1159,
+    "response_sha256": "577c32d4aa6c258c",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     773,
+     4373
+    ],
+    "company": 4578,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 1114,
+    "response_sha256": "974d687bc5bf78eb",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     773,
+     4791
+    ],
+    "company": 4578,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 1114,
+    "response_sha256": "974d687bc5bf78eb",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     777,
+     2879
+    ],
+    "company": 339,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 9877,
+    "response_sha256": "d691e1417f0a1c51",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     820,
+     825
+    ],
+    "company": 812,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 10075,
+    "response_sha256": "ae9888c277ee6bf9",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     849,
+     5503
+    ],
+    "company": 497,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 9942,
+    "response_sha256": "0052c9ba109e070a",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     2164,
+     2996
+    ],
+    "company": 1140,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 10227,
+    "response_sha256": "8f4422e4f41e4d95",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     2405,
+     3563
+    ],
+    "company": 1241,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 10274,
+    "response_sha256": "b3e28f643e406656",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   },
+   {
+    "pair": [
+     2537,
+     9163
+    ],
+    "company": 2335,
+    "context": "OWNERSHIP",
+    "source_attempt_id": 10756,
+    "response_sha256": "5ebacde9914db632",
+    "attempt_hash_resolves": true,
+    "both_in_same_attempt": true
+   }
+  ],
+  "unknown": [
+   {
+    "pair": [
+     22,
+     3811
+    ],
+    "company": 2037,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     45,
+     67
+    ],
+    "company": 1131,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     67,
+     3480
+    ],
+    "company": 144,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     67,
+     4603
+    ],
+    "company": 4614,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     67,
+     5990
+    ],
+    "company": 144,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     67,
+     5990
+    ],
+    "company": 1995,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     67,
+     6315
+    ],
+    "company": 4614,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     92,
+     6419
+    ],
+    "company": 273,
+    "context": "BOARD",
+    "left_censored_periods": 1,
+    "point_observations": 1,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     97,
+     9280
+    ],
+    "company": 8252,
+    "context": "MANAGEMENT",
+    "left_censored_periods": 1,
+    "point_observations": 1,
+    "known_overlap_days": null
+   },
+   {
+    "pair": [
+     112,
+     689
+    ],
+    "company": 4445,
+    "context": "OWNERSHIP",
+    "left_censored_periods": 0,
+    "point_observations": 2,
+    "known_overlap_days": null
+   }
+  ]
+ },
+ "group_sample_audits": [
+  {
+   "group_size": 2,
+   "member_set_hash": "005e4e091071ece2",
+   "role_context": "BOARD",
+   "kind": "RECURRING_GROUP",
+   "members_resolved": [
+    7747,
+    8671
+   ],
+   "support": {
+    "episode_keys": [
+     "5047:SAME_EVENT:2026-03-26..2026-03-26:005e4e091071",
+     "5047:SAME_SNAPSHOT:2026-09-01..2026-09-01:d5f4fdcb7ca5"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   },
+   "episode_samples": [
+    {
+     "episode_key": "EP:5047:BOARD:005e4e091071ece2:001",
+     "company": 5047,
+     "context": "BOARD",
+     "interval": [
+      "2026-03-26",
+      "2026-03-26"
+     ],
+     "co_observation_kind": "SAME_EVENT",
+     "junction_members": 2,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    },
+    {
+     "episode_key": "EP:5047:BOARD:005e4e091071ece2:002",
+     "company": 5047,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 2,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    }
+   ],
+   "junction_complete": true,
+   "source_trace": [
+    {
+     "observation_key": "PDF:4:CHE:115956",
+     "person": 7747,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 18992,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CHE:115957",
+     "person": 8671,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 18992,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:63809",
+     "person": 7747,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:63814",
+     "person": 8671,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    }
+   ]
+  },
+  {
+   "group_size": 3,
+   "member_set_hash": "0030eaa198a587f6",
+   "role_context": "BOARD",
+   "kind": "RECURRING_GROUP",
+   "members_resolved": [
+    4682,
+    5345,
+    9298
+   ],
+   "support": {
+    "episode_keys": [
+     "2791:SAME_EVENT:2026-03-23..2026-03-23:5cfaf980bec3",
+     "2791:SAME_SNAPSHOT:2026-09-01..2026-09-01:5cfaf980bec3"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   },
+   "episode_samples": [
+    {
+     "episode_key": "EP:2791:BOARD:0030eaa198a587f6:001",
+     "company": 2791,
+     "context": "BOARD",
+     "interval": [
+      "2026-03-23",
+      "2026-03-23"
+     ],
+     "co_observation_kind": "SAME_EVENT",
+     "junction_members": 3,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    },
+    {
+     "episode_key": "EP:2791:BOARD:0030eaa198a587f6:002",
+     "company": 2791,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 3,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    }
+   ],
+   "junction_complete": true,
+   "source_trace": [
+    {
+     "observation_key": "PDF:4:CHE:127554",
+     "person": 4682,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 29893,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CHE:127555",
+     "person": 9298,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 29893,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CHE:127557",
+     "person": 5345,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 29893,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:66475",
+     "person": 5345,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:66477",
+     "person": 9298,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:66478",
+     "person": 4682,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    }
+   ]
+  },
+  {
+   "group_size": 4,
+   "member_set_hash": "00b5a28c7d9dcbe2",
+   "role_context": "BOARD",
+   "kind": "RECURRING_GROUP",
+   "members_resolved": [
+    713,
+    4127,
+    4509,
+    8036
+   ],
+   "support": {
+    "episode_keys": [
+     "3290:SAME_EVENT:2025-09-02..2025-09-02:00b5a28c7d9d",
+     "3290:SAME_SNAPSHOT:2026-09-01..2026-09-01:00b5a28c7d9d",
+     "9448:SAME_SNAPSHOT:2026-09-01..2026-09-01:00b5a28c7d9d"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 2
+    },
+    "support_company_count": 2,
+    "support_episode_count": 3
+   },
+   "episode_samples": [
+    {
+     "episode_key": "EP:3290:BOARD:00b5a28c7d9dcbe2:001",
+     "company": 3290,
+     "context": "BOARD",
+     "interval": [
+      "2025-09-02",
+      "2025-09-02"
+     ],
+     "co_observation_kind": "SAME_EVENT",
+     "junction_members": 4,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    },
+    {
+     "episode_key": "EP:3290:BOARD:00b5a28c7d9dcbe2:002",
+     "company": 3290,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 4,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    }
+   ],
+   "junction_complete": true,
+   "source_trace": [
+    {
+     "observation_key": "PDF:4:CHE:129062",
+     "person": 8036,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 31426,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CHE:129063",
+     "person": 713,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 31426,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CHE:129064",
+     "person": 4509,
+     "kind": "APPOINTED_EVENT",
+     "source_event_id": 31426,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:66946",
+     "person": 8036,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:66947",
+     "person": 713,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:66948",
+     "person": 4509,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    }
+   ]
+  },
+  {
+   "group_size": 5,
+   "member_set_hash": "003bcf94c6a2ffef",
+   "role_context": "BOARD",
+   "kind": "RECURRING_GROUP",
+   "members_resolved": [
+    578,
+    3630,
+    4029,
+    4114,
+    9423
+   ],
+   "support": {
+    "episode_keys": [
+     "5150:SAME_SNAPSHOT:2026-09-01..2026-09-01:003bcf94c6a2",
+     "7218:SAME_SNAPSHOT:2026-09-01..2026-09-01:003bcf94c6a2"
+    ],
+    "episode_kind_counts": {
+     "SAME_SNAPSHOT": 2
+    },
+    "support_company_count": 2,
+    "support_episode_count": 2
+   },
+   "episode_samples": [
+    {
+     "episode_key": "EP:5150:BOARD:003bcf94c6a2ffef:001",
+     "company": 5150,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 5,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    },
+    {
+     "episode_key": "EP:7218:BOARD:003bcf94c6a2ffef:001",
+     "company": 7218,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 5,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    }
+   ],
+   "junction_complete": true,
+   "source_trace": [
+    {
+     "observation_key": "PDF:4:CPR:60628",
+     "person": 578,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:60629",
+     "person": 4029,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:60630",
+     "person": 3630,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64823",
+     "person": 578,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64824",
+     "person": 4029,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64825",
+     "person": 3630,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    }
+   ]
+  },
+  {
+   "group_size": 6,
+   "member_set_hash": "00d77501b3d73922",
+   "role_context": "BOARD",
+   "kind": "RECURRING_GROUP",
+   "members_resolved": [
+    1163,
+    1424,
+    2321,
+    6814,
+    7412,
+    9591
+   ],
+   "support": {
+    "episode_keys": [
+     "2524:SAME_SNAPSHOT:2026-09-01..2026-09-01:b16c1d0138a1",
+     "9287:SAME_SNAPSHOT:2026-09-01..2026-09-01:b16c1d0138a1"
+    ],
+    "episode_kind_counts": {
+     "SAME_SNAPSHOT": 2
+    },
+    "support_company_count": 2,
+    "support_episode_count": 2
+   },
+   "episode_samples": [
+    {
+     "episode_key": "EP:2524:BOARD:00d77501b3d73922:001",
+     "company": 2524,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 6,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    },
+    {
+     "episode_key": "EP:9287:BOARD:00d77501b3d73922:001",
+     "company": 9287,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 6,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    }
+   ],
+   "junction_complete": true,
+   "source_trace": [
+    {
+     "observation_key": "PDF:4:CPR:64544",
+     "person": 2321,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64545",
+     "person": 6814,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64546",
+     "person": 9591,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64531",
+     "person": 2321,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64532",
+     "person": 6814,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64533",
+     "person": 9591,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    }
+   ]
+  },
+  {
+   "group_size": 7,
+   "member_set_hash": "b16c1d0138a1dee4",
+   "role_context": "BOARD",
+   "kind": "RECURRING_GROUP",
+   "members_resolved": [
+    1163,
+    1424,
+    2321,
+    5328,
+    6814,
+    7412,
+    9591
+   ],
+   "support": {
+    "episode_keys": [
+     "2524:SAME_SNAPSHOT:2026-09-01..2026-09-01:b16c1d0138a1",
+     "9287:SAME_SNAPSHOT:2026-09-01..2026-09-01:b16c1d0138a1"
+    ],
+    "episode_kind_counts": {
+     "SAME_SNAPSHOT": 2
+    },
+    "support_company_count": 2,
+    "support_episode_count": 2
+   },
+   "episode_samples": [
+    {
+     "episode_key": "EP:2524:BOARD:b16c1d0138a1dee4:001",
+     "company": 2524,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 7,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    },
+    {
+     "episode_key": "EP:9287:BOARD:b16c1d0138a1dee4:001",
+     "company": 9287,
+     "context": "BOARD",
+     "interval": [
+      "2026-09-01",
+      "2026-09-01"
+     ],
+     "co_observation_kind": "SAME_SNAPSHOT",
+     "junction_members": 7,
+     "kinds": [
+      "PDF_HISTORY"
+     ]
+    }
+   ],
+   "junction_complete": true,
+   "source_trace": [
+    {
+     "observation_key": "PDF:4:CPR:64544",
+     "person": 2321,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64545",
+     "person": 6814,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64546",
+     "person": 9591,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64531",
+     "person": 2321,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64532",
+     "person": 6814,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    },
+    {
+     "observation_key": "PDF:4:CPR:64533",
+     "person": 9591,
+     "kind": "CURRENT_STATE_SNAPSHOT",
+     "source_event_id": null,
+     "source_attempt_id": null,
+     "family": "PDF_HISTORY"
+    }
+   ]
+  },
+  {
+   "group_size": 2,
+   "member_set_hash": "b5c36fd96e76f5e8",
+   "role_context": "BOARD",
+   "kind": "RECURRING_GROUP",
+   "members_resolved": [
+    80,
+    7261
+   ],
+   "support": {
+    "episode_keys": [
+     "965:SAFE_PERIOD_OVERLAP:2015-12-02..2016-07-19:b5c36fd96e76",
+     "965:SAME_SNAPSHOT:2026-09-01..2026-09-01:7fd8daa5d92a"
+    ],
+    "episode_kind_counts": {
+     "SAME_SNAPSHOT": 1,
+     "SAFE_PERIOD_OVERLAP": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   },
+   "episode_samples": [
+    {
+     "episode_key": "EP:965:BOARD:b5c36fd96e76f5e8:001",
+     "company": 965,
+     "common_intersection": [
+      "2015-12-02",
+      "2016-07-19"
+     ],
+     "stored_interval": [
+      "2015-12-02",
+      "2016-07-19"
+     ],
+     "interval_matches": true,
+     "members": 2,
+     "junction_members": 4,
+     "junction_persons_match": true
+    }
+   ],
+   "source_trace": [],
+   "safe_period_overlap": true
+  }
+ ],
+ "group_size_distribution": {
+  "2": 1580,
+  "3": 805,
+  "4": 320,
+  "5": 101,
+  "6": 18,
+  "7": 1
+ },
+ "source_separation": {
+  "pdf_only_pdfhist": 0,
+  "pdf_provenance_valid": true,
+  "ownership_rows_malformed": 0,
+  "legacy_or_ece_leak": 0,
+  "web_derived_groups": 0,
+  "web_derived_pairs": 0,
+  "ownership_without_request_attempt": 0
+ },
+ "coverage": {
+  "resolved_historical_events": 3483,
+  "unresolved_historical_events": 7126,
+  "ambiguous": 0,
+  "current_governance_linked": 7683,
+  "unresolved_current_person": 76,
+  "ownership_person_company_observations": 817,
+  "web_governance_observations": 0,
+  "web_unresolved_canonical": 7770,
+  "phase3_applicability": "Phase 3 pairs/groups use ONLY safely resolved observations; 7 126 unresolved historical events and web governance (0 canonical obs) contribute no pair/group rows (fail-closed)"
+ },
+ "closure_pair_metadata": {
+  "fallback_rows": 328,
+  "null_source_family_fallback_rows": 0,
+  "null_authority_class_fallback_rows": 171,
+  "rule_violations": []
+ },
+ "closure_support_recomputation": {
+  "mismatches": [],
+  "cross_kind_supported_groups": 930
+ },
+ "cross_kind_group_samples": [
+  {
+   "group_id": 11301,
+   "context": "BOARD",
+   "size": 2,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "5266:SAME_EVENT:2023-11-16..2023-11-16:8b0e1ce927ed",
+     "5266:SAME_SNAPSHOT:2026-09-01..2026-09-01:8b0e1ce927ed"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11302,
+   "context": "BOARD",
+   "size": 3,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "5266:SAME_EVENT:2023-11-16..2023-11-16:8b0e1ce927ed",
+     "5266:SAME_SNAPSHOT:2026-09-01..2026-09-01:8b0e1ce927ed"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11303,
+   "context": "BOARD",
+   "size": 2,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "5266:SAME_EVENT:2023-11-16..2023-11-16:8b0e1ce927ed",
+     "5266:SAME_SNAPSHOT:2026-09-01..2026-09-01:8b0e1ce927ed"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11313,
+   "context": "BOARD",
+   "size": 2,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 3
+   },
+   "companies": 3,
+   "episodes": 4,
+   "support": {
+    "episode_keys": [
+     "7082:SAME_EVENT:2018-10-25..2018-10-25:387cfaa2fc70",
+     "5412:SAME_SNAPSHOT:2026-09-01..2026-09-01:7efef5580e55",
+     "7082:SAME_SNAPSHOT:2026-09-01..2026-09-01:7efef5580e55",
+     "9113:SAME_SNAPSHOT:2026-09-01..2026-09-01:7efef5580e55"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 3
+    },
+    "support_company_count": 3,
+    "support_episode_count": 4
+   }
+  },
+  {
+   "group_id": 11314,
+   "context": "BOARD",
+   "size": 2,
+   "kinds": {
+    "SAFE_PERIOD_OVERLAP": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "965:SAFE_PERIOD_OVERLAP:2015-12-02..2016-07-19:b5c36fd96e76",
+     "965:SAME_SNAPSHOT:2026-09-01..2026-09-01:7fd8daa5d92a"
+    ],
+    "episode_kind_counts": {
+     "SAME_SNAPSHOT": 1,
+     "SAFE_PERIOD_OVERLAP": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11315,
+   "context": "BOARD",
+   "size": 2,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "601:SAME_EVENT:2023-07-18..2023-07-18:d180a359e8a6",
+     "601:SAME_SNAPSHOT:2026-09-01..2026-09-01:d180a359e8a6"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11316,
+   "context": "BOARD",
+   "size": 3,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "601:SAME_EVENT:2023-07-18..2023-07-18:d180a359e8a6",
+     "601:SAME_SNAPSHOT:2026-09-01..2026-09-01:d180a359e8a6"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11317,
+   "context": "BOARD",
+   "size": 2,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "601:SAME_EVENT:2023-07-18..2023-07-18:d180a359e8a6",
+     "601:SAME_SNAPSHOT:2026-09-01..2026-09-01:d180a359e8a6"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11318,
+   "context": "BOARD",
+   "size": 2,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "220:SAME_EVENT:2024-05-24..2024-05-24:e105c19b5d3d",
+     "220:SAME_SNAPSHOT:2026-09-01..2026-09-01:e105c19b5d3d"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  },
+  {
+   "group_id": 11319,
+   "context": "BOARD",
+   "size": 3,
+   "kinds": {
+    "SAME_EVENT": 1,
+    "SAME_SNAPSHOT": 1
+   },
+   "companies": 1,
+   "episodes": 2,
+   "support": {
+    "episode_keys": [
+     "220:SAME_EVENT:2024-05-24..2024-05-24:e105c19b5d3d",
+     "220:SAME_SNAPSHOT:2026-09-01..2026-09-01:e105c19b5d3d"
+    ],
+    "episode_kind_counts": {
+     "SAME_EVENT": 1,
+     "SAME_SNAPSHOT": 1
+    },
+    "support_company_count": 1,
+    "support_episode_count": 2
+   }
+  }
+ ],
+ "closure_core_recomputation": {
+  "invalid": [],
+  "core_groups": 980
+ },
+ "pair_metrics": {
+  "by_class": {
+   "KNOWN_TEMPORAL_OVERLAP": 16,
+   "SAME_COMPANY_EVER": 98,
+   "SAME_OBSERVATION": 1070,
+   "SAME_SNAPSHOT": 4480,
+   "UNKNOWN_TEMPORAL_RELATION": 230
+  },
+  "by_context": {
+   "BOARD": 4930,
+   "CONTROL_ACTOR": 12,
+   "MANAGEMENT": 761,
+   "OWNERSHIP": 191
+  },
+  "unique_person_pairs": 3677,
+  "direct": {
+   "felag_snapshot_pairs": 4480,
+   "same_event_pairs": 1019,
+   "ownership_same_obs_pairs": 51,
+   "known_days_rows": 16,
+   "point_overlap_rows": 0
+  }
+ },
+ "group_observation_metrics": {
+  "SAFE_PERIOD_OVERLAP": 20,
+  "SAME_EVENT": 1620,
+  "SAME_SNAPSHOT": 6785
+ },
+ "group_metrics": {
+  "BOARD:CORE_GROUP": 974,
+  "BOARD:RECURRING_GROUP": 1764,
+  "CONTROL_ACTOR:RECURRING_GROUP": 1,
+  "MANAGEMENT:CORE_GROUP": 6,
+  "MANAGEMENT:RECURRING_GROUP": 79,
+  "OWNERSHIP:RECURRING_GROUP": 1
+ }
+}

@@ -1,0 +1,602 @@
+[
+ {
+  "regnr": "2",
+  "entity_type": "P/F",
+  "name": "2 (P/F S2 , Smyrilsvegur 5 Postrúm 109)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "3",
+  "entity_type": "P/F",
+  "name": "Tjaldur (P/F S3 , Bryggjubakki 22 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "4",
+  "entity_type": "P/F",
+  "name": "Aktieselskabet Thorshavns Mælkeforsyning og Margarinefabrik (P/F S4 , c/o <redacted>)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "8",
+  "entity_type": "P/F",
+  "name": "Trygd Tryggingarfelag (P/F S8 , Oknarvegur 5 Postrúm 3048)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "9",
+  "entity_type": "P/F",
+  "name": "N. J. Mortensen (P/F S9 , Havnarlagið 54 Postrúm 2)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "10",
+  "entity_type": "P/F",
+  "name": "Føroya Banki (P/F S10 , Oknarvegur 5 Postrúm 3048)",
+  "reason": "pilot-anchor"
+ },
+ {
+  "regnr": "14",
+  "entity_type": "Sp/F",
+  "name": "14 (Sp/F S14 , Jøkulstræti 6 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "15",
+  "entity_type": "P/F",
+  "name": "Kimbil (P/F S15 , Brattalíð 7 Postrúm 222)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "21",
+  "entity_type": "P/F",
+  "name": "Maria Poulsen & Co. (P/F S21 , Smyrilsvegur 8 Postrúm 182)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "27",
+  "entity_type": "P/F",
+  "name": "Rich. B. Thomsen & Søn & Suðuroyar Timburhandil (P/F S27 , Havnalagið 12 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "29",
+  "entity_type": "P/F",
+  "name": "Thomas Dam & Co. (P/F S29 , Heykavegur 3 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "30",
+  "entity_type": "Sp/F",
+  "name": "Hans Joensen (Sp/F S30 , J. C. Svabosgøta 46 Postrúm 338)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "34",
+  "entity_type": "P/F",
+  "name": "Sandship (P/F S34 , Bakkavegur 32 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "36",
+  "entity_type": "Sp/F",
+  "name": "Hólmur (Sp/F S36 , Argjavegur 50 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "37",
+  "entity_type": "P/F",
+  "name": "C.C. (P/F S37 , Brekkutún 16 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "41",
+  "entity_type": "P/F",
+  "name": "H.N. Jacobsens Bókhandil (P/F S41 , Húsagarður 2 Postrúm 55)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "49",
+  "entity_type": "P/F",
+  "name": "Nema (P/F S49 , Smyrilsvegur 5 Postrúm 109)",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "54",
+  "entity_type": "Sp/F",
+  "name": "Viðanes (Sp/F S54 , Jøkulstræti 6 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "55",
+  "entity_type": "P/F",
+  "name": "Klaksvíkar Skipasmiðja (P/F S55 , Postrúm 250 )",
+  "reason": "oldest"
+ },
+ {
+  "regnr": "57",
+  "entity_type": "P/F",
+  "name": "Uttari Handil (P/F S57 , Havnalagið 12 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "931",
+  "entity_type": "P/F",
+  "name": "Varðin (P/F S931 , Garðabrekka 4 )",
+  "reason": "pilot-anchor"
+ },
+ {
+  "regnr": "1062",
+  "entity_type": "P/F",
+  "name": "Formula (P/F S1062 , Óðinshædd 2 Postrúm 1078)",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "2177",
+  "entity_type": "Sp/F",
+  "name": "Framskák Studio (Sp/F S2177 , Smyrilsvegur 10 Postrúm 90)",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "2400",
+  "entity_type": "Spk",
+  "name": "Norðoya Sparikassi (Spk S2400 , Ósávegur 1 Postrúm 149)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "2572",
+  "entity_type": "Fil",
+  "name": "DNV AS filialur av DNV AS, Norge (Fil S2572 , Vestara Bryggja 15 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "2628",
+  "entity_type": "Sp/F",
+  "name": "RTS Contractors (Sp/F S2628 , Fjøruvegur 7 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "2800",
+  "entity_type": "Gr",
+  "name": "Framtaksgrunnur Føroya (Gr S2800 , Vestara Bryggja 15, 1.th. Postrúm 3157)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "2934",
+  "entity_type": "Gr",
+  "name": "Grunnur H. N. Jacobsens (Gr S2934 , c/o <redacted>)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "2959",
+  "entity_type": "Gr",
+  "name": "Føroyagrunnurin frá 1971 (Gr S2959 , c/o <redacted>)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "3034",
+  "entity_type": "Sp/F",
+  "name": "Sæborg (Sp/F S3034 , Skansavegur 7 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "3433",
+  "entity_type": "Sp/F",
+  "name": "Hami (Sp/F S3433 , Norðari Ringvegur 13 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "3566",
+  "entity_type": "Eft/gr",
+  "name": "Eftirlønargrunnur Løntakaranna (Eft/gr S3566 , Stoffalág 17 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "3742",
+  "entity_type": "Sp/F",
+  "name": "Komfortbilar í konkurs (Sp/F S3742 , c/o <redacted>)",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "4052",
+  "entity_type": "Sp/F",
+  "name": "Viljin (Sp/F S4052 , Sýnarvegur 2 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "4192",
+  "entity_type": "Gr",
+  "name": "Suðuroyargrunnurin (Gr S4192 , Vágsvegur 60 Postrúm 30)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "4362",
+  "entity_type": "P/F",
+  "name": "Ognarfelagið SK (P/F S4362 , Falkavegur 6 Postrúm 3229)",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "4679",
+  "entity_type": "Sp/F",
+  "name": "J.E. (Sp/F S4679 , á Bakka 19 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "4954",
+  "entity_type": "Sp/F",
+  "name": "Selmar Nielsen, arkitektur (Sp/F S4954 , Landavegur 9 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "5015",
+  "entity_type": "Sp/F",
+  "name": "01.01.2008 (Sp/F S5015 , Brekkutún 7 Postrúm 1200)",
+  "reason": "pilot-anchor"
+ },
+ {
+  "regnr": "5019",
+  "entity_type": "Sp/F",
+  "name": "ARA (Sp/F S5019 , Traðarvegur 88 )",
+  "reason": "pilot-anchor"
+ },
+ {
+  "regnr": "5143",
+  "entity_type": "Gr",
+  "name": "Grunnurin Immanuel (Gr S5143 , Vørðubrekka 5 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5272",
+  "entity_type": "LVAÁ",
+  "name": "Meginfelag Búnaðarmanna (LVAÁ S5272 , Vegurin Langi 31 Postrúm 3088)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5273",
+  "entity_type": "LVAÁ",
+  "name": "Limasamtakið FK (LVAÁ S5273 , Brekkutún 9 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5274",
+  "entity_type": "Í/F",
+  "name": "Advokatfelagið (Í/F S5274 , Lucas Debesargøta 8 Postrúm 359)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5275",
+  "entity_type": "Í/F",
+  "name": "Advokatskrivstovan (Í/F S5275 , Frúutrøð 4 Postrúm 6)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5285",
+  "entity_type": "Sp/F",
+  "name": "Eliesar Olsen, Serlækni (Sp/F S5285 , Varðagøta 44 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "5334",
+  "entity_type": "FVAÁ",
+  "name": "Ognarfelag Tryggingartakaranna (FVAÁ S5334 , Kongabrúgvin Postrúm 329)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5336",
+  "entity_type": "Í/F",
+  "name": "Grasrót (Í/F S5336 , Vatnaskarðar )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5564",
+  "entity_type": "Sp/F",
+  "name": "Norðvind (Sp/F S5564 , Mainifløta 1 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "5774",
+  "entity_type": "Gr",
+  "name": "Norðoya Grunnurin (Gr S5774 , Ósavegur 1 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "5805",
+  "entity_type": "Sp/F",
+  "name": "Defined Energy (Sp/F S5805 , Geytagøta 23 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "5968",
+  "entity_type": "Í/F",
+  "name": "Faerport II Konsortium (Í/F S5968 , C/o SNA Landavgur 9)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "6009",
+  "entity_type": "Sp/F",
+  "name": "Mouritsen (Sp/F S6009 , Einarsgøta 7 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "6092",
+  "entity_type": "Í/F",
+  "name": "Tannlæknastovan í Dalatúni (Í/F S6092 , Dalatún 19 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "6211",
+  "entity_type": "Sp/F",
+  "name": "Katrina Christiansen (Sp/F S6211 , Skansavegur 7 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "6378",
+  "entity_type": "Fil",
+  "name": "NCC Føroyar, deild av NCC Norge AS, Noreg (Fil S6378 , á Heygnum Mikla 7 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "6388",
+  "entity_type": "Sp/F",
+  "name": "Fiskivarði (Sp/F S6388 , Rógvuvegur 18 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "6479",
+  "entity_type": "Í/F",
+  "name": "Articon - Búsetur (Í/F S6479 , c/o <redacted>)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "6579",
+  "entity_type": "Í/F",
+  "name": "Samtakið Klintra/Føroya Tele (Í/F S6579 , Heykavegur 4 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "6587",
+  "entity_type": "Sp/F",
+  "name": "Byggiráð (Sp/F S6587 , Undir Tinnukletti 8 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "6781",
+  "entity_type": "ÍVF",
+  "name": "OJ Service í konkurs (ÍVF S6781 , c/o <redacted>)",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "6982",
+  "entity_type": "ÍVF",
+  "name": "Odal (ÍVF S6982 , Peturstrøð 10 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "7084",
+  "entity_type": "Í/F",
+  "name": "Sandá (Í/F S7084 , c/o <redacted>)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "7173",
+  "entity_type": "ÍVF",
+  "name": "Natalia's Grill Bar (ÍVF S7173 , Giljageil 6 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "7346",
+  "entity_type": "Sp/F",
+  "name": "GJ (Sp/F S7346 , Stiðjagøta 25 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "7403",
+  "entity_type": "Í/F",
+  "name": "Nordic Aquaculture Contractors (NAC) (Í/F S7403 , Oyravegur 47 )",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "7516",
+  "entity_type": "ÍVF",
+  "name": "Høgnesen (ÍVF S7516 , Sjúrðargøta 23 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "7684",
+  "entity_type": "ÍVF",
+  "name": "Natúr Orka (ÍVF S7684 , Vágsvegur 9 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "7865",
+  "entity_type": "ÍVF",
+  "name": "Nephtys (ÍVF S7865 , Niðaragøta 9 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "8023",
+  "entity_type": "Sp/F",
+  "name": "JáB Holding (Sp/F S8023 , Viljormsgøta 3 )",
+  "reason": "pilot-anchor"
+ },
+ {
+  "regnr": "8027",
+  "entity_type": "Sp/F",
+  "name": "Shari (Sp/F S8027 , Heiðavegur 30 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "8088",
+  "entity_type": "Fil",
+  "name": "Metrostav Norge AS, deild av Metrostav Norge AS, Noreg (Fil S8088 , undir Bryggjubakka 21 Postrúm 106)",
+  "reason": "rare-entity-type"
+ },
+ {
+  "regnr": "8187",
+  "entity_type": "Sp/F",
+  "name": "Sálarfrøðistovan (Sp/F S8187 , Dr. Jakobsensgøta 19, 1. hædd Postrúm 167)",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "8331",
+  "entity_type": "ÍVF",
+  "name": "BM (ÍVF S8331 , Mørkin 14 kj. )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "8493",
+  "entity_type": "ÍVF",
+  "name": "SE (ÍVF S8493 , Landavegur 94A, 3.8 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "8636",
+  "entity_type": "ÍVF",
+  "name": "ES Tænastan (ÍVF S8636 , Traðavegur 35 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "8664",
+  "entity_type": "ÍVF",
+  "name": "Trolloftið (ÍVF S8664 , á Nesi 40 )",
+  "reason": "pilot-anchor"
+ },
+ {
+  "regnr": "8775",
+  "entity_type": "ÍVF",
+  "name": "B&F/Gutti Kristiansen (ÍVF S8775 , við Kykslíð 2 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "8907",
+  "entity_type": "ÍVF",
+  "name": "Týtt og tulkað (ÍVF S8907 , Stangavegur 84 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "9038",
+  "entity_type": "Sp/F",
+  "name": "Kroka (Sp/F S9038 , Strandatún 11 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "9170",
+  "entity_type": "ÍVF",
+  "name": "Zinfandel (ÍVF S9170 , Gerðisbreyt 12 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "9303",
+  "entity_type": "ÍVF",
+  "name": "á Kirkjuheyggi (ÍVF S9303 , Garðabrekka 15 )",
+  "reason": "middle-spread"
+ },
+ {
+  "regnr": "9449",
+  "entity_type": "ÍVF",
+  "name": "MHJ RØR (ÍVF S9449 , Gásamýri 3 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9450",
+  "entity_type": "Sp/F",
+  "name": "JFÁ (Sp/F S9450 , Strandatún 1 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9451",
+  "entity_type": "ÍVF",
+  "name": "JKD - Glas og Timbur (ÍVF S9451 , Borgartún 1 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9452",
+  "entity_type": "ÍVF",
+  "name": "Gagn Skógvar (ÍVF S9452 , Hoyvíksvegur 17 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9453",
+  "entity_type": "ÍVF",
+  "name": "Massage Klinikk við Genevieve (ÍVF S9453 , Karlamagnusarbreyt 42, 0,7 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9454",
+  "entity_type": "Sp/F",
+  "name": "Frá 08.07.2026 (Sp/F S9454 , Smyrilsvegur 8 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9455",
+  "entity_type": "ÍVF",
+  "name": "Albøta (ÍVF S9455 , Hoyvíksvegur 3 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9456",
+  "entity_type": "Sp/F",
+  "name": "Teigar (Sp/F S9456 , Ryskigøta 29 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9457",
+  "entity_type": "Sp/F",
+  "name": "Norhavn Byg (Sp/F S9457 , Bertugøta 9 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9458",
+  "entity_type": "Sp/F",
+  "name": "Stál Bygg (Sp/F S9458 , Undir Bryggjubakka 21 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9459",
+  "entity_type": "Sp/F",
+  "name": "22.06 (Sp/F S9459 , Bóndabrekka 13 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9460",
+  "entity_type": "ÍVF",
+  "name": "HD Megin (ÍVF S9460 , Garðsvegur 25 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9461",
+  "entity_type": "ÍVF",
+  "name": "BA Invest (ÍVF S9461 , Heygsvegur 14 VM )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9462",
+  "entity_type": "ÍVF",
+  "name": "BKJ Invest (ÍVF S9462 , Ovari Vegur 38 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9463",
+  "entity_type": "ÍVF",
+  "name": "Volt (ÍVF S9463 , Eiðisvegur 4 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9464",
+  "entity_type": "ÍVF",
+  "name": "10. septembur 1998 (ÍVF S9464 , Marknagilsvegur 32 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9465",
+  "entity_type": "ÍVF",
+  "name": "Skald (ÍVF S9465 , Vilhelmstrøð 6 )",
+  "reason": "newest"
+ },
+ {
+  "regnr": "9466",
+  "entity_type": "Sp/F",
+  "name": "Ólavsdóttir (Sp/F S9466 , Garðavegur 46 )",
+  "reason": "newest"
+ }
+]

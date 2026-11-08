@@ -1,0 +1,42 @@
+[
+ {
+  "source_schema": "registry_ownership",
+  "source_table": "company_relation_context",
+  "source_column": "source_relation_id",
+  "constraint_name": "company_relation_context_source_relation_id_fkey",
+  "validation_state": "VALIDATED",
+  "target_schema": "registry_ownership",
+  "target_table": "relation",
+  "target_column": "relation_id"
+ },
+ {
+  "source_schema": "registry_ownership",
+  "source_table": "person_relation_context",
+  "source_column": "person_a_relation_id",
+  "constraint_name": "person_relation_context_person_a_relation_id_fkey",
+  "validation_state": "VALIDATED",
+  "target_schema": "registry_ownership",
+  "target_table": "relation",
+  "target_column": "relation_id"
+ },
+ {
+  "source_schema": "registry_ownership",
+  "source_table": "person_relation_context",
+  "source_column": "person_b_relation_id",
+  "constraint_name": "person_relation_context_person_b_relation_id_fkey",
+  "validation_state": "VALIDATED",
+  "target_schema": "registry_ownership",
+  "target_table": "relation",
+  "target_column": "relation_id"
+ },
+ {
+  "source_schema": "registry_ownership",
+  "source_table": "relation",
+  "source_column": "source_attempt_id",
+  "constraint_name": "relation_source_attempt_id_fkey",
+  "validation_state": "VALIDATED",
+  "target_schema": "public",
+  "target_table": "request_attempt",
+  "target_column": "attempt_id"
+ }
+]

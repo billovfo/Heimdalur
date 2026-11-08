@@ -1,0 +1,1093 @@
+{
+  "selection_ref": "pdf_render_accuracy_selection.json",
+  "methodology": {
+    "primary": "double-extractor cross-check: stored pypdf extracted_text (what the parser consumed) vs independent poppler pdftotext (raw + -layout) on the same stored PDF bytes",
+    "render": "all pages of all 20 documents rendered to PNG (~150 dpi, tmp_render_pages/) stored as owner-reviewable artifacts; per-page ink-density vs content check",
+    "visual_limitation": "audit model has no image input and no OCR engine installable in this runtime; visual inspection substituted by (a) independent second extraction engine over the same bytes, (b) rendered-page ink-density sanity (no inked page lacks extracted content), (c) glyph-level agreement analysis. PNG renders retained for human owner review.",
+    "semantic_checks": "two-way date/number/token set comparison after whitespace normalization; every residual gap manually traced"
+  },
+  "documents": [
+    {
+      "document_id": 15600,
+      "observation_id": 7689,
+      "registration_number": "5534",
+      "pdf_type": "FelagPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 0.988,
+        "tokens_missing_in_pypdf_n": 1,
+        "tokens_missing_in_poppler_n": 1,
+        "tokens_missing_in_pypdf_sample": [
+          "skráseting"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "2skráseting"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0233,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0115,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [],
+      "material_extraction_errors": 0,
+      "document_result": "PASS"
+    },
+    {
+      "document_id": 3457,
+      "observation_id": 1620,
+      "registration_number": "155",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.079,
+        "tokens_missing_in_pypdf_n": 11,
+        "tokens_missing_in_poppler_n": 17,
+        "tokens_missing_in_pypdf_sample": [
+          "11-567",
+          "ndamál",
+          "sæther",
+          "liasen,",
+          "ndamál:",
+          "sandnæs",
+          "rættartún",
+          "pætursgøta",
+          "jøkulstræti",
+          "dimmalætting",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "pæ",
+          "ræ",
+          "sæ",
+          "ti",
+          "ther",
+          "tting",
+          "sandnæ",
+          "dimmalæ",
+          "endamál",
+          "ttartún",
+          "11-567j.",
+          "eliasen,",
+          "endamál:",
+          "tursgøta",
+          "jøkulstræ"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0432,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0101,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 2903,
+      "observation_id": 1342,
+      "registration_number": "1104",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.107,
+        "tokens_missing_in_pypdf_n": 5,
+        "tokens_missing_in_poppler_n": 6,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "inar",
+          "11-503",
+          "dimmalætting",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "einar",
+          "tting",
+          "dimmalæ",
+          "11-503j.",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.036,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 15735,
+      "observation_id": 7756,
+      "registration_number": "5547",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.086,
+        "tokens_missing_in_pypdf_n": 9,
+        "tokens_missing_in_poppler_n": 9,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "kt,",
+          "ric",
+          "spe",
+          "ven",
+          "ndamál",
+          "10-1052",
+          "spreingiog",
+          "___________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "sæ",
+          "eric",
+          "even",
+          "spekt,",
+          "endamál",
+          "________",
+          "10-1052j.",
+          "spreingi-",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0465,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0037,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 16876,
+      "observation_id": 8326,
+      "registration_number": "5758",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.114,
+        "tokens_missing_in_pypdf_n": 8,
+        "tokens_missing_in_poppler_n": 11,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "16-304",
+          "ndamál",
+          "ndamál:",
+          "sambært",
+          "hækkingar",
+          "íløguætlan",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "hæ",
+          "rt",
+          "tlan",
+          "sambæ",
+          "íløguæ",
+          "endamál",
+          "kkingar",
+          "16-304j.",
+          "endamál:",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0336,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 8077,
+      "observation_id": 3930,
+      "registration_number": "3448",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.102,
+        "tokens_missing_in_pypdf_n": 6,
+        "tokens_missing_in_poppler_n": 7,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "11-611",
+          "ndamál",
+          "ndamál:",
+          "dimmalætting",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "tting",
+          "dimmalæ",
+          "endamál",
+          "11-611j.",
+          "endamál:",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0373,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 24026,
+      "observation_id": 11901,
+      "registration_number": "7321",
+      "pdf_type": "FelagPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 0.989,
+        "tokens_missing_in_pypdf_n": 1,
+        "tokens_missing_in_poppler_n": 1,
+        "tokens_missing_in_pypdf_sample": [
+          "skráseting"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "1skráseting"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0253,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [],
+      "material_extraction_errors": 0,
+      "document_result": "PASS"
+    },
+    {
+      "document_id": 20115,
+      "observation_id": 9946,
+      "registration_number": "6377",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.223,
+        "tokens_missing_in_pypdf_n": 13,
+        "tokens_missing_in_poppler_n": 15,
+        "tokens_missing_in_pypdf_sample": [
+          "nr.",
+          "6377",
+          "krist",
+          "navn:",
+          "16-840",
+          "2702016",
+          "adressa:",
+          "kommuna:",
+          "fráboðari:",
+          "schrøtersgø",
+          "smápartafelag:",
+          "skrásetingar-nr.",
+          "______________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "110",
+          "20,",
+          "85,",
+          "balle",
+          "kristin",
+          "postbox",
+          "6377navn:",
+          "100felagið",
+          "olsenadressa:",
+          "schrøtersgøta",
+          "tórshavn.2702016",
+          "tórshavnkommuna:",
+          "07.12.201616-840j.",
+          "smápartafelag:skrásetingar-nr.",
+          "nr.___________________________________________________________fráboðari:"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [
+          "16"
+        ],
+        "numbers_missing_in_poppler": [
+          "20",
+          "616",
+          "85"
+        ]
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.023,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary glue/split differences between engines only — glyphs identical in both; no content created or dropped"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 10064,
+      "observation_id": 4922,
+      "registration_number": "3980",
+      "pdf_type": "FelagPdf",
+      "page_count": 3,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 0.991,
+        "tokens_missing_in_pypdf_n": 1,
+        "tokens_missing_in_poppler_n": 1,
+        "tokens_missing_in_pypdf_sample": [
+          "skráseting"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "3skráseting"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0174,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0178,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        },
+        {
+          "page": 3,
+          "ink_density": 0.017,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [],
+      "material_extraction_errors": 0,
+      "document_result": "PASS"
+    },
+    {
+      "document_id": 15633,
+      "observation_id": 7712,
+      "registration_number": "5534",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.096,
+        "tokens_missing_in_pypdf_n": 11,
+        "tokens_missing_in_poppler_n": 13,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "kt,",
+          "spe",
+          "11-259",
+          "ndamál",
+          "ndamál:",
+          "dimmalætting",
+          "næstformaður",
+          "næstformaður:",
+          "virðisbrævahandil",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "næ",
+          "tting",
+          "spekt,",
+          "dimmalæ",
+          "endamál",
+          "11-259j.",
+          "endamál:",
+          "vahandil",
+          "virðisbræ",
+          "stformaður",
+          "stformaður:",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0405,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 24465,
+      "observation_id": 12119,
+      "registration_number": "7407",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.062,
+        "tokens_missing_in_pypdf_n": 14,
+        "tokens_missing_in_poppler_n": 11,
+        "tokens_missing_in_pypdf_sample": [
+          "11678",
+          "navn:",
+          "víkin",
+          "20-673",
+          "sandur",
+          "adressa:",
+          "kommuna:",
+          "tórshavn.",
+          "03.09.2020",
+          "fráboðari:",
+          "smápartafelag:",
+          "stovningardato:",
+          "skrásetingar-nr.",
+          "___________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "7407navn:",
+          "sandurp/f",
+          "klaksvíkp/f",
+          "klaksvíksp/f",
+          "víkinadressa:",
+          "tórshavn.11678",
+          "klaksvíkkommuna:",
+          "03.09.202020-673j.",
+          "klaksvíkarstovningardato:",
+          "smápartafelag:skrásetingar-nr.",
+          "___________________________________________________________fráboðari:"
+        ],
+        "dates_missing_in_pypdf": [
+          "03.09.2020"
+        ],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": [
+          "020"
+        ]
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0382,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0051,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary glue/split differences between engines only — glyphs identical in both; no content created or dropped"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 9093,
+      "observation_id": 4435,
+      "registration_number": "3725",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.106,
+        "tokens_missing_in_pypdf_n": 10,
+        "tokens_missing_in_poppler_n": 12,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "iði",
+          "ven",
+          "10-365",
+          "ndamál",
+          "yðfinn",
+          "ndamál:",
+          "dimmalætting",
+          "tænastuvirksemi",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "tæ",
+          "eiði",
+          "even",
+          "tting",
+          "dimmalæ",
+          "endamál",
+          "eyðfinn",
+          "10-365j.",
+          "endamál:",
+          "nastuvirksemi",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.036,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 15351,
+      "observation_id": 7568,
+      "registration_number": "549",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.094,
+        "tokens_missing_in_pypdf_n": 7,
+        "tokens_missing_in_poppler_n": 8,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "13-236",
+          "ndamál",
+          "hækking",
+          "lækking",
+          "ndamál:",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "hæ",
+          "læ",
+          "kking",
+          "endamál",
+          "13-236j.",
+          "endamál:",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0374,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0085,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 15354,
+      "observation_id": 7565,
+      "registration_number": "549",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.091,
+        "tokens_missing_in_pypdf_n": 5,
+        "tokens_missing_in_poppler_n": 6,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "11-199",
+          "dimmalætting",
+          "ffersøesgøta",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "tting",
+          "dimmalæ",
+          "11-199j.",
+          "effersøesgøta",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0382,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0076,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 11248,
+      "observation_id": 5514,
+      "registration_number": "4339",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.095,
+        "tokens_missing_in_pypdf_n": 6,
+        "tokens_missing_in_poppler_n": 7,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "11-170",
+          "ndamál",
+          "ndamál:",
+          "dimmalætting",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "tting",
+          "dimmalæ",
+          "endamál",
+          "11-170j.",
+          "endamál:",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0362,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0076,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 8257,
+      "observation_id": 4011,
+      "registration_number": "3491",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.088,
+        "tokens_missing_in_pypdf_n": 12,
+        "tokens_missing_in_poppler_n": 14,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "li",
+          "kt,",
+          "spe",
+          "rhard",
+          "10-164",
+          "hækking",
+          "lækking",
+          "dimmalætting",
+          "ffersøesgøta",
+          "fuglafjørður.",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "hæ",
+          "læ",
+          "eli",
+          "fug",
+          "kking",
+          "tting",
+          "erhard",
+          "spekt,",
+          "dimmalæ",
+          "10-164j.",
+          "lafjørður.",
+          "effersøesgøta",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.04,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0076,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 3075,
+      "observation_id": 1429,
+      "registration_number": "1279",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.108,
+        "tokens_missing_in_pypdf_n": 5,
+        "tokens_missing_in_poppler_n": 5,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "ndamál",
+          "13-1487",
+          "ndamál:",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "endamál",
+          "endamál:",
+          "13-1487j.",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0368,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 2857,
+      "observation_id": 1322,
+      "registration_number": "1064",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.094,
+        "tokens_missing_in_pypdf_n": 8,
+        "tokens_missing_in_poppler_n": 10,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "ndamál",
+          "ystnes",
+          "13-1424",
+          "lækking",
+          "ndamál:",
+          "tænastur,",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "læ",
+          "tæ",
+          "kking",
+          "endamál",
+          "eystnes",
+          "nastur,",
+          "endamál:",
+          "13-1424j.",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0371,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0079,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 7635,
+      "observation_id": 3712,
+      "registration_number": "3344",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.107,
+        "tokens_missing_in_pypdf_n": 7,
+        "tokens_missing_in_poppler_n": 8,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "iði",
+          "15-750",
+          "ndamál",
+          "hækking",
+          "ndamál:",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "hæ",
+          "eiði",
+          "kking",
+          "endamál",
+          "15-750j.",
+          "endamál:",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.034,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        },
+        {
+          "page": 2,
+          "ink_density": 0.0067,
+          "classification": "LOSSLESS_ORDERING_DIFFERENCE",
+          "note": "low-density continuation/footer page; full content present in extracted_text"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    },
+    {
+      "document_id": 8166,
+      "observation_id": 3973,
+      "registration_number": "3476",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "cross_extractor": {
+        "pypdf_chars_frac_vs_poppler": 1.104,
+        "tokens_missing_in_pypdf_n": 7,
+        "tokens_missing_in_poppler_n": 7,
+        "tokens_missing_in_pypdf_sample": [
+          "j.",
+          "kt,",
+          "spe",
+          "11-404",
+          "yðfinn",
+          "dimmalætting",
+          "________________________________________________________________________"
+        ],
+        "tokens_missing_in_poppler_sample": [
+          "tting",
+          "spekt,",
+          "dimmalæ",
+          "eyðfinn",
+          "11-404j.",
+          "_____________________",
+          "___________________________________________________"
+        ],
+        "dates_missing_in_pypdf": [],
+        "dates_missing_in_poppler": [],
+        "numbers_missing_in_pypdf": [],
+        "numbers_missing_in_poppler": []
+      },
+      "pages": [
+        {
+          "page": 1,
+          "ink_density": 0.0375,
+          "classification": "EXTRACTION_ACCURATE",
+          "note": "full content page; token/date/number agreement with independent extractor"
+        }
+      ],
+      "minor_artifacts": [
+        "word-boundary split differences ('E ndamál:'/'Dimmalæ tting'/'Pæ tursgøta') — same glyphs in SOURCE PDF text layer, both engines; semantically harmless"
+      ],
+      "material_extraction_errors": 0,
+      "document_result": "PASS_WITH_MINOR_EXTRACTION_ARTIFACT"
+    }
+  ],
+  "summary": {
+    "documents_audited": 20,
+    "pages_audited": 32,
+    "PASS": 3,
+    "PASS_WITH_MINOR_EXTRACTION_ARTIFACT": 17,
+    "FAIL": 0,
+    "page_classifications": {
+      "EXTRACTION_ACCURATE": 19,
+      "PRESENTATION_DIFFERENCE_ONLY": 0,
+      "LOSSLESS_ORDERING_DIFFERENCE": 13,
+      "MATERIAL_TEXT_EXTRACTION_ERROR": 0
+    }
+  },
+  "traces": {
+    "doc24465_obs12119_reg7407": {
+      "visual_source": "header lines 'Tórshavn / 03.09.2020 / 20-673 / J. nr.'",
+      "extracted_text": "Tórshavn 03.09.202020-673J. nr. (glued; date + J.nr. both present)",
+      "structured_value": "dates.registration_date=2020-09-03; all 4 formation changes registration_date=2020-09-03 — correct",
+      "propagation": "STOPS_AT_EXTRACTION — semantic content preserved"
+    },
+    "doc20115_obs9946_reg6377": {
+      "visual_source": "footer 'Tórshavn 07.12.2016 / 16-840 / J. nr.' + reference 2702016",
+      "extracted_text": "Tórshavn 07.12.201616-840J. nr. / Tórshavn.2702016 (glued; components present)",
+      "structured_value": "registration_date=2016-12-07 correct",
+      "propagation": "no semantic impact"
+    }
+  },
+  "conclusion": {
+    "material_extraction_errors": 0,
+    "systemic": false,
+    "verdict": "PASS — 0 document FAIL, 0 MATERIAL_TEXT_EXTRACTION_ERROR; all residual artifacts are source-native glue/spacing present in the PDF text layer itself and none propagate into structured_data"
+  }
+}

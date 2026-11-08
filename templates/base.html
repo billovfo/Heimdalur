@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Heimdal{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='heimdal.css') }}">
+<script src="{{ url_for('static', filename='sort.js') }}" defer></script>
+<script src="{{ url_for('static', filename='app.js') }}" defer></script>
+{% block head %}{% endblock %}
+</head>
+<body>
+<a class="skiplink" href="#indhold">Spring til indhold</a>
+
+<div class="binder">
+
+<nav class="spine" aria-label="Sider" id="spine-nav">
+  <a class="spine-id spine-brand" href="/">
+    <div class="spine-logo-badge" aria-hidden="true">H</div>
+    <div>
+      <span class="spine-word">Heimdal</span>
+      <span class="spine-sub">Færøsk virksomhedsregister · lokalt snapshot</span>
+    </div>
+  </a>
+
+  {# ——— OVERBLIK ——— #}
+  <div class="spine-group" role="group" aria-label="Overblik">
+    <p class="spine-group-title">Overblik</p>
+    <ul class="nav-list">
+      {% set overblik = [
+        ('/', 'Dashboard', 'lucide-layout-dashboard'),
+        ('/overvaagning', 'Overvågning', 'lucide-star'),
+        ('/aendringer', 'Ændringslog', 'lucide-clock'),
+      ] %}
+      {% for href, label, icon in overblik %}
+      <li><a href="{{ href }}"{{ ' aria-current=page'|safe if request.path == href or (href != '/' and request.path.startswith(href)) }}><svg class="nav-icon" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#{{ icon }}"></use></svg><span>{{ label }}</span>{% if href == '/overvaagning' and watchlist_count is defined and watchlist_count > 0 %}<span class="watchlist-nav-count badge">{{ watchlist_count }}</span>{% endif %}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {# ——— ANALYSE ——— #}
+  <div class="spine-group" role="group" aria-label="Analyse">
+    <p class="spine-group-title">Analyse</p>
+    <ul class="nav-list">
+      {% set analyse = [
+        ('/find-forbindelse', 'Find forbindelse', 'lucide-route'),
+        ('/geo-kort', 'Geo-Kort', 'lucide-map'),
+        ('/compliance', 'Registerobservationer', 'lucide-shield'),
+        ('/bulk-screening', 'Bulk Screening', 'lucide-file-text'),
+      ] %}
+      {% for href, label, icon in analyse %}
+      <li><a href="{{ href }}"{{ ' aria-current=page'|safe if request.path == href or (href != '/' and request.path.startswith(href)) }}><svg class="nav-icon" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#{{ icon }}"></use></svg><span>{{ label }}</span></a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {# ——— REGISTER ——— #}
+  <div class="spine-group" role="group" aria-label="Register">
+    <p class="spine-group-title">Register</p>
+    <ul class="nav-list">
+      {% set register = [
+        ('/companies', 'Virksomheder', 'lucide-building-2'),
+        ('/persons', 'Personer', 'lucide-users'),
+        ('/groups', 'Koncerner', 'lucide-layers'),
+        ('/bestand', 'Bestand', 'lucide-database'),
+      ] %}
+      {% for href, label, icon in register %}
+      <li><a href="{{ href }}"{{ ' aria-current=page'|safe if request.path == href or (href != '/' and request.path.startswith(href)) }}><svg class="nav-icon" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#{{ icon }}"></use></svg><span>{{ label }}</span></a>{% if loop.first == false and label == 'Personer' %}{# spacer #}{% endif %}</li>
+      {% endfor %}
+      <li class="nav-sub-wrap"><a href="/persons/relationer" class="nav-sub-link"{{ ' aria-current=page'|safe if request.path == '/persons/relationer' }}><span>↳ Relationer</span></a></li>
+    </ul>
+  </div>
+
+  {% block spine_index %}{% endblock %}
+
+  <div class="spine-foot">
+    <p>Kilde: <span class="mono">sg.vs.fo</span> (Skráseting Føroya) · <span style="color:var(--text-3);">Snapshot · lokal</span></p>
+    <p class="text-xs text-muted mt-1" style="font-size: 0.64rem; line-height: 1.35;"><span aria-hidden="true" style="color:var(--warning);">⚠</span> IT-system under opbygning — forbehold tages.</p>
+  </div>
+</nav>
+
+<div class="content-pane">
+  <header class="topbar" role="banner" aria-label="Topbar">
+    <div class="topbar-left">
+      <button type="button" class="spine-toggle-btn" id="spine-toggle-btn" aria-label="Fold navigation" aria-expanded="true" style="display:none; width:36px; height:36px; border-radius:var(--r-md); border:1px solid var(--rule); background:var(--surface); place-items:center;">≡</button>
+      <nav class="breadcrumbs" aria-label="Brødkrumme">
+        {% block breadcrumbs %}
+        <span>Heimdal</span>
+        {% endblock %}
+      </nav>
+      {% block topbar_meta %}<span class="snapshot-badge">Snapshot · lokal</span>{% endblock %}
+    </div>
+    <div class="topbar-center" style="display:flex; justify-content:center; flex:1;">
+      <button type="button" class="cmd-trigger" id="cmd-palette-trigger" aria-label="Søg i registeret (Tryk Cmd+K)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <span>Søg i registeret...</span>
+        <span class="cmd-kbd">⌘K</span>
+      </button>
+    </div>
+    <div class="topbar-right">
+      <span class="live-dot" aria-hidden="true" title="Live"></span>
+      <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Skift tema (Dark / Light)" aria-label="Skift tema">
+        <svg id="theme-toggle-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <span id="theme-toggle-label" class="sr-only">Skift tema</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="indhold">{% block main %}{% endblock %}</main>
+</div>
+
+</div>
+
+{# ——— Command Palette ——— #}
+<div class="cmd-palette-modal" id="cmd-palette-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Hurtigsøgning">
+  <div class="cmd-palette-card">
+    <div class="cmd-palette-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+      <input type="search" class="cmd-palette-input" id="cmd-palette-input" placeholder="Søg virksomhed, person eller reg.nr..." autocomplete="off" spellcheck="false" aria-label="Hurtigsøgning i registeret">
+      <span class="cmd-kbd">ESC</span>
+    </div>
+    <div class="cmd-palette-results" id="cmd-palette-results" role="listbox" aria-label="Søgeresultater"></div>
+    <div class="cmd-palette-hint" style="padding:.6rem .9rem; border-top:1px solid var(--rule); font-size:.72rem; color:var(--text-3); display:flex; gap:.8rem;">
+      <span><kbd>↵</kbd> Åbn</span><span><kbd>↑↓</kbd> Navigér</span><span><kbd>Esc</kbd> Luk</span>
+    </div>
+  </div>
+</div>
+
+{# ——— Inspector Drawer ——— #}
+<div class="inspector-backdrop" id="inspector-backdrop"></div>
+<aside class="inspector-drawer" id="inspector-drawer" aria-label="Hurtiginspektion" aria-hidden="true">
+  <div class="inspector-head">
+    <div>
+      <h3 class="inspector-title" id="inspector-title">Inspektion</h3>
+      <span id="inspector-kind" class="kind-label"></span>
+    </div>
+    <button type="button" class="inspector-close-btn" id="inspector-close-btn" aria-label="Luk panel">✕</button>
+  </div>
+  <div class="inspector-body" id="inspector-content"></div>
+</aside>
+
+</body>
+</html>

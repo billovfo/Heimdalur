@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}QA-stikprøve — Heimdal{% endblock %}
+{% block main %}
+<h1>QA-stikprøve for batch {{ batch_id }}</h1>
+<p>QA ændrer aldrig kanoniske links. QA_NEEDS_REVIEW markerer kun til manuel genåbning.</p>
+<table>
+  <thead><tr><th>Sag</th><th>Valgt kanonisk</th><th>QA-årsag</th><th>Afgørelse</th><th>QA-status</th></tr></thead>
+  <tbody>
+  {% for e in sample %}
+    <tr>
+      <td>{{ e.case_key }}</td><td>#{{ e.chosen_canonical_id }}</td>
+      <td>{{ e.qa_reason }}</td><td>{{ e.decision }}</td><td>{{ e.qa_status }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5">Ingen QA-udtag.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

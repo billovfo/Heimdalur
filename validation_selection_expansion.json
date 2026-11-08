@@ -1,0 +1,1052 @@
+[
+ {
+  "regnr": "59",
+  "entity_type": "Sp/F",
+  "name": "Stiðjagøta 10 (Sp/F S59 , Stiðjagøta 10 Postrúm 1008)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "67",
+  "entity_type": "P/F",
+  "name": "Akraberg FD 10 (P/F S67 , Bakkavegur 22 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "121",
+  "entity_type": "P/F",
+  "name": "Jákup á Dul (P/F S121 , Staravegur 5, á Hálsi Postrúm 1)",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "200",
+  "entity_type": "P/F",
+  "name": "Magn (P/F S200 , Vestara Bryggja 10 Postrúm 188)",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "267",
+  "entity_type": "P/F",
+  "name": "17. november 1979 (P/F S267 , c/o <redacted>)",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "517",
+  "entity_type": "P/F",
+  "name": "Leif Niclasen (P/F S517 , Oyrabakkavegur 1 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "572",
+  "entity_type": "P/F",
+  "name": "Meðalsbrekka (P/F S572 , Kósabrúgvin 3 Postrúm 56)",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "755",
+  "entity_type": "Sp/F",
+  "name": "Eivind Petersen (Sp/F S755 , Ovarivegur 1 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "792",
+  "entity_type": "P/F",
+  "name": "GroAqua Group (P/F S792 , Kambsenni 9 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "1008",
+  "entity_type": "P/F",
+  "name": "Bakkafrost Farming (P/F S1008 , Bakkavegur 9 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "1330",
+  "entity_type": "P/F",
+  "name": "Í Garðinum (P/F S1330 , Vágsheygagøta 38 Postrúm 183)",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "1417",
+  "entity_type": "Sp/F",
+  "name": "J.F. Djurhuus (Sp/F S1417 , N. Finsensgøta 52 Postrúm 3203)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "1724",
+  "entity_type": "P/F",
+  "name": "Bakkafrost (P/F S1724 , Bakkavegur 9 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "1964",
+  "entity_type": "Sp/F",
+  "name": "Tilfeingi (Sp/F S1964 , c/o <redacted>)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2039",
+  "entity_type": "P/F",
+  "name": "Krossbrekka (P/F S2039 , Garðabrekka 4 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2202",
+  "entity_type": "P/F",
+  "name": "Bátatænastan (P/F S2202 , Rundingur 20 Postrúm 101)",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2329",
+  "entity_type": "P/F",
+  "name": "TN24 (P/F S2329 , Óðinshædd 9 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2338",
+  "entity_type": "Sp/F",
+  "name": "Tavan (Sp/F S2338 , Kulibakki 4 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2369",
+  "entity_type": "P/F",
+  "name": "Blikksmiðjan (P/F S2369 , Klaksvíksvegur 76 )",
+  "reason": "oldest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2435",
+  "entity_type": "P/F",
+  "name": "Fossá (P/F S2435 , úti á Bø 11 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2492",
+  "entity_type": "P/F",
+  "name": "Bergfrost (P/F S2492 , Bakkavegur 60 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2581",
+  "entity_type": "Sp/F",
+  "name": "Fram (Sp/F S2581 , Gerðagøta 31 Postrúm 15)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2710",
+  "entity_type": "P/F",
+  "name": "Faroe Sport (P/F S2710 , Tinghúsvegur 49 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2786",
+  "entity_type": "Sp/F",
+  "name": "Damco (Sp/F S2786 , Heiðagøta 11 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2849",
+  "entity_type": "P/F",
+  "name": "MT Højgaard Føroyar (P/F S2849 , Smyrilsvegur 13, 1. hædd Postrúm 1349)",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2942",
+  "entity_type": "P/F",
+  "name": "Avon (P/F S2942 , R.C. Effersøesgøta 5 Postrúm 164)",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "2978",
+  "entity_type": "Sp/F",
+  "name": "Búrhella (Sp/F S2978 , Kósaskákið 3 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3116",
+  "entity_type": "P/F",
+  "name": "Teigur (P/F S3116 , Skansavegur 1 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3195",
+  "entity_type": "Sp/F",
+  "name": "Jóan Petur Vang (Sp/F S3195 , Undir Kongavarða 40 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3233",
+  "entity_type": "P/F",
+  "name": "Nofa (P/F S3233 , Bryggjan 17 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3372",
+  "entity_type": "Sp/F",
+  "name": "TM-Import (Sp/F S3372 , c/o <redacted>)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3384",
+  "entity_type": "P/F",
+  "name": "H.K. Ognarfelagið (P/F S3384 , Tinghúsvegur 8 Postrúm 340)",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3505",
+  "entity_type": "Sp/F",
+  "name": "Breyðkassin (Sp/F S3505 , c/o <redacted>)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3571",
+  "entity_type": "P/F",
+  "name": "Mekanik (P/F S3571 , Rókahavnin 2 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3624",
+  "entity_type": "Sp/F",
+  "name": "27.05.2003 (Sp/F S3624 , c/o <redacted>)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3746",
+  "entity_type": "P/F",
+  "name": "Líraberg (P/F S3746 , Norðurstíggjur 3 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3775",
+  "entity_type": "Sp/F",
+  "name": "Gunnvá (Sp/F S3775 , við Hálsatjørn 7B )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3879",
+  "entity_type": "P/F",
+  "name": "HMH (P/F S3879 , Argjavegur 57 )",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3947",
+  "entity_type": "Sp/F",
+  "name": "Handilshøllin (Sp/F S3947 , Tormansvegur 26 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "3995",
+  "entity_type": "P/F",
+  "name": "Christian í Grótinum (P/F S3995 , Norðhavnin 8 Postrúm 329)",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4056",
+  "entity_type": "Sp/F",
+  "name": "Streym (Sp/F S4056 , Norðskálavegur 21 Postrúm 62)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4173",
+  "entity_type": "Sp/F",
+  "name": "Preben Hansen (Sp/F S4173 , Tinghúsvegur 18, 4. hædd Postrúm 2072)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4199",
+  "entity_type": "P/F",
+  "name": "Conseco (P/F S4199 , c/o <redacted>)",
+  "reason": "middle-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4318",
+  "entity_type": "Sp/F",
+  "name": "31.03.06 (Sp/F S4318 , við Rangá 7 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4433",
+  "entity_type": "Sp/F",
+  "name": "Eyðføri (Sp/F S4433 , Slættalíð 5 Postrúm 1289)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4551",
+  "entity_type": "P/F",
+  "name": "FF-Húsið (P/F S4551 , Bryggjubakki 14 Postrúm 58)",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4578",
+  "entity_type": "Sp/F",
+  "name": "Krea International (Sp/F S4578 , Nesvegur 103 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4699",
+  "entity_type": "Sp/F",
+  "name": "Steingrund Akustik (Sp/F S4699 , Leitisvegur 94 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4773",
+  "entity_type": "P/F",
+  "name": "Data Quality Systems (P/F S4773 , á Oyrareingjum 114 )",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4816",
+  "entity_type": "Sp/F",
+  "name": "Embla (Sp/F S4816 , Pætursgøta 5 )",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "4929",
+  "entity_type": "Sp/F",
+  "name": "Stórá (Sp/F S4929 , í Gerðinum 17 c/ o Postrúm 230)",
+  "reason": "oldest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5047",
+  "entity_type": "Sp/F",
+  "name": "RAM (Sp/F S5047 , Sivjugøta 11 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5146",
+  "entity_type": "P/F",
+  "name": "Bal-Ship (P/F S5146 , J. C. Svabosgøta 56 Postrúm 205)",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5163",
+  "entity_type": "Sp/F",
+  "name": "PHS-invest (Sp/F S5163 , Gróvargøta 8 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5314",
+  "entity_type": "Sp/F",
+  "name": "Gummibátatænastan (Sp/F S5314 , Mannaskarð 4 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5367",
+  "entity_type": "P/F",
+  "name": "Tryggingarfelagið Lív (P/F S5367 , Óðinshædd 11 Postrúm 206)",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5430",
+  "entity_type": "Sp/F",
+  "name": "09.02.1991 (Sp/F S5430 , Lykkjugerði 4 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5548",
+  "entity_type": "Sp/F",
+  "name": "MH10 (Sp/F S5548 , Heinagøta 21 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5643",
+  "entity_type": "Sp/F",
+  "name": "RCHO Securities (Sp/F S5643 , Dungagøta 17 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5671",
+  "entity_type": "P/F",
+  "name": "DWF (P/F S5671 , á Langasandi 28 Postrúm 49)",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5745",
+  "entity_type": "Sp/F",
+  "name": "29.05.2012 í konkurs (Sp/F S5745 , c/o <redacted>)",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5789",
+  "entity_type": "P/F",
+  "name": "Fakfelag (P/F S5789 , Traðarvegur 20 )",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5837",
+  "entity_type": "Sp/F",
+  "name": "Á-Glyvrar (Sp/F S5837 , Karvatoftir 2 Postrúm 86)",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5886",
+  "entity_type": "P/F",
+  "name": "Faroe Ship Føroyar (P/F S5886 , Eystara Bryggja Postrúm 47)",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "5929",
+  "entity_type": "Sp/F",
+  "name": "BJ Hammer (Sp/F S5929 , Tollaksgøta 27 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6017",
+  "entity_type": "Sp/F",
+  "name": "Búgvin (Sp/F S6017 , Skansavegur 7 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6097",
+  "entity_type": "Sp/F",
+  "name": "Andersen (Sp/F S6097 , Skálavegur 267A )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6115",
+  "entity_type": "P/F",
+  "name": "NordikLív Lívstryggingarfelag (P/F S6115 , Oknarvegur 5 Postrúm 3048)",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6176",
+  "entity_type": "Sp/F",
+  "name": "Sekstant dýping (Sp/F S6176 , Sigmundargøta 32 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6249",
+  "entity_type": "Sp/F",
+  "name": "Gómagott (Sp/F S6249 , Krosslíð 5 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6315",
+  "entity_type": "Sp/F",
+  "name": "Búð (Sp/F S6315 , Fjørðuvegur 5 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6386",
+  "entity_type": "P/F",
+  "name": "Vindfelagið í Húsahaga (P/F S6386 , c/o <redacted>)",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6397",
+  "entity_type": "Sp/F",
+  "name": "pro (Sp/F S6397 , Heiðriksmørk 23 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6409",
+  "entity_type": "ÍVF",
+  "name": "BØ! (ÍVF S6409 , Varðabrekka 13 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "6469",
+  "entity_type": "Sp/F",
+  "name": "Spiders from Mars (Sp/F S6469 , Tinghúsvegur 45 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6549",
+  "entity_type": "ÍVF",
+  "name": "Gardi Innovation (ÍVF S6549 , Varðagøta 15 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "6592",
+  "entity_type": "Sp/F",
+  "name": "Krympiplast (Sp/F S6592 , Djúpagilsvegur 30 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6664",
+  "entity_type": "ÍVF",
+  "name": "01.01.2018 (ÍVF S6664 , oman Hoydalar 5 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "6708",
+  "entity_type": "Sp/F",
+  "name": "18.03.18 (Sp/F S6708 , Dalakrókur 2 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6769",
+  "entity_type": "ÍVF",
+  "name": "eSport Føroyar (ÍVF S6769 , Hákunagøta 3 Postrúm 1288)",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "6807",
+  "entity_type": "Sp/F",
+  "name": "PhM-Holding3 (Sp/F S6807 , Traðargøta 19 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6909",
+  "entity_type": "P/F",
+  "name": "Kinnfelli (P/F S6909 , á Heimaru Bryggju 6 )",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "6918",
+  "entity_type": "ÍVF",
+  "name": "Sjósalt (ÍVF S6918 , Hagabrekka 16 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "6923",
+  "entity_type": "Sp/F",
+  "name": "boat.fo (Sp/F S6923 , Rygsgøta 15 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7020",
+  "entity_type": "Sp/F",
+  "name": "06.03.2019 (Sp/F S7020 , Viðargøta 16 )",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7027",
+  "entity_type": "ÍVF",
+  "name": "Óli Jensen (ÍVF S7027 , Nesvegur 74 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7112",
+  "entity_type": "Sp/F",
+  "name": "Taurus Networks (Sp/F S7112 , c/o <redacted>)",
+  "reason": "middle-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7155",
+  "entity_type": "ÍVF",
+  "name": "JJ Tøkni (ÍVF S7155 , Ólivantsgøta 3 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7211",
+  "entity_type": "Sp/F",
+  "name": "M (Sp/F S7211 , Hórheiðar 12 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7275",
+  "entity_type": "ÍVF",
+  "name": "Landskrona í konkurs (ÍVF S7275 , c/o <redacted>)",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7308",
+  "entity_type": "Sp/F",
+  "name": "Retep (Sp/F S7308 , á Brekku 55 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7376",
+  "entity_type": "ÍVF",
+  "name": "Data-driven (ÍVF S7376 , Tórugøta 11 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7404",
+  "entity_type": "Sp/F",
+  "name": "Skjal (Sp/F S7404 , Djóna í Geilgøta 18 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7442",
+  "entity_type": "ÍVF",
+  "name": "Psykolog Camilla Henanger (ÍVF S7442 , Vaktarhúsbrekka 5, kj. )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7520",
+  "entity_type": "Sp/F",
+  "name": "HHC (Sp/F S7520 , Á Brekkukletti 25 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7533",
+  "entity_type": "ÍVF",
+  "name": "Húsaumvæling (ÍVF S7533 , Rituvíkarvegur 12 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7598",
+  "entity_type": "Sp/F",
+  "name": "Atlantic Seafood (Sp/F S7598 , undir Bryggjubakka 21 Postrúm 106)",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7632",
+  "entity_type": "ÍVF",
+  "name": "Vertir (ÍVF S7632 , Brekkugøta 8 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7708",
+  "entity_type": "Sp/F",
+  "name": "Varðar (Sp/F S7708 , Móritsargøta 1 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7742",
+  "entity_type": "ÍVF",
+  "name": "Faroe Adventures (ÍVF S7742 , Smæruteigur 14 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7747",
+  "entity_type": "P/F",
+  "name": "Flatnahagi (P/F S7747 , Vestara Bryggja 10 )",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7813",
+  "entity_type": "ÍVF",
+  "name": "S&S (ÍVF S7813 , Brattalíð 15 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7816",
+  "entity_type": "Sp/F",
+  "name": "MIA hárfríðkan (Sp/F S7816 , Stangaskákið 11 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7901",
+  "entity_type": "ÍVF",
+  "name": "Senit (ÍVF S7901 , Karlamagnusarbreyt 42 0.4 )",
+  "reason": "oldest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "7924",
+  "entity_type": "Sp/F",
+  "name": "NK-entreprenørar (Sp/F S7924 , Vørðslan 10 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "7979",
+  "entity_type": "ÍVF",
+  "name": "Helmi (ÍVF S7979 , c/o <redacted>)",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8026",
+  "entity_type": "Sp/F",
+  "name": "HDM (Sp/F S8026 , Viðargøta 38 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8054",
+  "entity_type": "ÍVF",
+  "name": "Sokkar.fo (ÍVF S8054 , Tinghúsvegur 54 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8115",
+  "entity_type": "ÍVF",
+  "name": "HJ Holding (ÍVF S8115 , Undir Hálsi 50 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8145",
+  "entity_type": "Sp/F",
+  "name": "J&K Jensen Holding (Sp/F S8145 , Niels Finsens gøta 51 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8156",
+  "entity_type": "ÍVF",
+  "name": "Grønatúgva (ÍVF S8156 , Toftanesvegur 46 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8235",
+  "entity_type": "ÍVF",
+  "name": "HJ Microcement (ÍVF S8235 , Nýggivegur 3 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8242",
+  "entity_type": "Sp/F",
+  "name": "G.G. Smíð (Sp/F S8242 , Bókbindaragøta 38 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8304",
+  "entity_type": "ÍVF",
+  "name": "Reflekt (ÍVF S8304 , Gerðisvegur 14 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8327",
+  "entity_type": "Sp/F",
+  "name": "Valdemar Lützen Byggibúð (Sp/F S8327 , Skálatrøð 14 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8362",
+  "entity_type": "ÍVF",
+  "name": "Anna Debes Consult (ÍVF S8362 , Mýrisnípuvegur 41 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8385",
+  "entity_type": "P/F",
+  "name": "Framholding (P/F S8385 , Bakkavegur 22 )",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8438",
+  "entity_type": "ÍVF",
+  "name": "HEJ (ÍVF S8438 , Rættargarðar 10 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8444",
+  "entity_type": "Sp/F",
+  "name": "FR1 (Sp/F S8444 , Óðinshædd 11 Postrúm 206)",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8482",
+  "entity_type": "ÍVF",
+  "name": "10.10.2023 (ÍVF S8482 , Havnará 3 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8531",
+  "entity_type": "ÍVF",
+  "name": "23.11.23 (ÍVF S8531 , Tórsbyrgi 16 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8568",
+  "entity_type": "Sp/F",
+  "name": "0410 (Sp/F S8568 , Gundadalsvegur 19 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8590",
+  "entity_type": "ÍVF",
+  "name": "Grønmeti uppi í Króki (ÍVF S8590 , Uppi í Húsi 1 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8650",
+  "entity_type": "ÍVF",
+  "name": "Stinnur (ÍVF S8650 , Sóljuteigur11 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8672",
+  "entity_type": "Sp/F",
+  "name": "Føroya Keypssamtøka (Sp/F S8672 , c/o <redacted>)",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8688",
+  "entity_type": "ÍVF",
+  "name": "DanVerk (ÍVF S8688 , undir Torvbrekku 3 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8751",
+  "entity_type": "ÍVF",
+  "name": "Tal-knúsarin (ÍVF S8751 , Dalbúð 10 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8768",
+  "entity_type": "Sp/F",
+  "name": "7. apríl (Sp/F S8768 , Hornavegur 5 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8801",
+  "entity_type": "ÍVF",
+  "name": "Nót (ÍVF S8801 , Kovalág 3 )",
+  "reason": "middle-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8819",
+  "entity_type": "P/F",
+  "name": "Royður (P/F S8819 , Bakkavegur 22 )",
+  "reason": "newest-tercile/P/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8843",
+  "entity_type": "ÍVF",
+  "name": "Ryggshamar Nysted (ÍVF S8843 , Marknoyarvegur 65 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8866",
+  "entity_type": "ÍVF",
+  "name": "STS HúsaSmíð (ÍVF S8866 , Skálavegur 21 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8894",
+  "entity_type": "Sp/F",
+  "name": "01-01-2025 (Sp/F S8894 , Ognarvegur 15 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "8912",
+  "entity_type": "ÍVF",
+  "name": "Óli Mortensen (ÍVF S8912 , undir Heygnum 43 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8954",
+  "entity_type": "ÍVF",
+  "name": "IOT (ÍVF S8954 , Fornavegur 43 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "8988",
+  "entity_type": "ÍVF",
+  "name": "ANNA (ÍVF S8988 , Toftanesvegur 11, 1.4 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9018",
+  "entity_type": "Sp/F",
+  "name": "HG Holding (Sp/F S9018 , Pedda við Stein gøta 2 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "9024",
+  "entity_type": "ÍVF",
+  "name": "Byggiráðgevin (ÍVF S9024 , Dalavegur 8B )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9074",
+  "entity_type": "ÍVF",
+  "name": "Core-X (ÍVF S9074 , við Ánna 12 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9109",
+  "entity_type": "ÍVF",
+  "name": "Ritours (ÍVF S9109 , Áargeil 3 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9130",
+  "entity_type": "Sp/F",
+  "name": "SC Holding (Sp/F S9130 , Landavegur 94A,  1.3 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "9159",
+  "entity_type": "ÍVF",
+  "name": "Várheim (ÍVF S9159 , Heiðavegur 23 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9195",
+  "entity_type": "ÍVF",
+  "name": "THO (ÍVF S9195 , Undir Hamri 17 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9234",
+  "entity_type": "Sp/F",
+  "name": "Sirm Holding (Sp/F S9234 , Varðagøta 3 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "9248",
+  "entity_type": "ÍVF",
+  "name": "Lýsing.fo (ÍVF S9248 , Heygstún 7 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9292",
+  "entity_type": "ÍVF",
+  "name": "JNR Bygg (ÍVF S9292 , Undir Borgarhálsi 36 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9325",
+  "entity_type": "ÍVF",
+  "name": "Six seven eleven (ÍVF S9325 , Gerðavegur 24 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9351",
+  "entity_type": "ÍVF",
+  "name": "7/4 2026 (ÍVF S9351 , Kráarvegur 3 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ },
+ {
+  "regnr": "9361",
+  "entity_type": "Sp/F",
+  "name": "EYKADU (Sp/F S9361 , Karlamagnusabreyt 6B, 3.3 )",
+  "reason": "newest-tercile/Sp/F",
+  "run": "424244"
+ },
+ {
+  "regnr": "9397",
+  "entity_type": "ÍVF",
+  "name": "Brandsson (ÍVF S9397 , Fjósabrekka 3 )",
+  "reason": "newest-tercile/ÍVF",
+  "run": "424244"
+ }
+]

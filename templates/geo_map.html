@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+
+{% block title %}Geografisk Erhvervskort — Heimdal{% endblock %}
+
+{% block head %}<meta name="referrer" content="origin">{% endblock %}
+
+{% set region_labels = {
+  'SUDUROY': 'Suðuroy',
+  'SANDOY': 'Sandoy',
+  'SUDURSTREYMOY': 'Suðurstreymoy',
+  'NORDURSTREYMOY': 'Norðurstreymoy',
+  'VAGAR': 'Vágar',
+  'EYSTUROY': 'Eysturoy',
+  'NORDOYGGJAR': 'Norðoyggjar',
+} %}
+
+{% block main %}
+<header class="card" style="padding:.7rem 1rem; margin-bottom:.9rem; display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;">
+  <h1 style="margin:0; font-size:1.05rem; font-weight:700; display:flex; align-items:center; gap:.45rem;"><svg class="icon-inline" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-map"></use></svg> Geografisk Erhvervskort</h1>
+  <span class="chip chip-beregnet" style="font-size:.7rem;">FÆRØSK GEO</span>
+  <span class="text-xs text-muted" style="margin-left:.2rem;">By-aggregater · selskaber pr. by</span>
+</header>
+
+<div class="geo-map-layout">
+  <div class="card p-4">
+    <div class="card-header flex-between align-center mb-2">
+      <h2 class="text-base font-bold">Føroyar (Færøerne) — Selskaber pr. by</h2>
+    </div>
+
+    <div class="geo-map-filters" role="group" aria-label="Filtre">
+      <div class="geo-filter-field">
+        <span class="geo-filter-label" id="geo-view-label">Visning</span>
+        <div class="geo-view-group" role="group" aria-labelledby="geo-view-label">
+          <button type="button" class="geo-view-btn" data-geo-view="city" aria-pressed="true">Byer</button>
+          <button type="button" class="geo-view-btn" data-geo-view="region" aria-pressed="false">Regioner</button>
+        </div>
+      </div>
+
+    </div>
+
+    {# T4.5 (F-12): legenden beskriver den FAKTISKE encoding — markørstørrelse
+       (radius) koder antal selskaber; farven er konstant. #}
+    <div class="geo-legend" role="note" aria-label="Kortforklaring">
+      <span class="chip">Markørstørrelse = antal selskaber pr. by</span>
+      <span class="text-xs text-muted">Farven er konstant · antal vises ved valg (hover er sekundær hjælp)</span>
+    </div>
+    <p class="text-sm" style="margin:.45rem 0 .6rem; color:var(--text-2);"><strong>Klik på en markør eller vælg en by i listen.</strong></p>
+    <div id="geo-map-container" class="geo-map-canvas" role="region" aria-label="Zoombart kort over færøske byer"></div>
+  </div>
+
+  <div class="card p-4">
+    <h2 class="text-base font-bold mb-4" id="geo-inspector-title">Valgt by</h2>
+
+    <div id="cluster-inspector" class="p-3 bg-surface rounded mb-4 border border-border">
+      <div class="text-xs font-bold uppercase text-muted" id="geo-inspector-kind">Aktiv By</div>
+      <div id="geo-inspector-city" class="text-lg font-bold mt-1">Klik på en markør eller vælg en by i listen</div>
+      <dl class="geo-inspector-stats">
+        <div>
+          <dt>Selskaber</dt>
+          <dd id="geo-inspector-count" class="mono">—</dd>
+        </div>
+        <div>
+          <dt>Region</dt>
+          <dd id="geo-inspector-region" class="mono">—</dd>
+        </div>
+      </dl>
+    </div>
+
+    <dl class="geo-coverage">
+      <div>
+        <dt>Færøske byer</dt>
+        <dd id="geo-coverage-faroe" class="mono">—</dd>
+      </div>
+      <div>
+        <dt>Ukendt placering</dt>
+        <dd id="geo-coverage-unknown" class="mono">—</dd>
+      </div>
+      <div>
+        <dt>Uden for Færøerne</dt>
+        <dd id="geo-coverage-foreign" class="mono">—</dd>
+      </div>
+    </dl>
+
+    <h3 class="text-sm font-bold mt-4 mb-2">Bykatalog — alle registrerede byer</h3>
+    <div class="table-scroll geo-catalog" tabindex="0" role="region" aria-label="Rulleliste: bykatalog med selskabstal pr. by">
+      <table class="ledger">
+        <caption class="sr-only">Selskaber pr. by</caption>
+        <thead>
+          <tr>
+            <th scope="col" id="geo-table-th-first">By</th>
+            <th scope="col">Region</th>
+            <th scope="col" class="num">Selskaber</th>
+          </tr>
+        </thead>
+        <tbody id="geo-table-body">
+          {% for city in map_data.cities %}
+          <tr>
+            <td><a href="/companies?q={{ city.city.split(' ')[0] | urlencode }}" class="font-semibold">{{ city.city }}</a></td>
+            <td>{{ region_labels[city.region] }}</td>
+            <td class="num mono font-bold">{{ city.company_count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<section id="geo-selected-companies" class="card p-4" aria-labelledby="geo-selected-title">
+  <h2 class="text-base font-bold mb-2" id="geo-selected-title">Valgte virksomheder</h2>
+  <p id="geo-selected-status" class="geo-selected-status" role="status">Vælg en by eller region på kortet for at se virksomheder.</p>
+  <div class="table-scroll">
+    <table class="ledger">
+      <caption class="sr-only">Virksomheder i valgt by eller region</caption>
+      <thead>
+        <tr>
+          <th scope="col">Virksomhed</th>
+        </tr>
+      </thead>
+      <tbody id="geo-selected-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/leaflet/leaflet.css') }}">
+<script src="{{ url_for('static', filename='vendor/leaflet/leaflet.js') }}"></script>
+<script src="{{ url_for('static', filename='graph_shell.js') }}"></script>
+<script src="{{ url_for('static', filename='geo_map.js') }}"></script>
+<script type="application/json" id="geo-map-data">{{ {'data': map_data, 'tileUrl': tile_url, 'regionLabels': region_labels}|tojson }}</script>
+{% endblock %}

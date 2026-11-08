@@ -1,0 +1,139 @@
+{# Phase 4 — analytics section on the EXISTING person page, now the person
+   ANALYSE tab (product UX consolidation §45). Derived layer: every fact keeps
+   its source label and the coverage note is always visible (B10/B36/B46).
+
+   Product UX consolidation: collaborator rows render as human cards (§46)
+   that stack naturally at narrow widths (§47); the raw evidence classes live
+   in a per-card disclosure. Constellation groups render as FAMILIES
+   (§31-§35): maximal member set as headline, strict-subset groups folded
+   under "Vis N understøttede undergrupper" — fully rendered, nothing lost
+   (§33), deterministic order, no score (§32). #}
+<section class="card section" id="analytics" aria-labelledby="h-analytics">
+  <div class="section-head">
+    <h2 id="h-analytics" class="section-title">Observeret samarbejde (analyse)</h2>
+    {{ m.stamp('udledt') }}
+  </div>
+
+  <div class="section-body">
+    {% if section.error %}
+      <p class="empty-state-body">Analytics-data kunne ikke indlæses. Øvrige sektioner på siden er uændrede.</p>
+    {% else %}
+    <p class="section-lede" style="font-size:.82rem;color:var(--text-2);">{{ section.labels.disclaimer }}</p>
+
+    {# --- coverage (B36) — preserved, visually secondary (UX-08) --- #}
+    {% with cov = section.build.coverage_display %}
+    <details class="analytics-coverage" role="note" aria-label="Dækning og metode">
+        <summary>Dækning og metode</summary>
+        <p class="text-xs" style="color:var(--text-2);margin:.2rem 0;">
+          <strong>{{ section.labels.coverage_heading }}:</strong>
+          Analytics bruger kun personer, som kan knyttes sikkert til Heimdal.
+          {% if cov.unresolved_text %}{{ cov.unresolved_text }}{% endif %}
+          {% if cov.web_observations == 0 %}{{ cov.web_note }}{% endif %}
+        </p>
+    </details>
+    {% endwith %}
+
+    {# --- top collaborators (B13/B14/B15) — human cards (§46/§47) --- #}
+    <h3 class="sub-title" id="h-analytics-collab">Samarbejdspartnere</h3>
+    {% set coll = section.collaborators %}
+    {% if coll and coll.collaborators %}
+      <ul class="collab-list">
+      {% for c in coll.collaborators %}
+        <li class="collab-card">
+          <div class="collab-head">
+            <span class="collab-name">{{ m.entity_link(c.canonical_person_id, c.display_name, 'PERSON') }}</span>
+            <span class="collab-count">{{ c.shared_company_count }} fælles {{ 'virksomhed' if c.shared_company_count == 1 else 'virksomheder' }}</span>
+          </div>
+          {% if c.context_breakdown %}
+          <p class="collab-contexts text-xs">
+            {% for cb in c.context_breakdown %}<span class="badge badge-sm">{{ cb.label }}: {{ cb.count }}</span> {% endfor %}
+          </p>
+          {% endif %}
+          {% if c.first_observed or c.last_observed %}
+          <p class="collab-period text-xs">
+            {% if c.first_observed %}Første observerede fælles registrering: {{ c.first_observed }}{% endif %}
+            {% if c.last_observed %}{% if c.first_observed %} · {% endif %}Seneste: {{ c.last_observed }}{% endif %}
+          </p>
+          {% endif %}
+          {% if c.class_breakdown %}
+          <details class="source-details">
+            <summary>Se dokumentation</summary>
+            <p class="spine-note">Bevisklasser (rå): {% for cb in c.class_breakdown %}{{ cb.label }}: {{ cb.count }}{{ "; " if not loop.last }}{% endfor %}</p>
+          </details>
+          {% endif %}
+        </li>
+      {% endfor %}
+      </ul>
+      {% if coll.total > coll.shown %}<p class="text-xs text-muted">Viser {{ coll.shown }} af {{ coll.total }} samarbejdspartnere.</p>{% endif %}
+      <p class="text-xs text-muted">Sortering: fælles virksomheder, derefter direkte beviser, kendt overlap, id — ingen skjult score.</p>
+      {% if coll.error %}<p class="text-xs text-muted">Samarbejdslisten kunne ikke indlæses i dette build.</p>{% endif %}
+    {% else %}
+      <div class="empty-state"><div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div><p class="empty-state-title">{{ section.labels.empty_collaborators }}</p><p class="empty-state-body">Dette gælder kun analyse-buildet — kildeoplysningerne i Roller og Ejerskab er uændrede.</p></div>
+    {% endif %}
+
+    {# --- recurring groups (B22/B23/B24) — constellation FAMILIES (§31-§35) --- #}
+    <h3 class="sub-title" id="h-analytics-groups">{{ section.labels.groups_heading }}</h3>
+    {% set groups = section.groups %}
+    {% if groups and groups.families %}
+      <ul class="actors">
+      {% for fam in groups.families[:8] %}{{ m.constellation_family(fam) }}{% endfor %}
+      </ul>
+      <p class="text-xs text-muted">Viser {{ groups.shown_families }} af {{ groups.family_total }} konstellations-familier ({{ groups.group_total }} underliggende grupper). {{ groups.order_text }}</p>
+      {% if groups.family_total > groups.shown_families %}
+      <details class="analytics-more">
+        <summary>Vis flere konstellations-familier ({{ groups.family_total - groups.shown_families }} til)</summary>
+        <ul class="actors">
+        {% for fam in groups.families[8:] %}{{ m.constellation_family(fam) }}{% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+    {% elif groups and groups.groups %}
+      <ul class="actors">
+      {% for g in groups.groups %}{{ m.constellation_card(g) }}{% endfor %}
+      </ul>
+      <p class="text-xs text-muted">{{ groups.order_text }}</p>
+    {% else %}
+      <div class="empty-state"><div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div><p class="empty-state-title">{{ section.labels.empty_groups }}</p></div>
+    {% endif %}
+
+    {# --- observed role history (B17/B18) --- #}
+    <h3 class="sub-title" id="h-analytics-history">{{ section.labels.history_heading }}</h3>
+    {% set rh = section.role_history %}
+    {% if rh and (rh.periods or rh.current_roles) %}
+      {% if rh.current_roles %}
+      <p class="text-xs" style="margin:.4rem 0;"><strong>Aktuel registreret rolle ({{ rh.current_roles[0].authority_label }}):</strong></p>
+      <ul class="gloss-list">
+        {% for cr in rh.current_roles %}
+        <li>{{ m.entity_link(cr.company_id, cr.company_name, 'COMPANY') }} — {{ cr.contexts|join(', ') }} ({{ cr.observed or 'dato ikke læst' }})</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <div class="table-scroll">
+      <table class="ledger">
+        <caption class="sr-only">Observeret funktionstid for denne person</caption>
+        <thead>
+          <tr>
+            <th scope="col">Virksomhed</th>
+            <th scope="col">Kontekst</th>
+            <th scope="col">Observeret periode</th>
+            <th scope="col">Kilde</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for p in rh.periods %}
+          <tr>
+            <td data-sort="{{ p.company_name }}">{{ m.entity_link(p.company_id, p.company_name, 'COMPANY') }}</td>
+            <td>{{ p.context_label }}</td>
+            <td>{{ p.text }}</td>
+            <td>{{ p.source_family_label }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    {% else %}
+      <div class="empty-state"><div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div><p class="empty-state-title">{{ section.labels.empty_overlap }}</p></div>
+    {% endif %}
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Person Review — Heimdal{% endblock %}
+{% block main %}
+<h1>Menneskelig gennemgang — Personer</h1>
+<section aria-label="Dækning">
+  <h2>Dækning</h2>
+  <p>Uafklarede i alt: {{ queue.coverage.unresolved_total }} · Reviewable now: {{ queue.coverage.reviewable_now }} ·
+  Not reviewable under current stable-identity contract: {{ queue.coverage.not_eligible_total }}.</p>
+  <p>Ikke-kvalificerede: {{ queue.not_eligible }}.</p>
+  {% if queue.coverage.decided_by_decision %}<p>Afgørelser: {{ queue.coverage.decided_by_decision }}.</p>{% endif %}
+  {% if queue.coverage.decided_by_status %}<p>Status: {{ queue.coverage.decided_by_status }}.</p>{% endif %}
+</section>
+<p>{{ queue.reviewable }} sager klar til gennemgang af {{ queue.unresolved_total }} uafklarede. Ikke-kvalificerede: {{ queue.not_eligible }}.</p>
+<table>
+  <caption class="sr-only">Kø af uafklarede personer</caption>
+  <thead><tr><th>Kilde</th><th>Rolle</th><th>Omfang</th><th>Art</th><th>Sag</th></tr></thead>
+  <tbody>
+  {% for c in queue.cases[:200] %}
+    <tr>
+      <td>{{ c.source_name }}</td><td>{{ c.role }}</td><td>{{ c.source_scope }}</td>
+      <td>{{ c.eligibility_kind }}</td>
+      <td><a href="/persons/review/{{ c.person_role_id }}">Åbn</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

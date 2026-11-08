@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Registerobservationer — Heimdal{% endblock %}
+
+{% block main %}
+<header class="page-header">
+  <h1>Registerobservationer</h1>
+  <p class="lead">Beregnede mønstre i lokalt snapshot — siger intet om lovlighed eller risiko. Snapshot kan være ufuldstændigt; fravær ≠ fravær i virkeligheden. <a href="/bestand" class="text-xs text-muted" style="margin-left:.4rem;">Metode →</a></p>
+</header>
+
+<section class="stats-grid mb-6">
+  <div class="stat-card">
+    <div class="stat-value">{{ summary.total_observed_companies }}</div>
+    <div class="stat-label">Selskaber med registrerede ejerstruktur-observationer</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ summary.ownership_cycle_count }}</div>
+    <div class="stat-label">Registrerede cirkulære ejerstrukturer</div>
+  </div>
+</section>
+
+<section class="card mb-6">
+  <div class="card-header flex-between">
+    <div class="card-title">
+      <h2>Ejerstruktur-observationer</h2>
+      <span class="muted">Viser {{ rows|length }} af {{ total }} observationer</span>
+    </div>
+    <div class="filter-actions">
+      <a href="/api/export/compliance/matrix.csv" class="btn btn-sm btn-secondary">Eksportér CSV</a>
+      <a href="/api/export/compliance/matrix.json" class="btn btn-sm btn-secondary">Eksportér JSON</a>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <form method="get" action="/compliance" class="filter-bar">
+      <div class="filter-group">
+        <label for="filter-q">Søg virksomhed / reg.nr.</label>
+        <input type="search" id="filter-q" name="q" value="{{ q }}" placeholder="Søg selskab eller reg.nr..." class="form-input">
+      </div>
+      <div class="filter-group">
+        <label for="filter-otype">Observationstype</label>
+        <select id="filter-otype" name="observation_type" class="form-select">
+          <option value="">Alle observationstyper</option>
+          <option value="OWNERSHIP_CYCLE" {% if observation_type == 'OWNERSHIP_CYCLE' %}selected{% endif %}>Cirkulær ejerstruktur</option>
+          <option value="SAME_SURNAME_SHARE" {% if observation_type == 'SAME_SURNAME_SHARE' %}selected{% endif %}>Samme efternavn, samlet andel</option>
+        </select>
+      </div>
+      <div class="filter-group filter-actions-btn">
+        <button type="submit" class="btn btn-primary">Anvend</button>
+        {% if q or observation_type %}
+          <a href="/compliance" class="btn btn-text">Nulstil</a>
+        {% endif %}
+      </div>
+    </form>
+
+    <div class="table-scroll mt-4">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Virksomhed</th>
+            <th>Observation</th>
+            <th>Registreret andel</th>
+            <th>Relateret enhed</th>
+            <th>Handling</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rows %}
+          <tr>
+            <td>
+              <a href="/companies/{{ r.company_id }}" class="entity-link entity-company">
+                <strong>{{ r.company_name }}</strong>
+              </a>
+              {% if r.company_regnr %}
+                <span class="regnr-pill">{{ r.company_regnr }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="font-bold">{{ r.observation_label }}</div>
+            </td>
+            <td class="font-mono">
+              {% if r.observed_pct %}
+                {{ r.observed_pct|pct }} %
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if r.related_entity_name and r.related_entity_id %}
+                <a href="/persons/{{ r.related_entity_id }}" class="entity-link entity-person">{{ r.related_entity_name }}</a>
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="/companies/{{ r.company_id }}" class="btn btn-xs btn-outline">Inspicér</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5">
+              <div class="empty-state"><div class="empty-state-icon"><svg width="24" height="24" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-search"></use></svg></div><p class="empty-state-title">Ingen resultater</p><p class="empty-state-body">Ingen observationer fundet med de valgte filtre. Prøv at nulstille filtre eller søge bredere.</p><a class="btn btn-secondary" href="/compliance">Nulstil filtre</a></div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if total_pages > 1 %}
+    <div class="pagination mt-4">
+      {% if page > 1 %}
+        <a href="/compliance?page={{ page - 1 }}&observation_type={{ observation_type or '' }}&q={{ q }}" class="btn btn-sm btn-outline">Forrige</a>
+      {% endif %}
+      <span class="page-info">Side {{ page }} af {{ total_pages }}</span>
+      {% if page < total_pages %}
+        <a href="/compliance?page={{ page + 1 }}&observation_type={{ observation_type or '' }}&q={{ q }}" class="btn btn-sm btn-outline">Næste</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="card mb-6">
+  <div class="card-header">
+    <div class="card-title">
+      <h2>Registreringsmønstre</h2>
+      <span class="muted">Mønstre i registreringsoplysningerne, beregnet på samme snapshot</span>
+    </div>
+  </div>
+  <div class="card-body">
+    {% if registration_patterns %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Enhed</th>
+          <th>Mønster</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pat in registration_patterns %}
+        <tr>
+          <td>
+            {% if pat.entity_kind == 'PERSON' %}
+              <a href="/persons/{{ pat.entity_id }}" class="entity-link entity-person">{{ pat.entity_name }}</a>
+            {% else %}
+              <a href="/companies/{{ pat.entity_id }}" class="entity-link entity-company">{{ pat.entity_name }}</a>
+            {% endif %}
+          </td>
+          <td>{{ pat.pattern_label }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state"><div class="empty-state-icon"><svg width="24" height="24" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-search"></use></svg></div><p class="empty-state-title">Ingen resultater</p><p class="empty-state-body">Ingen registreringsmønstre i det aktuelle snapshot.</p></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

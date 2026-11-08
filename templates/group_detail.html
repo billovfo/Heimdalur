@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+
+{% block title %}{{ group.parent.display_name }} (Koncernstruktur) — Heimdal{% endblock %}
+
+{% block main %}
+<header class="page-header">
+  <div class="header-badges">
+    <span class="chip chip-kilde">{{ "ULTIMATE PARENT"|product_token }}</span>
+    <span class="chip chip-beregnet">FLERTALSKONTROL &gt;50%</span>
+  </div>
+  <h1>Koncern: {{ group.parent.display_name }}</h1>
+  <p class="lead">Komplet koncernoversigt over moderselskab, datterselskaber og associerede virksomheder.</p>
+</header>
+
+<section class="card mb-6">
+  <div class="card-header flex-between">
+    <div>
+      <h2>Koncerndiagram &amp; Selskabshierarki</h2>
+      <span class="muted">{{ group.subsidiary_count }} datterselskaber</span>
+    </div>
+    <div>
+      <a href="/companies/{{ group.parent.canonical_entity_id }}" class="btn btn-sm btn-outline">Gå til Moderselskabsside →</a>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="group-hierarchy-tree">
+      <div class="tree-root-node mb-4">
+        <div class="node-badge">{{ "ULTIMATE PARENT"|product_token|upper }}</div>
+        <h3><a href="/companies/{{ group.parent.canonical_entity_id }}" class="entity-link entity-company">{{ group.parent.display_name }}</a></h3>
+        {% if group.parent.registration_number %}
+          <div class="text-sm text-muted">Reg.nr: {{ group.parent.registration_number }}</div>
+        {% endif %}
+      </div>
+
+      <div class="tree-subsidiaries pl-6 border-l border-border">
+        {% macro render_tree_node(item) %}
+          <div class="tree-item mb-4 pl-4 relative">
+            <div class="flex-between align-center">
+              <div>
+                {% if item.type == 'SUBSIDIARY' %}
+                  <span class="badge badge-primary">Datterselskab (&gt;50%)</span>
+                {% else %}
+                  <span class="badge badge-warning">Associeret (20-50%)</span>
+                {% endif %}
+                <strong class="ml-2">
+                  <a href="/companies/{{ item.entity.owned_id }}" class="entity-link entity-company">{{ item.entity.owned_name }}</a>
+                </strong>
+                <span class="font-mono text-sm text-muted ml-2">(Kontrol: {{ item.control_pct|pct }} %{% if not item.cycle %} · Effektiv kapitalandel: {{ item.cash_flow_pct|pct }} %{% endif %})</span>
+                {% if item.cycle %}
+                {# F-3 / SoT §15: same wording as macros.cycle_explainer. #}
+                <p class="text-sm text-muted mt-1"><span class="cycle-mark" aria-hidden="true">↻</span>
+                  {{ item.entity.owned_name }} står allerede højere i koncernen — en krydsejerskabscyklus.
+                  En procent hen over en cyklus ville ikke svare til noget, kilden har registreret.
+                  De direkte relationer, cyklussen består af, vises i stedet uændret.</p>
+                {% endif %}
+              </div>
+              <div>
+                <a href="/companies/{{ item.entity.owned_id }}" class="btn btn-xs btn-outline">Vis profil</a>
+              </div>
+            </div>
+
+            {% if item.children %}
+              <div class="sub-tree pl-6 mt-3 border-l border-border">
+                {% for child in item.children %}
+                  {{ render_tree_node(child) }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% endmacro %}
+
+        {% for item in group.tree %}
+          {{ render_tree_node(item) }}
+        {% else %}
+          <p class="text-muted">Ingen datterselskaber registreret under dette moderselskab.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if group.tree %}
+<section class="card mb-6">
+  <div class="card-header flex-between align-center">
+    <div>
+      <h2>Kapitalstrøm &amp; Stemmekontrol (Sankey Flow)</h2>
+      <span class="text-xs text-muted">Viser hvordan kontrol og effektiv kapital flyder gennem holdinglagene</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div id="sankey-flow-container" class="network-graph-container" data-parent-id="{{ group.parent.canonical_entity_id }}" style="min-height: 440px;"></div>
+  </div>
+</section>
+
+<script src="/static/graph_shell.js"></script>
+<script src="/static/sankey_flow.js"></script>
+{% else %}
+<section class="card mb-6">
+  <div class="card-body">
+    <div class="empty-state"><div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div><p class="empty-state-title">Ingen Sankey at vise</p><p class="empty-state-body">Ingen datterselskaber registreret under dette moderselskab — se ejerskabstabellen ovenfor.</p></div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

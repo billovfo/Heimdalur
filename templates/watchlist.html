@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+
+{% block title %}Overvågning — Heimdal{% endblock %}
+
+{% block main %}
+<header class="card record hero mb-6">
+  <div class="hero-row">
+    <div>
+      <h1 class="record-name"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-star"></use></svg> Overvågning</h1>
+      <p class="record-badges mt-2">
+        <span class="hero-subtext">Dine udvalgte virksomheder og personer med de seneste registrerede ændringer</span>
+      </p>
+    </div>
+  </div>
+</header>
+
+<div class="top5-grid mb-6">
+  <!-- MINE OVERVÅGEDE ENHEDER -->
+  <section class="card section">
+    <div class="section-head flex-between align-center">
+      <h2 class="section-title">Mine Overvågede Enheder ({{ watched_entities|length }})</h2>
+    </div>
+    <div class="section-body">
+      <div class="skeleton-ledger" aria-busy="true" aria-hidden="true" style="display:none">
+        <div class="skeleton skeleton-row"></div>
+        <div class="skeleton skeleton-row"></div>
+        <div class="skeleton skeleton-row"></div>
+      </div>
+      <div class="table-scroll">
+      <table class="ledger">
+        <thead>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Navn</th>
+            <th scope="col">Tilføjet</th>
+            <th scope="col" class="num">Handling</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for w in watched_entities %}
+          <tr>
+            <td>{{ m.kind_mark(w.entity_kind) }}</td>
+            <td>
+              {% if w.entity_kind == 'PERSON' %}
+                {{ m.entity_link(w.canonical_entity_id, w.display_name, 'PERSON') }}
+              {% else %}
+                {{ m.entity_link(w.canonical_entity_id, w.display_name, 'COMPANY') }}
+                {% if w.registration_number %}<span class="regnr-pill">{{ w.registration_number }}</span>{% endif %}
+              {% endif %}
+            </td>
+            <td class="text-xs text-muted font-mono">{{ w.added_at|dk if w.added_at else '—' }}</td>
+            <td class="num">
+              <button type="button" class="btn btn-outline text-xs" data-unwatch-id="{{ w.canonical_entity_id }}" data-unwatch-kind="{{ w.entity_kind }}">Fjern</button>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4" class="text-center text-muted py-4">
+              Du overvåger ingen enheder endnu. Åbn en virksomhed eller person og tryk på <strong><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-star"></use></svg> Overvåg</strong> — de seneste registrerede ændringer vises her.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- LIVE ALARM FEED -->
+  <section class="card section">
+    <div class="section-head flex-between align-center">
+      <h2 class="section-title"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-clock"></use></svg> Seneste ændringer for overvågede enheder</h2>
+    </div>
+    <div class="section-body">
+      <div class="timeline-container">
+        {% for ev in events %}
+        <div class="timeline-item mb-3 pb-3 border-b border-border">
+          <div class="flex-between align-center">
+            <span class="badge badge-warning text-xs">{{ L.change_category_label(ev.change_category, ev.change_summary) or 'Registerændring' }}</span>
+            <span class="text-xs text-muted font-mono">{{ ev.event_timestamp|dk if ev.event_timestamp else 'Baseline' }}</span>
+          </div>
+          <div class="text-sm font-semibold mt-1">
+            {% if ev.entity_kind == 'PERSON' %}
+              <a href="/persons/{{ ev.canonical_entity_id }}" class="entity-link entity-person">{{ ev.entity_name }}</a>
+            {% else %}
+              <a href="/companies/{{ ev.canonical_entity_id }}" class="entity-link entity-company">{{ ev.entity_name }}</a>
+            {% endif %}
+          </div>
+          <div class="text-xs text-muted mt-1">{{ L.change_summary_label(ev.change_summary) }}</div>
+        </div>
+        {% else %}
+        <p class="empty text-muted">Ingen nye ændringer registreret for dine overvågede enheder.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}Dashboard · Heimdal{% endblock %}
+
+{% macro fig(n, label, note='') %}
+<div class="fig metric-card" style="background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-lg);padding:1rem 1.1rem;">
+  <p class="fig-n">{{ '{:,}'.format(n).replace(',', '.') }}</p>
+  <p class="fig-l">{{ label }}</p>
+  {% if note %}<p class="fig-note">{{ note }}</p>{% endif %}
+</div>
+{%- endmacro %}
+
+{% block main %}
+
+<header class="card record hero">
+  <h1 class="record-name">Bestand</h1>
+  <p class="record-badges">
+    {% if o.state == 'PARTIAL_POPULATION' %}
+      <span class="verdict v-part"><span class="v-mark" aria-hidden="true">–</span>Partiel population</span>
+    {% else %}
+      <span class="verdict v-ok"><span class="v-mark" aria-hidden="true">=</span>Alle opslag afsluttet</span>
+    {% endif %}
+  </p>
+  <p class="snapshot">
+    <span class="snap-cap">Hentet fra kilden</span>
+    <span class="mono">{{ o.freshness.n }}</span> opslag ·
+    ældste <span class="mono">{{ o.freshness.oldest|dk }}</span> ·
+    nyeste <span class="mono">{{ o.freshness.newest|dk }}</span>
+  </p>
+</header>
+
+{# T1.4 (plan v1/F-22): the dead /api/export/companies.csv action was removed —
+   the route does not exist. Global CSV export is DEFERRED to owner decision
+   (gate G5): no dead action, no new export feature built. #}
+<div class="action-bar"><a class="btn btn-primary" href="/overvaagning"><svg width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-star"></use></svg> Gå til Overvågning</a><a class="btn btn-secondary" href="/bulk-screening">Bulk opslag</a></div>
+
+<section class="card section" id="bestand" aria-labelledby="h-best">
+  <div class="section-head">
+    <h2 id="h-best" class="section-title">Enheder</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+  <div class="section-body">
+    <div class="figures figures-grid">
+      {% for k in o.kinds %}
+        {{ fig(k.n, m.KIND.get(k.entity_kind, m.KIND['UNKNOWN_ENTITY']).label) }}
+      {% endfor %}
+    </div>
+    <div class="figures figures-grid">
+      {{ fig(o.inventory, 'I beholdning') }}
+      {{ fig(o.unresolved, 'Ikke afsluttet',
+             'Opdaget · i kø · prøves igen' if o.unresolved else '') }}
+    </div>
+    {% if o.state == 'PARTIAL_POPULATION' %}
+      {% call m.note() %}
+        Populationen er <strong>partiel</strong>. Fuld population kræver desuden indsamlerens
+        nøglerums- og hultjek, som porten ikke har adgang til.
+      {% endcall %}
+    {% endif %}
+  </div>
+</section>
+
+<section class="card section" id="relationer" aria-labelledby="h-rel">
+  <div class="section-head">
+    <h2 id="h-rel" class="section-title">Relationer</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+  <div class="section-body">
+    <div class="figures figures-grid">
+      {% for r in o.relations %}{{ fig(r.n, r.t.replace('_', ' ')|lower) }}{% endfor %}
+      {{ fig(o.no_actor_status, 'ingen registreret kontrolaktør') }}
+    </div>
+  </div>
+</section>
+
+<section class="card section" id="indirekte" aria-labelledby="h-ind">
+  <div class="section-head">
+    <h2 id="h-ind" class="section-title">Indirekte ejerskab</h2>
+    {{ m.stamp('beregnet') }}
+  </div>
+  <div class="section-body">
+    <div class="worksheet">
+      <div class="figures figures-grid">
+        {{ fig(o.indirect, 'beregnede ejerforhold') }}
+        {{ fig(o.cycle_groups, 'cyklusgrupper') }}
+        {{ fig(o.cycle_entities, 'enheder i cyklus', 'ingen procent føres hen over en cyklus') }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="card section" id="koersler" aria-labelledby="h-run">
+  <div class="section-head">
+    <h2 id="h-run" class="section-title">Seneste kørsler</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+  <div class="section-body">
+    {% if o.runs %}
+    <div class="table-scroll">
+      <table class="ledger">
+        <caption class="sr-only">Indsamlerens seneste kørsler</caption>
+        <thead><tr><th scope="col">Kørsel</th><th scope="col">Type</th>
+          <th scope="col">Status</th><th scope="col">Afsluttet</th></tr></thead>
+        <tbody>
+          {% for r in o.runs %}
+          <tr>
+            <td title="{{ r.collection_run_id }}">{{ loop.index }}</td>
+            <td title="{{ r.run_type }}">{{ L.RUN_TYPE_LABELS.get(r.run_type, r.run_type) }}</td>
+            <td title="{{ r.run_status }}{% if r.stop_reason %} — {{ r.stop_reason }}{% endif %}">{{ L.RUN_STATUS_LABELS.get(r.run_status, r.run_status) }}{% if r.stop_reason %}
+              <span class="absent">{{ r.stop_reason }}</span>{% endif %}</td>
+            <td class="mono" title="{{ r.ended_at|dk }}">{{ r.ended_at|dk }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state" style="text-align:center;padding:2rem 1rem;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-lg);">
+      <p style="margin:0 0 .4rem;font-weight:600;color:var(--text);">Ingen kørsler registreret</p>
+      <p class="empty" style="margin:0;">Indsamleren har endnu ingen kørsler i dette snapshot.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>Heimdal gengiver kilden <span class="mono">sg.vs.fo</span> som gemt lokalt. Ingen tal rettes,
+    ingen huller udfyldes.</p>
+</footer>
+{% endblock %}

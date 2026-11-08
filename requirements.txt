@@ -1,0 +1,15 @@
+# Heimdal - Python 3.14. Direct third-party imports of heimdal/, heimdal_collect.py,
+# tools/ and the root test_*.py files (AST scan 2026-11-06), pinned to the versions
+# installed on the dev box. Install: python3 -m pip install -r requirements.txt
+# Do not add langsmith: it loads as a broken pytest plugin (see pytest.ini).
+
+# --- runtime: portal (heimdal/), collector (heimdal_collect.py), pdfhist ---
+Flask==3.1.3            # pulls Werkzeug 3.1.8, Jinja2 3.1.6, MarkupSafe 3.0.3, itsdangerous 2.2.0, click 8.3.3, blinker 1.9.0
+psycopg==3.3.4
+psycopg-binary==3.3.4   # the libpq implementation in use (psycopg.pq.__impl__ == "binary")
+pypdf==6.13.2
+
+# --- dev/test only: pytest suite, tools/gate.sh, tools/verify_*.py ---
+pytest==9.0.3
+playwright==1.60.0      # test_frontend_quality.py + tools/verify_*.py; then `playwright install chrome`
+requests==2.33.1        # test_pdfhist_live_pilot.py imports pdfhist_live_pilot.py, which imports requests

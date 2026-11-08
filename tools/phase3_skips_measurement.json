@@ -1,0 +1,3711 @@
+[
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 98,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 98,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1795,
+   2417
+  ],
+  "company": 162,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2417,
+   2565
+  ],
+  "company": 162,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2417,
+   5457
+  ],
+  "company": 162,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   2417,
+   5627
+  ],
+  "company": 162,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   5571,
+   6651
+  ],
+  "company": 207,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   92,
+   6419
+  ],
+  "company": 273,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5389,
+   6419
+  ],
+  "company": 273,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5389,
+   6419
+  ],
+  "company": 273,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2321,
+   5001
+  ],
+  "company": 279,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2321,
+   6984
+  ],
+  "company": 279,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 6,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2321,
+   8469
+  ],
+  "company": 279,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   1742,
+   2364
+  ],
+  "company": 362,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2364,
+   3007
+  ],
+  "company": 362,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 5,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2364,
+   7166
+  ],
+  "company": 362,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4558,
+   8411
+  ],
+  "company": 488,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   4558,
+   8411
+  ],
+  "company": 488,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   920,
+   4208
+  ],
+  "company": 714,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1982,
+   4208
+  ],
+  "company": 714,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2191,
+   3697
+  ],
+  "company": 727,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3697,
+   5502
+  ],
+  "company": 727,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   1044,
+   3750
+  ],
+  "company": 1047,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1162,
+   3750
+  ],
+  "company": 1047,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3750,
+   8032
+  ],
+  "company": 1047,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3523,
+   5629
+  ],
+  "company": 1106,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1338,
+   4803
+  ],
+  "company": 1193,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2244,
+   4803
+  ],
+  "company": 1193,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3796,
+   4803
+  ],
+  "company": 1193,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4803,
+   7261
+  ],
+  "company": 1193,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 1225,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5226,
+   8809
+  ],
+  "company": 1348,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 6,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   893,
+   3206
+  ],
+  "company": 1391,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1957,
+   2594
+  ],
+  "company": 1452,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1957,
+   5074
+  ],
+  "company": 1452,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5294,
+   8621
+  ],
+  "company": 1504,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2061,
+   5304
+  ],
+  "company": 1516,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   7841,
+   8677
+  ],
+  "company": 1581,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3523,
+   5629
+  ],
+  "company": 1708,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   1027,
+   8503
+  ],
+  "company": 1806,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5294,
+   6161
+  ],
+  "company": 1912,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5294,
+   8621
+  ],
+  "company": 1912,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6368,
+   7658
+  ],
+  "company": 1929,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6368,
+   7927
+  ],
+  "company": 1929,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 5,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6368,
+   7948
+  ],
+  "company": 1929,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3274,
+   9647
+  ],
+  "company": 2068,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1261,
+   1742
+  ],
+  "company": 2133,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   825,
+   3399
+  ],
+  "company": 2230,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3399,
+   6011
+  ],
+  "company": 2230,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2840,
+   5344
+  ],
+  "company": 2315,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 5,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1588,
+   4617
+  ],
+  "company": 2324,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   5658,
+   6545
+  ],
+  "company": 2425,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2266,
+   8859
+  ],
+  "company": 2455,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5109,
+   8859
+  ],
+  "company": 2455,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   7173,
+   8859
+  ],
+  "company": 2455,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   8849,
+   8859
+  ],
+  "company": 2455,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   2556,
+   2988
+  ],
+  "company": 2490,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2988,
+   4417
+  ],
+  "company": 2490,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2988,
+   5444
+  ],
+  "company": 2490,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2988,
+   7665
+  ],
+  "company": 2490,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   977,
+   6049
+  ],
+  "company": 2616,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2756,
+   3661
+  ],
+  "company": 2685,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3889,
+   9298
+  ],
+  "company": 3039,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   277,
+   2756
+  ],
+  "company": 3215,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2756,
+   4247
+  ],
+  "company": 3215,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2756,
+   8436
+  ],
+  "company": 3215,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3210,
+   8809
+  ],
+  "company": 3238,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   404,
+   9627
+  ],
+  "company": 3381,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 3439,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 3439,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4167,
+   5226
+  ],
+  "company": 3465,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4167,
+   6144
+  ],
+  "company": 3465,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   187,
+   6617
+  ],
+  "company": 3495,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4396,
+   6617
+  ],
+  "company": 3495,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6450,
+   7454
+  ],
+  "company": 3535,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 3711,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 3711,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5615,
+   6352
+  ],
+  "company": 3777,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5615,
+   7666
+  ],
+  "company": 3777,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5615,
+   8272
+  ],
+  "company": 3777,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5226,
+   6045
+  ],
+  "company": 4022,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6828,
+   9183
+  ],
+  "company": 4160,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1588,
+   5033
+  ],
+  "company": 4310,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   977,
+   6049
+  ],
+  "company": 4477,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2556,
+   2988
+  ],
+  "company": 4551,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2988,
+   5444
+  ],
+  "company": 4551,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2988,
+   7665
+  ],
+  "company": 4551,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5970,
+   9366
+  ],
+  "company": 4562,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3025,
+   8125
+  ],
+  "company": 4657,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   7214,
+   8125
+  ],
+  "company": 4657,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   8411,
+   8493
+  ],
+  "company": 4664,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5652,
+   7571
+  ],
+  "company": 4789,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5652,
+   8393
+  ],
+  "company": 4789,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5652,
+   9738
+  ],
+  "company": 4789,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4116,
+   8461
+  ],
+  "company": 5093,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   7165,
+   8461
+  ],
+  "company": 5093,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   1623,
+   6957
+  ],
+  "company": 5096,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4662,
+   6957
+  ],
+  "company": 5096,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3697,
+   5502
+  ],
+  "company": 5384,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   1338,
+   4776
+  ],
+  "company": 5387,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2244,
+   4776
+  ],
+  "company": 5387,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3796,
+   4776
+  ],
+  "company": 5387,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4776,
+   7261
+  ],
+  "company": 5387,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4232,
+   7971
+  ],
+  "company": 5417,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 5443,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 5443,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   344,
+   3562
+  ],
+  "company": 5651,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   875,
+   3562
+  ],
+  "company": 5651,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2092,
+   7764
+  ],
+  "company": 5663,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   876,
+   4622
+  ],
+  "company": 5687,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 5,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2493,
+   4622
+  ],
+  "company": 5687,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 5,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4622,
+   5537
+  ],
+  "company": 5687,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4550,
+   5844
+  ],
+  "company": 5727,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4417,
+   9513
+  ],
+  "company": 5825,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4452,
+   9513
+  ],
+  "company": 5825,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 5912,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 5912,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 6044,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 6044,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1127,
+   8677
+  ],
+  "company": 6434,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4767,
+   5442
+  ],
+  "company": 6719,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1183,
+   5474
+  ],
+  "company": 6727,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5474,
+   8403
+  ],
+  "company": 6727,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3605,
+   3734
+  ],
+  "company": 6782,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 6,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6513,
+   9301
+  ],
+  "company": 6880,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3135,
+   6513
+  ],
+  "company": 6880,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 6898,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 6898,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1657,
+   8100
+  ],
+  "company": 6908,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4247,
+   9593
+  ],
+  "company": 7160,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6161,
+   8621
+  ],
+  "company": 7248,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4076,
+   7795
+  ],
+  "company": 7271,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   977,
+   6049
+  ],
+  "company": 7382,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2364,
+   2700
+  ],
+  "company": 7419,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2364,
+   5220
+  ],
+  "company": 7419,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2364,
+   8188
+  ],
+  "company": 7419,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2364,
+   8809
+  ],
+  "company": 7419,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3306,
+   8425
+  ],
+  "company": 7435,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 5,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 7515,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 7515,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3210,
+   8809
+  ],
+  "company": 7821,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 7,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4067,
+   8809
+  ],
+  "company": 7821,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 7,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 7870,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 7870,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   893,
+   3206
+  ],
+  "company": 7998,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5515,
+   8195
+  ],
+  "company": 8057,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 6,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5389,
+   6429
+  ],
+  "company": 8215,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   97,
+   9280
+  ],
+  "company": 8252,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5998,
+   6702
+  ],
+  "company": 8318,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6503,
+   8210
+  ],
+  "company": 8639,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   8974,
+   9572
+  ],
+  "company": 8639,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1588,
+   4617
+  ],
+  "company": 8647,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "SAME_COMPANY_EVER"
+ },
+ {
+  "pair": [
+   8167,
+   8562
+  ],
+  "company": 8908,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   4436,
+   6478
+  ],
+  "company": 8986,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 7,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6478,
+   7328
+  ],
+  "company": 8986,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 4,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5123,
+   6370
+  ],
+  "company": 9110,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5123,
+   6791
+  ],
+  "company": 9110,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   658,
+   6368
+  ],
+  "company": 9174,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   3129,
+   6368
+  ],
+  "company": 9174,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5515,
+   6368
+  ],
+  "company": 9174,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 5,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6368,
+   7927
+  ],
+  "company": 9174,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6368,
+   8683
+  ],
+  "company": 9174,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6368,
+   9133
+  ],
+  "company": 9174,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2441,
+   6702
+  ],
+  "company": 9283,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5998,
+   6702
+  ],
+  "company": 9283,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   6173,
+   6702
+  ],
+  "company": 9283,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1150,
+   9298
+  ],
+  "company": 9292,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   9153,
+   9298
+  ],
+  "company": 9292,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   2969,
+   5388
+  ],
+  "company": 9427,
+  "ctx": "MANAGEMENT",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "APPOINTED_EVENT",
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 3,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   1689,
+   8216
+  ],
+  "company": 9444,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ },
+ {
+  "pair": [
+   5147,
+   8216
+  ],
+  "company": 9444,
+  "ctx": "BOARD",
+  "families": [
+   "PDF_HISTORY"
+  ],
+  "auths": [
+   "AUTHORITATIVE_CURRENT_GOVERNANCE",
+   "HISTORICAL_PDF_OBSERVATION"
+  ],
+  "kinds": [
+   "CURRENT_STATE_SNAPSHOT",
+   "REMOVED_EVENT"
+  ],
+  "n_obs": 2,
+  "candidate_classes": "UNKNOWN"
+ }
+]

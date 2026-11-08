@@ -1,0 +1,315 @@
+{
+  "selection_type": "risk_stratified_worst_case_not_random",
+  "selection_criteria": "coverage quotas: 4x Felag multi-role-families, 2x formation-many-changes, 2x pre-2012 old formats, 3x glued/OCR-like spacing, 1x capital classes, 1x one-line notice, 1x multi-page Felag, 3x most-changes Lysing, 1x longest text, remainder composite risk score",
+  "rules": "distinct document_id; written BEFORE any visual/textual inspection; page_count from stored bytes (metadata only); no substitution afterwards",
+  "corpus": "full run 424245 (26623 docs with stored bytes)",
+  "live_requests": 0,
+  "generated_at": "2026-09-01T00:05:00+02:00",
+  "selected": [
+    {
+      "document_id": 15600,
+      "observation_id": 7689,
+      "registration_number": "5534",
+      "pdf_type": "FelagPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "multiple_role_families_in_same_document",
+        "felag_snapshot_full_state"
+      ],
+      "risk_features": [
+        "2 role families",
+        "11 persons",
+        "1 long addresses",
+        "unknown_sections 0"
+      ],
+      "byte_length": 10443,
+      "oldest_change": "2026-12-31"
+    },
+    {
+      "document_id": 3457,
+      "observation_id": 1620,
+      "registration_number": "155",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "formation_notice_many_changes"
+      ],
+      "risk_features": [
+        "formation with 19 changes"
+      ],
+      "byte_length": 30654,
+      "oldest_change": "2011-08-12"
+    },
+    {
+      "document_id": 2903,
+      "observation_id": 1342,
+      "registration_number": "1104",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "formation_notice_many_changes"
+      ],
+      "risk_features": [
+        "formation with 15 changes"
+      ],
+      "byte_length": 28409,
+      "oldest_change": "2011-07-02"
+    },
+    {
+      "document_id": 15735,
+      "observation_id": 7756,
+      "registration_number": "5547",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "glued_lines_ocr_like_spacing"
+      ],
+      "risk_features": [
+        "4 glued line joins"
+      ],
+      "byte_length": 30849,
+      "oldest_change": "2010-12-01"
+    },
+    {
+      "document_id": 16876,
+      "observation_id": 8326,
+      "registration_number": "5758",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "glued_lines_ocr_like_spacing"
+      ],
+      "risk_features": [
+        "4 glued line joins"
+      ],
+      "byte_length": 27205,
+      "oldest_change": "2016-06-21"
+    },
+    {
+      "document_id": 8077,
+      "observation_id": 3930,
+      "registration_number": "3448",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "glued_lines_ocr_like_spacing"
+      ],
+      "risk_features": [
+        "3 glued line joins"
+      ],
+      "byte_length": 28158,
+      "oldest_change": "2011-07-06"
+    },
+    {
+      "document_id": 24026,
+      "observation_id": 11901,
+      "registration_number": "7321",
+      "pdf_type": "FelagPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "capital_classes"
+      ],
+      "risk_features": [
+        "Klassi capital classes"
+      ],
+      "byte_length": 9814,
+      "oldest_change": "2026-12-31"
+    },
+    {
+      "document_id": 20115,
+      "observation_id": 9946,
+      "registration_number": "6377",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "one_line_notice"
+      ],
+      "risk_features": [
+        "single-line notice body"
+      ],
+      "byte_length": 110809,
+      "oldest_change": "2016-12-07"
+    },
+    {
+      "document_id": 10064,
+      "observation_id": 4922,
+      "registration_number": "3980",
+      "pdf_type": "FelagPdf",
+      "page_count": 3,
+      "reason_selected": [
+        "multi_page_felag"
+      ],
+      "risk_features": [
+        "multi-page snapshot"
+      ],
+      "byte_length": 11727,
+      "oldest_change": "2026-12-31"
+    },
+    {
+      "document_id": 15633,
+      "observation_id": 7712,
+      "registration_number": "5534",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "most_changes_in_corpus"
+      ],
+      "risk_features": [
+        "15 changes",
+        "0 persons"
+      ],
+      "byte_length": 29153,
+      "oldest_change": "2011-04-08"
+    },
+    {
+      "document_id": 24465,
+      "observation_id": 12119,
+      "registration_number": "7407",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "longest_lysing_text"
+      ],
+      "risk_features": [
+        "2536 chars"
+      ],
+      "byte_length": 131790,
+      "oldest_change": "2020-09-03"
+    },
+    {
+      "document_id": 9093,
+      "observation_id": 4435,
+      "registration_number": "3725",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 117"
+      ],
+      "byte_length": 28139,
+      "oldest_change": "2010-05-20"
+    },
+    {
+      "document_id": 15351,
+      "observation_id": 7568,
+      "registration_number": "549",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 115"
+      ],
+      "byte_length": 30161,
+      "oldest_change": "2013-04-18"
+    },
+    {
+      "document_id": 15354,
+      "observation_id": 7565,
+      "registration_number": "549",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 113"
+      ],
+      "byte_length": 30384,
+      "oldest_change": "2011-03-28"
+    },
+    {
+      "document_id": 11248,
+      "observation_id": 5514,
+      "registration_number": "4339",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 112"
+      ],
+      "byte_length": 29421,
+      "oldest_change": "2011-03-16"
+    },
+    {
+      "document_id": 8257,
+      "observation_id": 4011,
+      "registration_number": "3491",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 112"
+      ],
+      "byte_length": 30074,
+      "oldest_change": "2010-02-19"
+    },
+    {
+      "document_id": 3075,
+      "observation_id": 1429,
+      "registration_number": "1279",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 110"
+      ],
+      "byte_length": 26877,
+      "oldest_change": "2013-11-21"
+    },
+    {
+      "document_id": 2857,
+      "observation_id": 1322,
+      "registration_number": "1064",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 110"
+      ],
+      "byte_length": 29622,
+      "oldest_change": "2013-12-18"
+    },
+    {
+      "document_id": 7635,
+      "observation_id": 3712,
+      "registration_number": "3344",
+      "pdf_type": "LysingPdf",
+      "page_count": 2,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 109"
+      ],
+      "byte_length": 29744,
+      "oldest_change": "2015-11-26"
+    },
+    {
+      "document_id": 8166,
+      "observation_id": 3973,
+      "registration_number": "3476",
+      "pdf_type": "LysingPdf",
+      "page_count": 1,
+      "reason_selected": [
+        "highest_composite_risk_score"
+      ],
+      "risk_features": [
+        "score 107"
+      ],
+      "byte_length": 28193,
+      "oldest_change": "2011-06-15"
+    }
+  ]
+}

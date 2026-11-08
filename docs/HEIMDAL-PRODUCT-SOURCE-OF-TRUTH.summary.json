@@ -1,0 +1,319 @@
+{
+  "document_version": "2.4",
+  "document_sha256": "811b97e034d06a53c3985338f0f119a031604f21de584480d5f7054f4e87e3bb",
+  "generated_at_utc": "2026-11-06",
+  "status": "PENDING_OWNER_APPROVAL",
+  "implementation_authorized": false,
+  "previous_version": "2.3",
+  "note": "v2.4 (audit 2026-11, owner decision D5) makes the SoT match what is built: new §1a as-built state, Phase 2 PDF history BUILT_FLAGS_OFF instead of PAUSED (§27), analytics parked (D6), PEP empty until a sourced import (D14), person review built with 12 PENDING decisions, 127.0.0.1-only without auth, OSM tiles as the only external request (D12), audit owner decisions D1-D15 in §29c, known deviations in §1a.4. Not a new product strategy. implementation_authorized becomes true only when the owner approves v2.4. See SoT §0.7.",
+  "note_v2_3": "v2.3 synchronizes completed company-discovery reconnaissance, full source permission and the five-work-package acquisition plan. It is NOT a new product strategy: no product decision, phase boundary or terminology changed. Three things v2.2 left open are now settled — the discovery method is chosen (search-cbi registration-number enumeration, SoT §8), source permission is granted by owner attestation (SoT §9.1), and get-table's behavior is measured (BFS radius N, start-entity dependent; the earlier byte-identical-response assumption is FALSIFIED, SoT §6/§8a.6). Unchanged: the Phase 1/Phase 2 boundary, raw acquisition before relation processing, local PostgreSQL as runtime and primary database, control-registration terminology (§14a), From/To semantics (§14b), relation processing as later scope, and implementation_authorized=false. See SoT §0.6.",
+
+  "reconnaissance_status": "COMPLETED_FOR_PLANNED_ACQUISITION",
+  "additional_reconnaissance_required": false,
+  "reconnaissance_report": "HEIMDAL-COMPANY-DISCOVERY-RECONNAISSANCE.md",
+  "reconnaissance_report_sha256": "f1abd49d62f740a4b94a87f8671c4ab7f156871ccbe4acef50aa5a1df3fc6e00",
+
+  "source_permission": {
+    "status": "GRANTED",
+    "scope": "FULL_DATA_COLLECTION",
+    "source_owner_contact_required_before_collection": false,
+    "source_support_availability": "TEMPORARILY_UNAVAILABLE_DUE_TO_SUMMER_LEAVE",
+    "permission_granted_by": "NOT_RECORDED",
+    "permission_granted_at": "NOT_RECORDED",
+    "permission_channel": "NOT_RECORDED",
+    "owner_attestation_recorded_at": "2026-08-01",
+    "conservative_collection_still_required": true,
+    "interface_still_not_officially_documented": true,
+    "interface_still_not_assumed_stable": true
+  },
+
+  "company_discovery": {
+    "primary_method": "SEARCH_CBI_REGISTRATION_NUMBER_ENUMERATION",
+    "primary_endpoint": "/api/search-cbi?size={n}&q={term}",
+    "gap_detection_method": "ENTITIES_OBSERVED_IN_GET_TABLE_AS_GAP_DETECTOR",
+    "graph_traversal_as_completeness_proof": false,
+    "finds_isolated_companies": true,
+    "denominator_method_identified": true,
+    "denominator_established": false,
+    "size_verified_up_to": 101,
+    "offset_pagination_supported": false
+  },
+
+  "get_table_acquisition": {
+    "behavior": "N_HOP_UNDIRECTED_NEIGHBOURHOOD_BALL_AROUND_START_ENTITY",
+    "level_semantics": "LEVEL_N_EQUALS_BFS_RADIUS_N",
+    "level_measurement_classification": "OBSERVED",
+    "default_level": 1,
+    "default_level_classification": "ACCEPTED_PLANNING_RULE",
+    "start_entity_independent": false,
+    "byte_identical_responses_from_both_ends": false,
+    "empty_array_proves_not_found": false
+  },
+
+  "entity_typing": {
+    "primary_source": "GET_TABLE_NAME_TEXT_GREEDY_RIGHTMOST_SEPARATOR_PARSE",
+    "validation_source": "GET_GRAPH_COLORLABEL_SAMPLED_ONLY",
+    "validation_sample_count": 62,
+    "validation_matches": 62,
+    "validation_conflicts": 0,
+    "unknown_entity_fallback": true,
+    "blocks_raw_acquisition": false
+  },
+
+  "raw_storage": {
+    "request_provenance_separate_from_response_content": true,
+    "response_content_deduplication_by_sha256": true,
+    "multiple_attempts_may_reference_one_content_row": true,
+    "deduplication_may_never_remove_request_history": true
+  },
+
+  "acquisition_plan": {
+    "document": "HEIMDAL-CURRENT-DATA-ACQUISITION-PLAN.md",
+    "name": "CURRENT FIVE-WORK-PACKAGE COMPANY INVENTORY AND RAW ACQUISITION PLAN",
+    "work_package_count": 5,
+    "work_packages": [
+      "Permission record and preflight",
+      "Company inventory enumeration",
+      "Inventory quality and queue preparation",
+      "Raw get-table level=1 acquisition",
+      "Completion report and relation-processing handoff"
+    ],
+    "supersedes": "WU-ACQ-01_TO_WU-ACQ-08",
+    "implemented_in": "heimdal_collect.py",
+    "relation_processing_in_scope": false
+  },
+
+  "registered_control_actor": {
+    "source_term": "Veruligur Eigari",
+    "primary_ui_label": "Registreret kontrolaktør",
+    "ui_section": "Kontrolregistrering",
+    "canonical_relation_type": "REGISTERED_CONTROL_ACTOR",
+    "counts_as_ownership": false,
+    "included_in_indirect_ownership": false
+  },
+
+  "no_registered_control_actor": {
+    "source_term": "Ongin veruligur eigari",
+    "source_abbreviation": "O.V.E.",
+    "primary_ui_label": "Ingen registreret kontrolaktør",
+    "canonical_storage_class": "ENTITY_STATUS",
+    "canonical_status_type": "NO_REGISTERED_CONTROL_ACTOR",
+    "canonical_self_edge_forbidden": true
+  },
+
+  "from_to_semantics": {
+    "raw_direction_always_preserved": true,
+    "canonical_direction_defined_per_relation_type": true,
+    "universal_from_to_rule_forbidden": true,
+    "direct_ownership": {
+      "source_relation_pattern": "Eigari N%",
+      "from": "OWNER",
+      "to": "OWNED_ENTITY"
+    },
+    "registered_control_actor": {
+      "source_relation": "Veruligur Eigari",
+      "from": "REGISTERED_ACTOR",
+      "to": "REGISTERED_ENTITY"
+    },
+    "ove": {
+      "source_relation": "O.V.E.",
+      "canonical_edge": false,
+      "canonical_status": "NO_REGISTERED_CONTROL_ACTOR"
+    }
+  },
+
+  "primary_source_strategy": "Heimdal's first product is built on current, structured relation data from sg.vs.fo, acquired, validated, and stored locally as immutable snapshots — never queried live from the WebUI at request time.",
+
+  "phase_1_scope": {
+    "name": "CURRENT_RELATIONS",
+    "source": "sg.vs.fo (OBSERVED_SOURCE_INTERFACE, not officially documented)",
+    "covers": ["Ejere (Eigarar)", "Registreret kontrolaktør (source: Veruligur Eigari)", "Nevnd", "Stjórn", "Annað", "direct ownership", "indirect ownership with paths", "current shared companies", "current shared board/management relations", "person and company portals"],
+    "status": "PRIMARY_ACTIVE_SCOPE"
+  },
+  "phase_2_scope": {
+    "name": "HISTORICAL_PDF_ENRICHMENT",
+    "source": "Skráseting Føroya felag_pdf/lysing_pdf (existing pipeline)",
+    "covers": ["historical board/management periods", "bankruptcy", "liquidation", "mergers", "incorporation", "cessation", "name history", "historical capital", "historical address"],
+    "status": "BUILT_FLAGS_OFF (v2.3: PAUSED) — built per HEIMDAL-PDF-HISTORIK-MASTERPLAN-v3.1.2.md, projection run 33, integration and UI flags off, does not block phase 1"
+  },
+
+  "runtime_data_source": "Heimdal's local canonical database only — never sg.vs.fo directly at request time",
+  "runtime_upstream_dependency": false,
+  "upstream_dependency_policy": "product must remain fully readable when sg.vs.fo is unavailable, slow, changed, rate-limited, or removed; upstream status affects only freshness/new-snapshot availability",
+
+  "raw_snapshot_required": true,
+  "local_database_required": true,
+  "source_interface_status": "OBSERVED_SOURCE_INTERFACE / NOT_OFFICIALLY_DOCUMENTED / NOT_ASSUMED_STABLE",
+  "source_use_assessment_required": true,
+  "source_use_assessment_satisfied_by": "OWNER_ATTESTATION",
+  "entity_discovery_required": true,
+  "snapshot_freshness_required": true,
+
+  "current_data_semantics": {
+    "represents_source_observation": true,
+    "claims_historical_validity": false,
+    "historical_validity_phase": 2
+  },
+
+  "company_inventory": {
+    "required_before_full_relation_acquisition": true,
+    "used_as_get_table_queue": true,
+    "local_search_source": true,
+    "partial_inventory_allowed": true,
+    "partial_inventory_label": "PARTIAL_POPULATION",
+    "full_population_label": "FULL_POPULATION_CLAIMED",
+    "full_population_requires": ["documented_discovery_method", "measurable_entity_universe", "denominator", "per_entity_fetch_status", "known_gaps_and_errors_list"],
+    "minimal_schema_fields": ["source_company_id", "source_system", "display_name", "raw_entity_type", "registration_number_if_available", "discovery_method", "discovered_at", "raw_response_reference", "collection_scope"]
+  },
+
+  "acquisition_priority": ["COMPANY_DISCOVERY", "GET_TABLE", "GET_CVE_WHEN_REQUIRED", "GET_GRAPH_AS_VALIDATION_OR_FALLBACK"],
+
+  "processing_sequence": ["ENTITY_INVENTORY", "RAW_ACQUISITION", "RELATION_PROCESSING", "DERIVED_RELATIONS", "PRODUCT_PROJECTIONS"],
+
+  "raw_acquisition_before_relation_processing": true,
+  "get_table_primary_source": true,
+  "get_graph_required_per_company": false,
+  "pdf_history_phase": 2,
+
+  "current_relation_groups": [
+    {"groupId": 2, "groupName": "Nevnd"},
+    {"groupId": 3, "groupName": "Stjórn"},
+    {"groupId": 4, "groupName": "Eigarar"},
+    {"groupId": 5, "groupName": "Annað"}
+  ],
+  "current_relation_type_examples_observed": ["Stjóri (cbTypeId 21)", "Nevndarformaður (cbTypeId 22)", "Nevndarlimur (cbTypeId 32)", "Eigari N.N% (cbTypeId 1, percentage embedded in label text) -> DIRECT_OWNERSHIP", "Veruligur Eigari (cbTypeId 41, separate relation) -> REGISTERED_CONTROL_ACTOR, primary UI label 'Registreret kontrolaktør'", "O.V.E. (self-edge-shaped status row) -> ENTITY_STATUS NO_REGISTERED_CONTROL_ACTOR, primary UI label 'Ingen registreret kontrolaktør'"],
+  "unknown_relation_type_handling": "stored as OTHER_SOURCE_RELATION with original label preserved, never discarded",
+
+  "current_portal_requirements": {
+    "required_routes": ["/companies", "/companies/:canonical_company_id", "/persons", "/persons/:canonical_person_id", "/network", "/search", "/entities/:canonical_entity_id"],
+    "entities_fallback_route_note": "ORGANIZATION and PUBLIC_AUTHORITY entities (and UNKNOWN_ENTITY until resolved) get a canonical_entity_id and this minimal fallback route (name, type, source ID, clickable relation list) instead of a full portal, per SoT §3.4 — this closes the 404 gap for these types without requiring full ownership/co-involvement sections that don't apply to them",
+    "all_entities_clickable": true,
+    "no_generated_route_404": true
+  },
+
+  "canonical_id_requirements": {
+    "canonical_person_id_required": true,
+    "canonical_company_id_required": true,
+    "source_id_stored_separately_from_canonical_id": true,
+    "canonical_ids_never_reused": true,
+    "same_name_does_not_imply_same_canonical_id": true,
+    "entity_merges_and_splits_documented_explicitly": true,
+    "canonical_redirect_required_on_merge": true
+  },
+
+  "person_portal_requirements": {
+    "direct_ownership_required": true,
+    "indirect_ownership_with_paths_required": true,
+    "roles_by_source_group_required": ["Nevnd", "Stjórn", "Eigarar", "Annað"],
+    "person_to_person_relation_breakdown_required": true,
+    "snapshot_and_freshness_shown": true
+  },
+  "company_portal_requirements": {
+    "who_owns_company_required": true,
+    "what_company_owns_required": true,
+    "incoming_and_outgoing_ownership_kept_separate": true,
+    "persons_by_source_group_required": ["Nevnd", "Stjórn", "Eigarar", "Annað"],
+    "company_to_company_relation_breakdown_required": true,
+    "snapshot_and_freshness_shown": true
+  },
+
+  "clickable_entity_requirements": {
+    "all_entities_clickable": true,
+    "links_use_canonical_ids_only": true,
+    "no_links_from_name_or_row_id_or_relation_id": true
+  },
+
+  "person_to_person_relation_metrics": ["fælles virksomheder", "fælles Nevnd-relationer", "fælles Stjórn-relationer", "fælles ejerrelationer", "relationer gennem Annað", "cross-role-relationer"],
+  "company_to_company_relation_metrics": ["fælles personer", "fælles ejere", "fælles Nevnd-personer", "fælles Stjórn-personer", "cross-role-personer", "direkte ejerforbindelse", "indirekte ejerforbindelse"],
+  "cross_role_relation_requirements": "all combinations between Nevnd, Stjórn, Eigarar, Annað must be registrable and explainable, not just same-group matches",
+
+  "relation_context_definition": {
+    "person_to_person": ["person_a", "person_b", "company", "person_a_relation", "person_b_relation", "snapshot"],
+    "company_to_company": ["company_a", "company_b", "relation_basis", "related_entity", "company_a_relation", "company_b_relation", "snapshot"],
+    "relation_basis_values": ["DIRECT_OWNERSHIP", "INDIRECT_OWNERSHIP", "SHARED_OWNER", "SHARED_BENEFICIAL_OWNER", "SHARED_BOARD_PERSON", "SHARED_MANAGEMENT_PERSON", "CROSS_ROLE_PERSON", "SHARED_OTHER_RELATION"],
+    "aggregate_counts_never_shown_without_breakdown": true
+  },
+  "relation_deduplication_requirements": {
+    "same_relation_from_multiple_traversal_starts_deduplicated": true,
+    "same_relation_from_get_table_and_get_graph_deduplicated": true,
+    "same_relation_from_both_directions_deduplicated": true,
+    "deterministic_relation_identity_fields": ["snapshot", "from_source_entity", "to_source_entity", "source_relation_type", "source_relation_label", "relation_direction"],
+    "raw_payloads_may_duplicate_in_raw_archive": true,
+    "canonical_relations_never_duplicate": true
+  },
+
+  "current_snapshot_only_limitations": {
+    "phase_1_shows": ["CURRENT_SHARED_COMPANIES", "CURRENT_SHARED_BOARD_MEMBERSHIPS", "CURRENT_SHARED_MANAGEMENT_RELATIONS"],
+    "phase_1_must_not_claim": ["antal historiske bestyrelsesperioder", "samlet historisk overlap", "første fælles bestyrelsesperiode", "seneste fælles bestyrelsesperiode"],
+    "allowed_date_fields": ["first_observed_at", "last_observed_at", "missing_since_snapshot"],
+    "forbidden_unless_source_documents_them": ["valid_from", "valid_to", "appointed_at", "resigned_at"],
+    "phase_1_co_involvement_default_metric": "antal aktuelle fælles bestyrelsesrelationer",
+    "historical_relation_claims_phase_1": false
+  },
+
+  "historical_features_deferred": [
+    "PDF historical extraction", "historiske lifecycle-events", "historiske bestyrelsesperioder",
+    "konkursanalyse", "likvidationshistorik", "fusioner", "historiske adresser",
+    "bogført egenkapital", "Top persons", "AI-genereret risikoscore", "samlet control flag",
+    "produktion eller deployment", "SIMULTANEOUS_BOARD_PERIODS metric (moved from v1.2 to Phase 2)"
+  ],
+
+  "owner_decisions_resolved_v1_v1_2": {
+    "control-definition": "A — RAW_FACTS_ONLY_NO_CONTROL_FLAG (applies to both phases)",
+    "cross-ownership-cycles": "A — DETECT_AND_WITHHOLD_AMBIGUOUS_PERCENTAGE (applies to both phases)",
+    "bankruptcy-relations-scope": "B — INCLUDE_ALL_DOCUMENTED_ROLES_WITH_ROLE_CATEGORIES (phase 2)",
+    "historical-addresses": "A — CURRENT_ADDRESS_IN_INITIAL_PRODUCT (phase 2)",
+    "book-equity-priority": "B — SEPARATE_FUTURE_ACCOUNTING_SOURCE, non_blocking (phase 2)",
+    "identity-same-name": "A — MULTI_ATTRIBUTE_EVIDENCE_AND_UNRESOLVED_COLLISIONS (applies to both phases)",
+    "organization-vs-company": "A — REGISTRATION_NUMBER_BASED_CLASSIFICATION (applies to both phases)",
+    "liquidation-relation-model-scope": "B — SHARED_LIFECYCLE_MODEL_WITH_EXPLICIT_EVENT_CLASS (phase 2)",
+    "co-involvement-network-metric": "B — SIMULTANEOUS_BOARD_PERIODS — REASSIGNED to phase_2_historical_metric in v2.0; phase 1 uses its own current-snapshot default instead"
+  },
+
+  "explicit_non_goals_phase_1": [
+    "PDF historical extraction", "historiske lifecycle-events", "historiske bestyrelsesperioder",
+    "konkursanalyse", "likvidationshistorik", "fusioner", "historiske adresser",
+    "bogført egenkapital", "Top persons", "AI-genereret risikoscore", "samlet control flag",
+    "produktion eller deployment"
+  ],
+
+  "blocking_requirements_phase_1": [
+    "Heimdal serverer produktdata fra sin lokale database, ikke direkte fra upstream.",
+    "Alle rå upstream-responses gemmes med timestamp og hash.",
+    "Ingen source entity forsvinder uden terminal status.",
+    "Alle relationer bevarer source group, type og raw label.",
+    "Alle ejerprocenter bevarer både raw og parsed værdi.",
+    "Registreret kontrolaktør (source: Veruligur Eigari) bevares som separat relationstype, tæller ikke som ejerskab, indgår ikke i indirekte ejerskabsberegning.",
+    "Ingen registreret kontrolaktør (source: O.V.E.) gemmes som entity-status, aldrig som canonical self-edge.",
+    "Raw From og To bevares altid ordret; canonical subject/object tildeles pr. relationstype.",
+    "Alle indirekte ejerandele kan forklares med konkrete stier.",
+    "Ejerskabscykler detekteres.",
+    "Hver person har et stabilt canonical person-ID.",
+    "Hver virksomhed har et stabilt canonical company-ID.",
+    "Source IDs og canonical IDs opbevares separat.",
+    "Alle personer og virksomheder har klikbare portaler.",
+    "Ingen genereret portalroute giver 404.",
+    "Personportalen viser direkte og indirekte ejerskab med ejerstier.",
+    "Personportalen viser roller under Nevnd, Stjórn, Eigarar og Annað.",
+    "Personportalen viser relationer til andre personer, forklarligt.",
+    "Cross-role-relationer bevares.",
+    "Virksomhedsportalen viser hvem der ejer virksomheden og hvad den selv ejer, adskilt.",
+    "Virksomhedsportalen viser relationer til andre virksomheder, forklarligt.",
+    "Samme source-relation tælles ikke flere gange.",
+    "Alle UI-visninger viser snapshot- og freshness-tidspunkt.",
+    "Upstream-fejl gør ikke allerede gemte data utilgængelige.",
+    "Collector respekterer rate-limit- og adgangsfejl.",
+    "Ingen adgangskontrol eller teknisk begrænsning omgås.",
+    "Fase 2 blokerer ikke Fase 1."
+  ],
+
+  "canonical_person_id_required": true,
+  "canonical_company_id_required": true,
+  "all_entities_clickable": true,
+  "person_direct_ownership_required": true,
+  "person_indirect_ownership_required": true,
+  "person_relation_breakdown_required": true,
+  "company_relation_breakdown_required": true,
+  "cross_role_relations_required": true,
+  "historical_relation_claims_phase_1": false
+}

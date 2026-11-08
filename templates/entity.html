@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}{{ entity.display_name }} · Heimdal{% endblock %}
+
+{# §3.4 minimal fallback: ORGANIZATION / PUBLIC_AUTHORITY / UNKNOWN_ENTITY have
+   no full portal (no §16.1–§16.4 / §17 sections). Only what §3.4 names:
+   navn, entity type, source-ID og en klikbar liste af de relationer, den
+   optræder i — intet mere. #}
+{% block main %}
+
+<header class="card record">
+  <h1 class="record-name">{{ entity.display_name }}</h1>
+  <p class="record-badges">{{ m.kind_mark(entity.entity_kind) }}</p>
+
+  <dl class="record-facts">
+    <div><dt>Registreringsnummer</dt>
+      <dd>{% if entity.registration_number %}<span class="mono">{{ entity.registration_number }}</span>
+          {% else %}<span class="absent">ikke registreret i kilden</span>{% endif %}</dd></div>
+    {% if entity.raw_type_token %}
+    <div><dt>Kildens type</dt><dd>{{ m.raw(entity.raw_type_token, none) }}</dd></div>{% endif %}
+    <div><dt>Status i beholdning</dt>
+      <dd>{% if entity.inventory_status %}{{ entity.inventory_status }}
+          {% else %}<span class="absent">ikke i virksomhedsregisteret</span>{% endif %}</dd></div>
+    <div><dt>ID</dt><dd><span class="mono">{{ entity.canonical_entity_id }}</span>
+      <span class="absent">kilden: {{ entity.source_entity_id }}</span></dd></div>
+  </dl>
+
+  {# §10's snapshot-sprog, samme tre tilstande som §16/§17-siderne. #}
+  {% if fetch_state == 'FETCH_FAILED' %}
+  <p class="snapshot snapshot-failed">
+    <span class="snap-cap">Aldrig hentet med succes</span>
+    Kildens oplysninger blev aldrig hentet for denne enhed.
+    {%- if provenance.last_fetched_at %} Seneste forsøg
+      <span class="mono">{{ provenance.last_fetched_at|dk }}</span>{% endif %}
+    {%- if provenance.last_http_status %} · HTTP
+      <span class="mono">{{ provenance.last_http_status }}</span>{% endif %}
+    {%- if provenance.last_error_category %} ·
+      <span class="mono">{{ provenance.last_error_category }}</span>{% endif %}.
+  </p>
+  {% elif fetch_state == 'FETCHED_OK' %}
+  <p class="snapshot">
+    <span class="snap-cap">Hentet fra kilden</span>
+    <span class="mono">{{ provenance.last_fetched_at|dk }}</span>
+    {%- if provenance.snapshot_sha256 %} · snapshot
+      <span class="mono">{{ provenance.snapshot_sha256[:12] }}</span>{% endif %}
+    {%- if provenance.last_http_status %} · HTTP
+      <span class="mono">{{ provenance.last_http_status }}</span>{% endif %}
+    {%- if provenance.last_error_category %} ·
+      <span class="mono">{{ provenance.last_error_category }}</span>{% endif %}
+  </p>
+  {% else %}
+  <p class="snapshot snapshot-blank">
+    <span class="snap-cap">Aldrig hentet direkte</span>
+    Denne enhed er aldrig selv blevet hentet fra kilden. Alt nedenfor stammer fra andre
+    opslag, hvor den optræder som modpart. Det er ikke en fejl.
+  </p>
+  {% endif %}
+
+  <p class="section-lede">Denne enhedstype har en begrænset profil —
+    kun identitet og de relationer, kilden viser den i.</p>
+</header>
+
+<section class="card section" id="relationer" aria-labelledby="h-rel">
+  <div class="section-head">
+    <h2 id="h-rel" class="section-title">Relationer</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+
+  <div class="section-body">
+    {% if relations %}
+    <ul class="actors">
+      {% for r in relations %}
+      <li class="actor">
+        {{ m.entity_link(r.counterparty_id, r.counterparty_name, r.counterparty_kind) }}
+        <span class="relation-basis-label">{{ r.label }}</span>
+        {% if r.raw_label %}{{ m.raw(r.raw_label, 'Kildens betegnelse') }}{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">Kilden viser ingen relationer for denne enhed i dette snapshot.</p>
+    {% endif %}
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>Heimdal gengiver kilden <span class="mono">sg.vs.fo</span> som gemt lokalt. Ingen tal rettes,
+    ingen huller udfyldes.</p>
+</footer>
+{% endblock %}

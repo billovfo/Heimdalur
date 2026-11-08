@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+
+{% block title %}Historisk Ændringslog & Multi-Snapshot — Heimdal{% endblock %}
+
+{% block main %}
+<header class="page-header">
+  <div class="flex align-center gap-2" style="flex-wrap:wrap;">
+    <h1>Historisk Ændringslog</h1>
+    <span class="chip chip-beregnet" style="font-size:.6rem; padding:.15rem .4rem; letter-spacing:.04em;">Snapshot</span>
+  </div>
+  <p class="lead">Observerede ændringer i snapshot — tid, status, selskab.</p>
+  {% if total is defined %}
+  <p class="text-xs text-muted mt-1">{{ total }} hændelser{% if category %} · <span class="chip chip-info text-xs" style="vertical-align:middle;">{{ L.change_category_label(category) }}</span>{% endif %}{% if from_date or to_date %} · Datointerval {{ from_date or '—' }} → {{ to_date or '—' }}{% endif %} · Side {{ page }} af {{ total_pages }} · <a href="/bestand" class="text-xs">Snapshot-info →</a></p>
+  {% endif %}
+</header>
+
+<section class="card">
+  <div class="card-header" style="padding:.65rem 1rem; flex-direction:column; align-items:stretch; gap:.5rem;">
+    <form method="get" action="/aendringer" class="filter-bar flex flex-wrap gap-2 align-center">
+      <select name="category" class="form-select text-xs" style="min-width:170px;" aria-label="Kategori">
+        <option value="">Alle kategorier</option>
+        <option value="STATUS_CHANGED" {% if category == 'STATUS_CHANGED' %}selected{% endif %}>Status</option>
+        <option value="OWNERSHIP_ADDED" {% if category == 'OWNERSHIP_ADDED' %}selected{% endif %}>Ny ejer</option>
+        <option value="OWNERSHIP_REMOVED" {% if category == 'OWNERSHIP_REMOVED' %}selected{% endif %}>Ejer ud</option>
+        <option value="ROLE_APPOINTED" {% if category == 'ROLE_APPOINTED' %}selected{% endif %}>Ny rolle</option>
+        <option value="ROLE_RESIGNED" {% if category == 'ROLE_RESIGNED' %}selected{% endif %}>Fratrådt</option>
+        <option value="CONTROL_ACTOR_CHANGED" {% if category == 'CONTROL_ACTOR_CHANGED' %}selected{% endif %}>Kontrol</option>
+      </select>
+
+      <details class="advanced-filter text-xs" {% if from_date or to_date %}open{% endif %}>
+        <summary class="chip chip-outline text-xs" style="cursor:pointer; list-style:none;">Datointerval ▾</summary>
+        <span class="flex gap-1 align-center mt-1" style="flex-wrap:wrap;">
+          <label class="flex gap-1 align-center">Fra <input type="date" name="from_date" class="form-input text-xs" value="{{ from_date or '' }}" style="padding:.2rem .4rem;"></label>
+          <label class="flex gap-1 align-center">Til <input type="date" name="to_date" class="form-input text-xs" value="{{ to_date or '' }}" style="padding:.2rem .4rem;"></label>
+        </span>
+      </details>
+
+      <button type="submit" class="btn btn-sm btn-secondary">Filtrér</button>
+      {% if category or from_date or to_date %}<a href="/aendringer" class="btn btn-xs btn-outline">Nulstil</a>{% endif %}
+    </form>
+    {% if category or from_date or to_date %}
+    <div class="text-xs text-muted">Fra dato / Datointerval aktiv — <a href="/aendringer">ryd filter</a></div>
+    {% endif %}
+  </div>
+
+  <div class="card-body" style="padding:0;">
+    {% if events %}
+      {% set ns = namespace(cur='') %}
+      {% for event in events %}
+        {% set d = event.event_timestamp.strftime('%Y-%m-%d') if event.event_timestamp else '' %}
+        {% if d != ns.cur %}
+          {% if not loop.first %}</tbody></table></div>{% endif %}
+          <div class="date-group">
+            <span class="date-label">{% if event.event_timestamp %}<time datetime="{{ d }}">{{ event.event_timestamp.strftime('%d.%m.%Y') }}</time>{% else %}Baseline{% endif %}</span>
+          </div>
+          <div class="table-scroll"><table class="ledger changelog-ledger"><thead class="sr-only"><tr><th scope="col">Selskab</th><th scope="col">Hvad ændrede sig</th><th scope="col">Tid</th></tr></thead><tbody>
+          {% set ns.cur = d %}
+        {% endif %}
+        <tr class="event-row">
+          <td>
+            {% if event.entity_kind == 'PERSON' %}
+              <a href="/persons/{{ event.canonical_entity_id }}" class="entity-link entity-person">{{ event.entity_name }}</a>
+            {% else %}
+              <a href="/companies/{{ event.canonical_entity_id }}" class="entity-link entity-company">{{ event.entity_name }}</a>
+            {% endif %}
+            {% if event.registration_number %}<span class="mono text-xs text-muted" style="margin-left:.35rem;">{{ event.registration_number }}</span>{% endif %}
+          </td>
+          <td>
+            <span class="badge badge-sm" style="background:rgba(59,130,246,.14); border-color:rgba(59,130,246,.3);" title="{{ L.change_category_label(event.change_category) }} · {{ L.change_summary_label(event.change_summary) }}">{{ m.change_keyword(event.change_category, event.change_summary) }}</span><span class="sr-only">{{ L.change_category_label(event.change_category) }}</span>
+            {# T5.2 (F-15): sekundær summary er VISIBLE i rækken (hover er ikke
+               primær information). Fuldt tekst ligger i disclosure pr. dag. #}
+            {% if event.change_summary %}
+              <div class="text-xs text-muted changelog-row-summary">{{ L.change_summary_label(event.change_summary)|truncate(110) }}</div>
+            {% endif %}
+            {% if event.change_summary or event.field_name %}
+              <details class="source-details changelog-row-details">
+                <summary>Fuld detalje</summary>
+                <p class="spine-note">{{ L.change_summary_label(event.change_summary) or 'Ingen summary' }}</p>
+                {% if event.field_name %}
+                  <p class="spine-note">Felt: <span class="mono">{{ event.field_name }}</span>
+                  {% if event.old_value or event.new_value %} · Fra <q>{{ L.change_summary_label(event.old_value) or '—' }}</q> til <q>{{ L.change_summary_label(event.new_value) or '—' }}</q>{% endif %}</p>
+                {% endif %}
+              </details>
+            {% endif %}
+          </td>
+          <td class="mono text-xs" style="white-space:nowrap; width:5rem; color:var(--text-2);">{{ event.event_timestamp.strftime('%H:%M') if event.event_timestamp else '—' }}</td>
+        </tr>
+        {% if loop.last %}</tbody></table></div>{% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="empty-state"><div class="empty-state-icon"><svg width="24" height="24" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-search"></use></svg></div><p class="empty-state-title">Ingen hændelser</p><p class="empty-state-body">Ingen hændelser i dette filter. Prøv anden kategori eller dato.</p></div>
+    {% endif %}
+
+    {% if total_pages is defined and total_pages > 1 %}
+    <div class="pagination mt-4" style="padding:0 1rem 1rem; display:flex; gap:.5rem; align-items:center; justify-content:center;">
+      {% if page > 1 %}
+        <a href="/aendringer?page={{ page - 1 }}{% if category %}&category={{ category }}{% endif %}{% if from_date %}&from_date={{ from_date }}{% endif %}{% if to_date %}&to_date={{ to_date }}{% endif %}" class="btn btn-sm btn-outline">Forrige</a>
+      {% endif %}
+      <span class="page-info text-xs text-muted">Side {{ page }} af {{ total_pages }}</span>
+      {% if page < total_pages %}
+        <a href="/aendringer?page={{ page + 1 }}{% if category %}&category={{ category }}{% endif %}{% if from_date %}&from_date={{ from_date }}{% endif %}{% if to_date %}&to_date={{ to_date }}{% endif %}" class="btn btn-sm btn-outline">Næste</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

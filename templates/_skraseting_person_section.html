@@ -1,0 +1,64 @@
+{# ======================================================================
+   SKRÁSETING SECTION PÅ EKSISTERENDE PERSONSIDE (task sections 28-33).
+   Renderes KUN når view-modellen returnerede data (sikkert LINKED person,
+   gate = integration AND ui). Alt er kilde-afmærket; virksomhedsnavne
+   linker til de EKSISTERENDE Heimdal-virksomhedssider (section 30).
+   ====================================================================== #}
+<section class="card" id="skraseting-person" aria-labelledby="skr-person-h">
+  <h2 id="skr-person-h" class="card-title">Skráseting</h2>
+  <p class="record-badges">
+    <span class="badge">{{ section.source_label }}</span>
+  </p>
+  <p class="spine-note">Registrerede oplysninger fra Skráseting Føroya —
+    vises separat og ændrer ikke Heimdals øvrige oplysninger om personen.</p>
+
+  {% if section.current %}
+  <h3>{{ section.current_heading }}</h3>
+  <ul class="person-roles">
+    {% for r in section.current %}
+    <li>
+      <span class="muted">{{ r.role_label }}</span>
+      {% if r.role_title %}<strong>{{ r.role_title|product_role }}</strong>{% else %}<span class="muted">Rolle kan ikke præciseres</span>{% endif %}
+      {% if r.company.canonical_entity_id %}
+      — <a href="{{ url_for('entities.company', canonical_entity_id=r.company.canonical_entity_id) }}">{{ r.company.name }}</a>
+      {% elif r.company.name %}{{ r.company.name }}{% endif %}
+      <span class="muted">(pr. registreret snapshot)</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="spine-note">Ingen aktuelle registrerede roller i Skráseting.</p>
+  {% endif %}
+
+  {% if section.historical %}
+  <h3>{{ section.historical_heading }}</h3>
+  <ul class="person-roles">
+    {% for r in section.historical %}
+    <li>
+      <span class="muted">{{ r.role_label }}</span>
+      {% if r.role_title %}{{ r.role_title|product_role }}{% else %}<span class="muted">Rolle kan ikke præciseres</span>{% endif %}
+      {% if r.company.canonical_entity_id %}
+      — <a href="{{ url_for('entities.company', canonical_entity_id=r.company.canonical_entity_id) }}">{{ r.company.name }}</a>
+      {% elif r.company.name %}{{ r.company.name }}{% endif %}
+      {% if r.role_type == 'AUDITOR' %} <span class="muted">({{ section.auditor_note | lower }})</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="spine-note">{{ section.historical_note }}</p>
+  {% endif %}
+
+  {% if section.related_companies %}
+  <h3>{{ section.companies_heading }}</h3>
+  <ul class="person-roles">
+    {% for comp in section.related_companies %}
+    <li><a href="{{ url_for('entities.company', canonical_entity_id=comp.canonical_entity_id) }}">{{ comp.name }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <details class="source-details">
+    <summary>Vis kildeoplysninger</summary>
+    <p class="spine-note">Kilde: Skráseting Føroya (FelagPdf / Tekningarútskrift).
+      Projection run: {{ section.projection_run_id }}.</p>
+  </details>
+</section>

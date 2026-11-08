@@ -1,0 +1,671 @@
+{# Fælles komponenter.
+
+   Tre stemmer, tre mærker — aldrig kun tre farver:
+
+     stamp()  — hvem hævder det? Ordmærke: fyldt (KILDE), blå ramme
+                (BEREGNET), stiplet ramme (INGEN KILDE).
+     raw()    — kildens egne ord og tal: monospace, i citationstegn,
+                mærket med kildens navn.
+     note()   — Heimdals egen forklaring: blå streg og mærket
+                "Heimdal forklarer".
+
+   Intet andet på siden bruger nogen af de tre behandlinger, og enhver
+   farvekodet skelnen har både et ord og en form ved siden af sig, så siden
+   overlever gråtoneprint og farveblindhed (ejerkrav 2026-08-02).
+#}
+
+{% set KIND = {
+  'PERSON':           {'label': 'Person',              'glyph': '●', 'cls': 'k-person'},
+  'COMPANY':          {'label': 'Virksomhed',          'glyph': '■', 'cls': 'k-company'},
+  'ORGANIZATION':     {'label': 'Organisation',        'glyph': '◆', 'cls': 'k-org'},
+  'PUBLIC_AUTHORITY': {'label': 'Offentlig myndighed', 'glyph': '▲', 'cls': 'k-authority'},
+  'UNKNOWN_ENTITY':   {'label': 'Ukendt type',         'glyph': '?', 'cls': 'k-unknown'},
+} %}
+
+{% set CONFIDENCE = {
+  'OBSERVED_AND_OWNER_ACCEPTED':    {'label': 'Ejer-godkendt', 'pips': '●●●', 'cls': 'c-accepted'},
+  'OBSERVED_FOR_SUPPLIED_EXAMPLES': {'label': 'Eksempler',     'pips': '●●○', 'cls': 'c-examples'},
+  'UNCONFIRMED':                    {'label': 'Ubekræftet',    'pips': '●○○', 'cls': 'c-unconfirmed'},
+} %}
+
+{# Herkomstmærke. Ord + rammestil, aldrig kulør alene. #}
+{% set STAMP = {'kilde':    {'cls': 'st-kilde',    'text': 'KILDE', 'icon': 'check'},
+                'beregnet': {'cls': 'st-beregnet', 'text': 'BEREGNET', 'icon': 'calc'},
+                'udledt':   {'cls': 'st-udledt',  'text': 'UDLEDT', 'icon': 'calc'},
+                'ingen':    {'cls': 'st-ingen',    'text': 'INGEN KILDE', 'icon': 'minus'}} %}
+
+{# T2.5 (plan v1/F-03, § 20) — één proveniens-kontrakt:
+   - BEREGNET/UDLEDT med kendt entity (enten eksplisit entity_id eller
+     `entity` i import-context) bliver <a> til /kildeinformation/<id> —
+     klik-påstanden i tooltippen bliver derved sand.
+   - BEREGNET/UDLEDT uden kendt entity får ærlig copy UDEN klik-påstand.
+   - KILDE/INGEN KILDE er informative stamps: aldrig klik-påstand. #}
+{% macro stamp(which, entity_id=None) %}
+  {%- set s = STAMP[which] -%}
+  {%- set eid = entity_id if entity_id is not none else ((entity.canonical_entity_id if entity else none) if entity is defined else none) -%}
+  {%- set tip = {'kilde': 'Direkte fra sg.vs.fo snapshot',
+                 'beregnet': 'Beregnet af Heimdal — analyse, ikke kildeoplysning',
+                 'udledt': 'Udledt af registrerede observationer — analyse, ikke kildeoplysning',
+                 'ingen': 'Fravær i snapshot — kan ikke fortolkes som fravær i virkeligheden'}[which] -%}
+  {%- if which == 'beregnet' -%}
+  {%- set linktip = 'BEREGNET — Beregnet af Heimdal. Kildeinformation viser beregningens kildegrundlag' -%}
+  {%- else -%}
+  {%- set linktip = 'UDLEDT — Udledt af registrerede observationer. Kildeinformation viser beregningens kildegrundlag' -%}
+  {%- endif -%}
+  <{% if which in ('beregnet','udledt') and eid %}a href="/kildeinformation/{{ eid }}" class="stamp {{ s.cls }} stamp-link" title="{{ linktip }}"{% else %}span class="stamp {{ s.cls }}" title="{{ tip }}"{% endif %} aria-label="Proveniens: {{ s.text }}{% if which in ('beregnet','udledt') and eid %} — link til Kildeinformation{% endif %}">{% if s.icon=='check' %}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>{% elif s.icon=='calc' %}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h8M8 18h8"/></svg>{% else %}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/></svg>{% endif %} {{ s.text }}</{% if which in ('beregnet','udledt') and eid %}a{% else %}span{% endif %}>
+{%- endmacro %}
+
+{# Kildens egne ord — aldrig Heimdals. Skjult bag Avanceret-visning. #}
+{% macro raw(value, tag='Kilde') %}
+  <span class="raw advanced-only">{% if tag %}<span class="raw-tag">{{ tag }}</span>{% endif %}<q>{{ value }}</q></span>
+{%- endmacro %}
+
+{# T3.3 (plan v1/F-17/F-20): dansk pluralis — "1 selskab" / "3 selskaber". #}
+{% macro pluralize(n, ental, flertal) %}{{ n }} {{ ental if n == 1 else flertal }}{%- endmacro %}
+
+{# T3.3: lean delt rapportchrome. Ordning (bindende): rapporttype → entity-
+   identitet → genereret-timestamp → kilde/disclaimer → primær fund-summary →
+   eksport-actions → teknisk proveniens-appendiks. Rapportgenre og juridisk
+   wording er G1–G3-gated — denne chrome fremsætter kun neutrale, tekniske
+   fakta: kilde, snapshot-basis, deterministisk beregning, sporbarhed. #}
+{% macro report_header(entity, generated_at, report_type_label) %}
+  <header class="dossier-header card mb-6">
+    {% include "_dossier_provenance.html" %}
+    <h1 class="text-2xl font-bold">{{ entity.display_name }}</h1>
+    <div class="text-sm text-muted mt-1">Genereret den {{ generated_at }}</div>
+    <p class="text-xs text-muted mt-2 report-disclaimer">
+      Kilde: Skráseting Føroya (sg.vs.fo) — lokalt snapshot. Beregnede tal i denne
+      rapport er Heimdals deterministiske beregning af kildeoplysningerne;
+      proveniens og tekniske detaljer står i rapportens tekniske appendiks.
+    </p>
+  </header>
+{%- endmacro %}
+
+{% macro report_summary_line(summary_html) %}
+  <p class="report-summary text-sm mb-4"><strong>Primær fund:</strong> {{ summary_html|safe }}</p>
+{%- endmacro %}
+
+{% macro report_provenance_appendix(entity, provenance) %}
+  <footer class="card dossier-footer text-sm text-muted">
+    <h3 class="font-bold mb-1">Proveniens &amp; kildedokumentation (teknisk appendiks)</h3>
+    <p>Kilde: Skráseting Føroya (<span class="mono">sg.vs.fo</span>).
+       Sidst observeret: {{ provenance.last_fetched_at|dk if provenance.last_fetched_at else 'Ikke hentet direkte' }}.
+       SHA-256 snapshot: <span class="mono">{{ provenance.snapshot_sha256 or 'N/A' }}</span>.</p>
+    <p class="mt-1">Kanonisk ID: <span class="mono">{{ entity.canonical_entity_id }}</span> ·
+       Kilde-ID: <span class="mono">{{ entity.source_entity_id }}</span>{% if entity.raw_type_token %} ·
+       Formbetegnelse (kilden): <span class="mono">{{ entity.raw_type_token }}</span>{% endif %} ·
+       Beholdningsstatus (teknisk token): <span class="mono">{{ entity.inventory_status or '—' }}</span></p>
+    <p class="mt-1">Heimdal-rapport er et lokalt beregnet analyseprodukt med fuld deterministisk sporbarhed.</p>
+  </footer>
+{%- endmacro %}
+
+{# Heimdals egen forklaring — aldrig kildens ord. Gemt bag et lille
+   spørgsmålsikon (ejerbeslutning 2026-08-15): siden skal kunne overskues,
+   uddybningen ligger en udvidelse væk. <details>/<summary> er nativt
+   tastatur- og oplæser-tilgængeligt uden JS. #}
+{% macro help(text=None, tag='Heimdal forklarer') %}
+<details class="help advanced-only">
+  <summary aria-label="{{ tag }} — uddybende forklaring, tryk for at åbne">
+    <span class="help-mark" aria-hidden="true">?</span></summary>
+  <div class="help-body">
+    <p class="gloss-tag">{{ tag }}</p>
+    {% if text %}<div class="gloss-body">{{ text }}</div>
+    {% else %}<div class="gloss-body">{{ caller() }}</div>{% endif %}
+  </div>
+</details>
+{%- endmacro %}
+
+{% macro note(tag='Heimdal forklarer') %}{{ help(caller(), tag=tag) }}{%- endmacro %}
+
+{# Sorterbart kolonnehoved med server-side sortering: første klik sorterer
+   stigende (eller skifter retning, hvis kolonnen allerede er aktiv).
+   data-server-sort får sort.js til at springe hovedet over. #}
+{% macro sort_header(path, qs, listing, key, label) -%}
+  {%- set s = listing.sort|string -%}
+  {%- set active = s.lstrip('-') == key -%}
+  {%- set desc = s.startswith('-') -%}
+  <th scope="col" data-server-sort{% if active %} aria-sort="{{ 'descending' if desc else 'ascending' }}"{% endif %}>
+    <a class="sort-link" href="{{ path }}?sort={% if active and not desc %}-{% endif %}{{ key }}{{ qs }}">{{ label }}
+      <span class="arrow" aria-hidden="true">▲</span></a>
+  </th>
+{%- endmacro %}
+
+{# Typemærket står én gang pr. side, i sidehovedet — ikke på hver eneste række. #}
+{% macro kind_mark(kind) %}
+  {%- set k = KIND.get(kind, KIND['UNKNOWN_ENTITY']) -%}
+  <span class="kind-mark {{ k.cls }}"><span class="glyph" aria-hidden="true">{{ k.glyph }}</span><span class="kind-label">{{ k.label }}</span></span>
+{%- endmacro %}
+
+{# En klikbar entity. PERSON gengives kun fra display_name — kildens rå
+   etikette bærer en privat hjemmeadresse og når aldrig herind.
+
+   Typen bæres af glyffens form (● ■ ◆ ▲ ?) og gentages ikke som ord på hver
+   række: ordet stod før på hver eneste linje i hver eneste tabel og fyldte
+   mere end navnene. Det læses stadig op — glyffen er aria-hidden, ordet står
+   som skjult tekst lige efter navnet. #}
+{% macro entity_link(id, name, kind) %}
+  {%- set k = KIND.get(kind, KIND['UNKNOWN_ENTITY']) -%}
+  <span class="entity {{ k.cls }}"><span class="glyph" aria-hidden="true">{{ k.glyph }}</span><a class="entity-name" href="{{ entity_url(kind, id) }}">{{ name }}</a><span class="entity-kind sr-only">{{ k.label }}</span></span>
+{%- endmacro %}
+
+{# Ordet er signalet. Skjult bag Avanceret-visning. #}
+{% macro confidence(value) %}
+  {%- set c = CONFIDENCE.get(value, CONFIDENCE['UNCONFIRMED']) -%}
+  <span class="conf advanced-only {{ c.cls }}">{{ c.label }}</span>
+{%- endmacro %}
+
+{# Begge tal, altid. En mislykket parse står i ord — aldrig blankt, aldrig 0.
+   Farvekodning pr. bånd (ejerbeslutning 2026-08-16): ≥50 % kraftigt,
+   25-49 % mellem, <25 % dæmpet — tallet er uændret. #}
+{% macro percentage_cell(row) %}
+  {% if row.percentage_parse_status == 'FAILED' or row.parsed_percentage is none %}
+    <span class="pct-failed">Procent kunne ikke læses</span>
+  {% else %}
+    {% set band = 'pct-high' if row.parsed_percentage >= 50
+                   else ('pct-mid' if row.parsed_percentage >= 25 else 'pct-low') %}
+    <div class="pct-bar-container">
+      <svg class="pct-micro-bar" width="50" height="6" viewBox="0 0 50 6" aria-hidden="true">
+        <rect width="50" height="6" fill="rgba(255,255,255,0.08)" rx="3"/>
+        <rect class="pct-micro-fill" width="{{ (50 * [100, row.parsed_percentage]|min / 100)|round(1) }}" height="6" fill="#3b82f6" rx="3"/>
+      </svg>
+      <span class="pct {{ band }}">{{ row.parsed_percentage|pct }}&nbsp;%</span>
+    </div>
+  {% endif %}
+  <span class="pct-raw">{{ raw(row.raw_percentage_label or 'ingen procenttekst', tag=none) }}</span>
+{% endmacro %}
+
+{# ---------------------------------------------------------------------------
+   Direkte ejerskab. `direction` er påkrævet og kontrolleres både mod blokken
+   OG mod hver eneste række, den er blevet givet. SoT §16.2: indgående og
+   udgående ejerskab må aldrig dele liste, og den historiske fejl var netop en
+   forespørgsel, der kunne returnere begge. Denne makro nægter at gengive en
+   uoverensstemmelse.
+
+   En rigtig <table>: dette er ægte tabeldata, og et nyt udseende er ingen
+   grund til at smide semantikken væk. data-sort giver sort.js den rigtige
+   nøgle (tal som tal, navn uden glyf); uden JS står tabellen i kildens egen
+   rækkefølge og virker uændret.
+--------------------------------------------------------------------------- #}
+{% macro direct_table(block, direction, noun='virksomhed') %}
+  {% if direction not in ('INCOMING', 'OUTGOING') %}{{ fail('direction is required') }}{% endif %}
+  {% if block.direction != direction %}{{ fail('retningsuoverensstemmelse: blok ' ~ block.direction ~ ' i ' ~ direction ~ '-sektion') }}{% endif %}
+  {% for r in block.rows %}
+    {% if r.direction != direction %}{{ fail('række med forkert retning: ' ~ r.direction) }}{% endif %}
+  {% endfor %}
+
+  {% if block.rows %}
+  <div class="table-scroll">
+  <table class="ledger">
+    <caption class="sr-only">
+      {{ 'Direkte ejere af virksomheden' if direction == 'INCOMING' else 'Virksomheder denne virksomhed ejer direkte' }}
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">{{ 'Ejer' if direction == 'INCOMING' else 'Ejet virksomhed' }}</th>
+        <th scope="col" class="num">Ejerandel</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in block.rows %}
+      <tr>
+        <td data-sort="{{ r.owner_name if direction == 'INCOMING' else r.owned_name }}">
+          {% if direction == 'INCOMING' %}
+            {{ entity_link(r.owner_id, r.owner_name, r.owner_kind) }}
+          {% else %}
+            {{ entity_link(r.owned_id, r.owned_name, r.owned_kind) }}
+          {% endif %}
+        </td>
+        <td class="num" data-sort="{{ r.parsed_percentage if r.parsed_percentage is not none else -1 }}">{{ percentage_cell(r) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+    <p class="empty">{{ 'Ingen registrerede ejere i dette snapshot.'
+       if direction == 'INCOMING' else
+       'Ingen registrerede andele i dette snapshot.' }}</p>
+  {% endif %}
+
+  {{ sum_footer(block.sum, direction) }}
+{% endmacro %}
+
+{# Optællingen står altid. For indgående ejerskab holdes kildens egen sum op
+   mod 100 %. For udgående gøres det bevidst ikke: andele i forskellige
+   virksomheder lægges ikke sammen, og en total ville opfinde en oplysning,
+   kilden aldrig har givet. #}
+{% macro sum_footer(s, direction) %}
+  {% if direction == 'INCOMING' %}
+  <div class="tally tally-{{ s.state|lower }}">
+    <div class="tally-head">
+      <span class="tally-label">Registreret ejerskab i alt</span>
+      {% if s.state == 'EXACTLY_100' %}
+        <span class="verdict v-ok"><span class="v-mark" aria-hidden="true">=</span>Fuldt registreret</span>
+      {% elif s.state == 'OVER_100' %}
+        <span class="verdict v-warn"><span class="v-mark" aria-hidden="true">!</span>Over 100&nbsp;% — flaget</span>
+      {% else %}
+        <span class="verdict v-part"><span class="v-mark" aria-hidden="true">–</span>Delvist registreret</span>
+      {% endif %}
+      <span class="tally-total">{{ s.total|pct }}&nbsp;%</span>
+    </div>
+
+    <p class="tally-text">
+      {% if s.state == 'EXACTLY_100' %}
+        Kilden dækker hele virksomheden.
+      {% elif s.state == 'UNDER_100' %}
+        Kilden oplyser ingen ejere for de resterende {{ s.remainder|pct }}&nbsp;%.
+        Det betyder ikke, at de andele er uejede — kun at snapshottet ikke nævner dem.
+      {% else %}
+        {{ s.excess|pct }}&nbsp;procentpoint mere end 100&nbsp;%.
+        Heimdal normaliserer aldrig kildens egne tal — uoverensstemmelsen ligger i kilden,
+        ikke i beregningen.
+      {% endif %}
+      {% if s.unreadable %}
+        {{ s.unreadable }} {{ 'ejerandel' if s.unreadable == 1 else 'ejerandele' }} kunne ikke læses
+        og indgår ikke i totalen.
+      {% endif %}
+    </p>
+
+    {% if s.largest is not none %}
+    <p class="tally-text">
+      <span class="tally-label">Største registrerede direkte ejerandel</span>
+      {{ s.largest|pct }}&nbsp;%.
+      {% if s.largest >= 50 %}
+        Kilden viser mindst én direkte ejer med halvdelen eller mere af de registrerede andele.
+      {% elif s.largest >= 25 %}
+        Kilden viser mindst én direkte ejer med mindst en fjerdedel af de registrerede andele.
+      {% else %}
+        Ingen registreret direkte ejerandel i dette snapshot er mindst en fjerdedel.
+      {% endif %}
+    </p>
+    {% endif %}
+  </div>
+  {% elif s.unreadable %}
+  {# Kun det ikke-læsbare er ny oplysning — hvorfor der ikke står en total,
+     siger sig selv og står som øje-støj i vejen for tallene (ejerbeslutning
+     2026-08-15). #}
+  <p class="tally-text">
+    {{ s.unreadable }} {{ 'ejerandel' if s.unreadable == 1 else 'ejerandele' }} kunne ikke læses som procent.
+  </p>
+  {% endif %}
+{% endmacro %}
+
+{# Én beregnet ejersti, opløst i navne og procent pr. led. #}
+{% macro path_chain(p) %}
+  <ol class="chain">
+    {% for node in p.nodes %}
+      <li class="chain-node">
+        {% if node %}{{ entity_link(node.canonical_entity_id, node.display_name, node.entity_kind) }}
+        {% else %}<span class="entity k-unknown"><span class="glyph" aria-hidden="true">?</span><span class="entity-name">Entity uden canonical ID</span></span>{% endif %}
+      </li>
+      {% if not loop.last %}
+        {% set hop = p.hops[loop.index0] %}
+        <li class="chain-hop">
+          {% if hop and hop.parsed_percentage is not none %}
+            <span class="hop-pct">{{ hop.parsed_percentage|pct }}&nbsp;%</span>
+          {% elif hop %}
+            <span class="hop-pct hop-failed">procent ikke læsbar</span>
+          {% else %}
+            <span class="hop-pct hop-failed">kant ikke fundet</span>
+          {% endif %}
+          <span class="hop-arrow" aria-hidden="true">→</span>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+{% endmacro %}
+
+{# Owner D8 2026-11-06 (C-3): a chain through an ownership cycle gets no
+   indirect percentage — it is named with its cycle group instead of left out. #}
+{% macro cycle_withheld(groups, partial=false) %}
+  <p class="path-count"><span class="cycle-mark" aria-hidden="true">↻</span>
+    {%- if partial %}Desuden går en ejersti gennem ejerskabscyklus {{ groups|join(', ') }} — dens andel tilbageholdes og indgår ikke i procenten.
+    {%- else %}Ejerstien går gennem ejerskabscyklus {{ groups|join(', ') }} — procent tilbageholdes.{% endif %}</p>
+{% endmacro %}
+
+{% macro indirect_block(rows, direction, in_cycle=false, withheld=[]) %}
+  {% if direction not in ('INCOMING', 'OUTGOING') %}{{ fail('direction is required') }}{% endif %}
+  {% if not rows and not withheld %}
+    <p class="empty">
+      {{- 'Ingen indirekte ejere' if direction == 'INCOMING' else 'Ingen indirekte andele' }}
+      i dette snapshot{{ ' uden for cyklussen' if in_cycle }}.</p>
+  {% else %}
+    {% if in_cycle and rows %}
+      {% call note() %}
+        Beregnet <strong>uden for</strong> cyklussen: ingen sti går gennem cyklussens egne kanter,
+        og ingen procent er ført hen over cyklussen.
+      {% endcall %}
+    {% endif %}
+    <ul class="indirect">
+      {% for r in rows %}
+      <li class="indirect-row">
+        <div class="indirect-head">
+          {% if r.counterparty %}
+            {{ entity_link(r.counterparty.canonical_entity_id, r.counterparty.display_name, r.counterparty.entity_kind) }}
+          {% else %}
+            <span class="entity k-unknown"><span class="glyph" aria-hidden="true">?</span><span class="entity-name">Ukendt entity</span></span>
+          {% endif %}
+          <span class="indirect-pct">
+            <span class="pct">{{ r.computed_percentage|pct }}&nbsp;%</span>
+            <small>indirekte</small>
+          </span>
+        </div>
+        {# Én sti: stien taler for sig selv, og dens produkt er tallet ovenfor.
+           Kun når der er flere stier, siger tællingen og delprodukterne noget. #}
+        <div class="indirect-paths">
+          {% if r.path_count > 1 or r.paths_truncated %}
+          <p class="path-count">
+            {{ r.path_count }} ejerstier
+            {%- if r.paths_truncated %} · {{ r.shown_path_count }} vist · procenten dækker alle
+              {{ r.path_count }}{% endif %}
+          </p>
+          {% endif %}
+          {% for p in r.paths %}
+            <div class="path">
+              {{ path_chain(p) }}
+              {% if r.paths|length > 1 %}
+                <p class="path-product">Produkt <strong>{{ p.percentage|pct }}&nbsp;%</strong></p>
+              {% endif %}
+            </div>
+          {% endfor %}
+          {% if r.withheld_cycles %}{{ cycle_withheld(r.withheld_cycles, true) }}{% endif %}
+        </div>
+      </li>
+      {% endfor %}
+      {% for w in withheld %}
+      <li class="indirect-row">
+        <div class="indirect-head">
+          {% if w.canonical_entity_id %}
+            {{ entity_link(w.canonical_entity_id, w.display_name, w.entity_kind) }}
+          {% else %}
+            <span class="entity k-unknown"><span class="glyph" aria-hidden="true">?</span><span class="entity-name">Ukendt entity</span></span>
+          {% endif %}
+        </div>
+        <div class="indirect-paths">{{ cycle_withheld(w.cycle_group_ids) }}</div>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+{# ---------------------------------------------------------------------------
+   §16.4/§19 relation-til-andre-virksomheder. Genbruges af §18 (person-til-
+   person) med en anden basis_labels-ordbog — grænsefladen
+   relation_breakdown(peer, basis_labels) skifter derfor aldrig form.
+
+   Nedbrydningen (relation-counts) står altid synligt ved siden af totalen.
+   <details> pakker kun de enkelte kontekstrækker ind, aldrig nedbrydningen
+   selv — et samlet tal uden sin nedbrydning er præcis den fejl, §16.4 findes
+   for at forhindre. #}
+{% macro relation_breakdown(peer, basis_labels, total_companies=false) %}
+<div class="relation-peer">
+  <div class="relation-peer-head">
+    {{ entity_link(peer.peer_id, peer.peer_name, peer.peer_kind) }}
+    {# Udadtil tæller relationen pr. virksomhed, ikke pr. indbyrdes
+       rolle-kombination (ejerbeslutning 2026-08-15): total_companies=true
+       på personsiderne. Nedbrydningen nedenunder viser stadig alt. #}
+    {% set n = peer.companies|length if total_companies else peer.contexts|length %}
+    <span class="relation-total">{{ n }}
+      {{ 'relation' if n == 1 else 'relationer' }}</span>
+  </div>
+  <ul class="relation-counts">
+    {% for basis, n in peer.counts.items() %}
+    <li><span class="relation-basis-label">{{ basis_labels.get(basis, basis) }}</span>
+      <span class="relation-basis-count">{{ n }}</span></li>
+    {% endfor %}
+  </ul>
+  <details class="relation-detail">
+    <summary>Vis de {{ peer.contexts|length }} enkeltrelationer</summary>
+    <ul class="relation-contexts">
+      {% for ctx in peer.contexts %}
+      <li>
+        <span class="relation-basis-label">{{ basis_labels.get(ctx.relation_basis, ctx.relation_basis) }}</span>
+        {% if ctx.directional %}
+          <span class="relation-direction">
+            {%- if ctx.relation_basis == 'DIRECT_CONTROL_ACTOR' -%}
+              {{ 'denne virksomhed er kontrolaktør' if ctx.subject_is_this
+                 else 'modparten er kontrolaktør' }}
+            {%- else -%}
+              {{ 'denne virksomhed ejer' if ctx.subject_is_this
+                 else 'modparten ejer' }}
+            {%- endif -%}
+          </span>
+        {% endif %}
+        {% if ctx.related_entity_id %}
+          via {{ entity_link(ctx.related_entity_id, ctx.related_entity_name, ctx.related_entity_kind) }}
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </details>
+</div>
+{% endmacro %}
+
+{# SoT §15: et cyklusmedlem får aldrig en beregnet indirekte procent. #}
+{% macro cycle_explainer(cycle, entity) %}
+  <div class="cycle">
+    <p class="cycle-head">
+      <span class="cycle-mark" aria-hidden="true">↻</span>
+      <span>
+      {% if cycle.self_loop %}
+        {{ entity.display_name }} ejer en andel af sig selv.
+      {% else %}
+        {{ entity.display_name }} indgår i en krydsejerskabscyklus med
+        {% for m in cycle.members if m.canonical_entity_id != entity.canonical_entity_id -%}
+          {{ entity_link(m.canonical_entity_id, m.display_name, m.entity_kind) }}{{ ', ' if not loop.last }}
+        {%- endfor %}.
+      {% endif %}
+      </span>
+    </p>
+    <div class="cycle-body">
+      {% call note() %}
+        En procent hen over en cyklus ville ikke svare til noget, kilden har registreret.
+        De direkte relationer, cyklussen består af, vises i stedet uændret.
+      {% endcall %}
+      {% if cycle.edges %}
+      <ul class="cycle-edges">
+        {% for e in cycle.edges %}
+        <li>
+          {{ entity_link(e.owner_id, e.owner_name, e.owner_kind) }}
+          <span class="hop-arrow" aria-hidden="true">→</span>
+          {% if e.parsed_percentage is not none %}<span class="hop-pct">{{ e.parsed_percentage|pct }}&nbsp;%</span>
+          {% else %}<span class="hop-pct hop-failed">procent ikke læsbar</span>{% endif %}
+          <span class="hop-arrow" aria-hidden="true">→</span>
+          {{ entity_link(e.owned_id, e.owned_name, e.owned_kind) }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <p class="cycle-id">Cyklusgruppe {{ cycle.cycle_group_id }} · {{ cycle.members|length }}
+        {{ 'medlem' if cycle.members|length == 1 else 'medlemmer' }}</p>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro interactive_network_graph(entity_id, entity_kind) %}
+<section class="card section" id="netvaerksgraf" aria-labelledby="h-netvaerksgraf">
+  <div class="section-head flex-between align-center">
+    <div class="flex align-center gap-2">
+      <h2 id="h-netvaerksgraf" class="section-title">Interaktiv Netværksgraf</h2>
+      {{ stamp('beregnet') }}
+    </div>
+    <div class="flex align-center gap-2" role="group" aria-label="Graf-værktøjer">
+      <button type="button" class="btn btn-secondary text-xs" data-graph-action="reset" title="Fjern alle udfoldede noder" aria-label="Nulstil graf — fjern alle udfoldede noder">↺ Nulstil</button>
+      <button type="button" class="btn btn-secondary text-xs" data-graph-action="fullscreen" title="Fuld skærm — Esc for at lukke" aria-label="Vis graf i fuld skærm">⛶ Fuld skærm</button>
+      <button type="button" class="btn btn-secondary text-xs" data-graph-action="png" aria-label="Eksportér grafen som PNG-billede">Eksportér PNG</button>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <div class="network-graph-toolbar" style="flex-wrap:wrap;" role="group" aria-label="Netværksgraf-kontroller">
+      <div class="graph-control-group" style="flex-wrap:wrap;">
+        <label for="graph-slider-{{ entity_id }}" class="text-xs font-bold text-muted">Tærskel:</label>
+        <input type="range" id="graph-slider-{{ entity_id }}" class="graph-threshold-slider" min="0" max="50" step="5" value="0" data-graph-input="threshold">
+        <span id="graph-slider-val-{{ entity_id }}" class="text-xs font-mono">0%</span>
+        <div id="graph-histogram-{{ entity_id }}" class="graph-histogram" style="display:flex; gap:2px; align-items:end; height:18px; margin-left:.5rem;" aria-hidden="true"><span class="hist-bar" data-bucket="0-25" style="width:22px; background:rgba(148,163,184,.5);"></span><span class="hist-bar" data-bucket="25-50" style="width:22px; background:rgba(148,163,184,.5);"></span><span class="hist-bar" data-bucket="50+" style="width:22px; background:rgba(148,163,184,.5);"></span></div>
+      </div>
+
+      <div class="graph-control-group" style="flex-wrap:wrap;">
+        <label for="graph-magnet-{{ entity_id }}" class="text-xs font-bold text-muted" title="Magnetisk frastødning — alle noder skubber hinanden væk">Afstand:</label>
+        <input type="range" id="graph-magnet-{{ entity_id }}" min="0" max="100" step="5" value="70" style="width:120px;" data-graph-input="magnet" title="0=kompakt · 100=meget luftigt (alle noder frastøder)">
+        <span id="graph-magnet-val-{{ entity_id }}" class="text-xs font-mono">70%</span>
+      </div>
+
+      <div class="graph-control-group">
+        <label class="text-xs flex align-center gap-1 cursor-pointer">
+          <input type="checkbox" checked data-graph-filter="DIRECT_OWNERSHIP"> Direkte Ejerskab
+        </label>
+        <label class="text-xs flex align-center gap-1 cursor-pointer">
+          <input type="checkbox" checked data-graph-filter="ROLE"> Ledelsesroller
+        </label>
+        <label class="text-xs flex align-center gap-1 cursor-pointer">
+          <input type="checkbox" checked data-graph-filter="CONTROL"> Kontrol
+        </label>
+      </div>
+      <div class="graph-control-group">
+        <label for="graph-search-{{ entity_id }}" class="sr-only">Søg i graf</label>
+        <input type="search" id="graph-search-{{ entity_id }}" placeholder="Søg i graf…" class="input input-sm" style="width:150px; padding:.3rem .5rem; border-radius:var(--r-sm); border:1px solid var(--rule); background:var(--bg); color:var(--text);"
+               data-graph-input="search" aria-label="Søg i graf">
+      </div>
+      <div class="text-xs text-muted" style="flex-basis:100%; margin-top:.35rem; display:flex; gap:.9rem; flex-wrap:wrap; align-items:center;">
+        <span><em>Dobbeltklik for at folde ud/lukke · Træk for at flytte · Rul for zoom</em></span>
+        <span style="display:inline-flex; align-items:center; gap:.3rem;">— pil <span style="display:inline-block; width:0; height:0; border-left:6px solid #38bdf8; border-top:4px solid transparent; border-bottom:4px solid transparent;"></span> ejer → ejet</span>
+      </div>
+    </div>
+
+    <div id="network-graph-container" class="network-graph-container" data-entity-id="{{ entity_id }}" data-entity-kind="{{ entity_kind }}" tabindex="0" role="application" aria-roledescription="netværkskort" aria-label="Interaktivt ejerskabs- og rolle-netværk"></div>
+    <div id="network-ledger-{{ entity_id }}" class="table-scroll mt-3" style="max-height:220px; overflow:auto; display:none;" tabindex="0" role="region" aria-label="Kantliste for netværksgrafen">
+      <table class="ledger" aria-describedby="h-netvaerksgraf">
+        <caption class="sr-only">Kantliste — samme data som grafen (sandhed)</caption>
+        <thead><tr><th scope="col">Fra</th><th scope="col">Relation</th><th scope="col">Til</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script src="/static/graph_shell.js"></script>
+<script src="/static/graph_network.js"></script>
+{% endmacro %}
+
+{# Ændringslog-stikord: én linje, maks 2 ord. Helsætningen gemmes som title/details. #}
+{% macro change_keyword(category, summary) -%}
+  {%- if category == 'STATUS_CHANGED' -%}
+    {%- if summary and 'RETRYABLE_ERROR' in summary -%}Fejl{%- elif summary and 'FETCHED' in summary -%}Registreret{%- else -%}Status{%- endif -%}
+  {%- elif category == 'OWNERSHIP_ADDED' -%}Ny ejer
+  {%- elif category == 'OWNERSHIP_REMOVED' -%}Ejer ud
+  {%- elif category == 'OWNERSHIP_PERCENTAGE_CHANGED' -%}Andel ændret
+  {%- elif category == 'ROLE_APPOINTED' -%}Ny rolle
+  {%- elif category == 'ROLE_RESIGNED' -%}Fratrådt
+  {%- elif category == 'CONTROL_ACTOR_CHANGED' -%}Kontrol
+  {%- else -%}{{ category|replace('_',' ')|lower|capitalize }}{%- endif -%}
+{%- endmacro %}
+
+{# ======================================================================
+   Konstellationskort (owner acceptance UX correction UX-01/02/07/09).
+   Identitet i collapsed state: kontekst-titel, medlemmer synlige,
+   support som tal, badges kun som badges. Datoer efter episodesemantik
+   (punkt aldrig som interval — view-modellen leverer observation_wording).
+   Gruppens identitet forbliver (member_set_hash, role_context); kortet
+   viser en forhåndsvisning af medlemmerne, resten står i disclosure.
+   ====================================================================== #}
+{% macro constellation_title(g) -%}
+  {{ g.context_title or (g.context_label ~ '-konstellation') }}
+{%- endmacro %}
+
+{% macro constellation_members(g) %}
+  {%- set pv = g.member_preview -%}
+  {%- for mem in pv.shown %}{{ entity_link(mem.canonical_person_id, mem.display_name, 'PERSON') }}{% if not loop.last %} <span class="member-sep" aria-hidden="true">·</span> {% endif %}{% endfor %}
+  {%- if pv.rest %} <span class="member-more">+ {{ pluralize(pv.rest, "person", "personer") }}</span>{% endif -%}
+{%- endmacro %}
+
+{% macro constellation_badges(g) %}
+  {%- for k in g.kinds_labels %}<span class="badge badge-sm badge-constellation">{{ k }}</span> {% endfor -%}
+{%- endmacro %}
+
+{% macro constellation_card(g) %}
+<li class="actor constellation-card">
+  <h4 class="constellation-title">{{ constellation_title(g) }}</h4>
+  <p class="constellation-members">{{ constellation_members(g) }}</p>
+  <p class="constellation-facts text-xs">
+    {{ pluralize(g.group_size, "person", "personer") }}
+    · {{ g.support.support_company_count }} virksomheder
+    · {{ g.support.support_episode_count }} observationer
+    {% if g.observation_wording %}<span class="constellation-obs">· {{ g.observation_wording }}</span>{% endif %}
+  </p>
+  {% if g.kinds_labels %}<p class="constellation-badges">{{ constellation_badges(g) }}</p>{% endif %}
+  <details class="analytics-disclosure">
+    <summary>Hvem og hvilket bevis</summary>
+    <p class="text-xs">
+      {% for mem in g.members %}{{ entity_link(mem.canonical_person_id, mem.display_name, 'PERSON') }}{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+    <p class="text-xs" style="color:var(--text-2);">Episodetyper: {{ g.episode_kinds_labels|join(', ') or '—' }}</p>
+  </details>
+</li>
+{%- endmacro %}
+
+{# ======================================================================
+   Konstellations-familie (product UX consolidation §31-§35).
+   READ-ONLY display-gruppering: den mest informative (maksimale)
+   medlemsmængde er family-headline; undergrupper (strict subsets, samme
+   role_context) ligger FOLDET under "Vis N understøttede undergrupper" —
+   hver undergruppe forbliver komplet renderet (medlemmer, support,
+   episoder), så ingen evidence tabes (§33). Deterministisk orden, ingen
+   score (§32). ====================================================================== #}
+{% macro constellation_family(fam) %}
+<li class="actor constellation-card constellation-family">
+  <h4 class="constellation-title">{{ constellation_title(fam.headline) }}</h4>
+  <p class="constellation-members">{{ constellation_members(fam.headline) }}</p>
+  <p class="constellation-facts text-xs">
+    {{ pluralize(fam.headline.group_size, "person", "personer") }}
+    · {{ fam.headline.support.support_company_count }} virksomheder
+    · {{ fam.headline.support.support_episode_count }} observationer
+    {% if fam.headline.observation_wording %}<span class="constellation-obs">· {{ fam.headline.observation_wording }}</span>{% endif %}
+  </p>
+  {% if fam.headline.kinds_labels %}<p class="constellation-badges">{{ constellation_badges(fam.headline) }}</p>{% endif %}
+  <details class="analytics-disclosure">
+    <summary>Hvem og hvilket bevis</summary>
+    <p class="text-xs">
+      {% for mem in fam.headline.members %}{{ entity_link(mem.canonical_person_id, mem.display_name, 'PERSON') }}{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+    <p class="text-xs" style="color:var(--text-2);">Episodetyper: {{ fam.headline.episode_kinds_labels|join(', ') or '—' }}</p>
+  </details>
+  {% if fam.subgroup_count %}
+  <details class="family-subgroups">
+    <summary>Vis {{ fam.subgroup_count }} understøttede undergrupper</summary>
+    <ul class="actors">
+      {% for g in fam.subgroups %}{{ constellation_card(g) }}{% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+</li>
+{%- endmacro %}
+
+{# ======================================================================
+   Netværks-preview (product UX consolidation §36-§37): compact summary
+   på virksomheds-/personsiden; den fulde interaktive graf ligger udelukkende
+   på /network (ingen kapabilitetstab — værktøjet duplikeres ikke længere på
+   detaljesiden). ====================================================================== #}
+{% macro network_preview(entity_id, entity_kind, full_url, counts) %}
+<section class="card section" id="netvaerksgraf" aria-labelledby="h-netvaerksgraf">
+  <div class="section-head">
+    <h2 id="h-netvaerksgraf" class="section-title">Netværk</h2>
+    {{ stamp('beregnet') }}
+  </div>
+  <div class="section-body">
+    <p class="network-preview-summary text-sm">
+      {% if counts %}<strong>{{ counts.companies }}</strong> virksomheder ·
+      <strong>{{ counts.persons }}</strong> personer ·
+      <strong>{{ counts.relations }}</strong> relationer{% if counts.groups %} ·
+      <strong>{{ counts.groups }}</strong> konstellationer{% endif %}{% else %}Netværket viser virksomhedens og personens direkte og beregnede relationer.{% endif %}
+    </p>
+    {# T4.1 (F-10): dekorativ SVG fjernet — knuderne viste ikke enhedens
+       data og kunne misforståes som faktisk netværksstruktur. Previewet
+       består kun af de beregnede tal + CTA til den fulde graf. #}
+    <p class="network-preview-cta">
+      <a class="btn btn-primary" href="{{ full_url }}">Åbn netværksanalyse →</a>
+      <span class="text-xs text-muted">Fuld interaktiv graf med kantliste, filtre og eksport.</span>
+    </p>
+  </div>
+</section>
+{% endmacro %}

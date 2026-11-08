@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Gennemgå person — Heimdal{% endblock %}
+{% block main %}
+<h1>Kilde: {{ packet.source.name_exact }}</h1>
+{% if change and change.categories != ["NO_MATERIAL_CHANGE"] %}
+<section aria-label="Ændret siden sidst">
+  <h2>CHANGED SINCE LAST REVIEW</h2>
+  <ul>{% for line in change.lines %}<li>{{ line }}</li>{% endfor %}</ul>
+  <details><summary>View previous packet ({{ change.old_packet_hash }})</summary>
+    <p>Sealed version retained immutably; full prior evidence available on request.</p></details>
+  <details><summary>View current packet ({{ change.new_packet_hash }})</summary>
+    <p>Shown below in full. The diff is a shortcut, not a replacement.</p></details>
+</section>
+{% endif %}
+<section aria-label="Kilde">
+  <h2>Kilde</h2>
+  <p>Rolle: {{ packet.source.role }} · Omfang: {{ packet.source.scope }} · Rolle-id: {{ packet.person_role_id }}</p>
+</section>
+<section aria-label="Kandidater">
+  <h2>Kandidater (alfabetisk — ikke sorteret efter score)</h2>
+  <ul>
+  {% for c in packet.candidates|sort(attribute="display_name") %}
+    <li>{{ c.display_name }} (#{{ c.canonical_entity_id }})</li>
+  {% else %}
+    <li>Ingen kandidat — NO MATCH eller udsæt.</li>
+  {% endfor %}
+  </ul>
+</section>
+<section aria-label="Beviser">
+  <h2>Beviser</h2>
+  {% if packet.evidence.contradictory %}
+  <p role="alert"><strong>Contradictory evidence exists — review before approving.</strong></p>
+  <h3>Modstridende</h3><ul>{% for e in packet.evidence.contradictory %}<li>{{ e }}</li>{% endfor %}</ul>
+  <h3>Understøttende</h3><ul>{% for e in packet.evidence.supporting %}<li>{{ e }}</li>{% else %}<li>Ingen</li>{% endfor %}</ul>
+  {% else %}
+  <h3>Understøttende</h3><ul>{% for e in packet.evidence.supporting %}<li>{{ e }}</li>{% else %}<li>Ingen</li>{% endfor %}</ul>
+  {% endif %}
+  <h3>Manglende</h3><ul>{% for e in packet.evidence.missing %}<li>{{ e }}</li>{% else %}<li>Ingen</li>{% endfor %}</ul>
+  {% if not packet.evidence.contradictory %}
+  <h3>Modstridende</h3><ul><li>Ingen</li></ul>
+  {% endif %}
+</section>
+<aside aria-label="Gennemgangstillid">
+  <h2>Gennemgangstillid (underordnet)</h2>
+  <p>Review confidence vises efter bevisgennemgang. Aldrig sandsynlighed.</p>
+</aside>
+<aside aria-label="Session">
+  <p id="session-indicator" aria-live="polite"></p>
+  <p id="session-note" role="status"></p>
+  <button type="button" id="session-reset">Start new review session</button>
+</aside>
+<form method="post" action="/persons/review/{{ packet.person_role_id }}/decision" id="decision-form">
+  <input type="hidden" name="shown_packet_hash" value="{{ packet_hash }}">
+  <fieldset>
+    <legend>Kandidat (påkrævet ved godkendelse)</legend>
+    {% for c in packet.candidates|sort(attribute="display_name") %}
+    <label><input type="radio" name="chosen_canonical_id" value="{{ c.canonical_entity_id }}"> {{ c.display_name }} (#{{ c.canonical_entity_id }})</label>
+    {% else %}
+    <p>Ingen kandidat vist — kan ikke godkendes.</p>
+    {% endfor %}
+  </fieldset>
+  <fieldset>
+    <legend>Afgørelse</legend>
+    <label>Begrundelse (påkrævet ved tvetydig/udsæt/afvis):
+      <select name="reason_code">
+        <option value="">— vælg —</option>
+        <optgroup label="Tvetydig">
+          <option>MULTIPLE_PLAUSIBLE_CANDIDATES</option><option>CONFLICTING_INDEPENDENT_EVIDENCE</option>
+          <option>INSUFFICIENT_DISCRIMINATOR</option><option>TEMPORAL_CONFLICT</option>
+          <option>ROLE_CONFLICT</option><option>IDENTITY_CONFLICT</option><option>OTHER_AMBIGUOUS</option>
+        </optgroup>
+        <optgroup label="Udsæt">
+          <option>INSUFFICIENT_INDEPENDENT_EVIDENCE</option><option>NO_CANONICAL_CANDIDATE</option>
+          <option>NEEDS_EXTERNAL_EVIDENCE</option><option>SOURCE_CONTEXT_INCOMPLETE</option>
+          <option>WAIT_FOR_NEW_CANONICAL</option><option>WAIT_FOR_NEW_SOURCE_EVIDENCE</option><option>OTHER_DEFER</option>
+        </optgroup>
+        <optgroup label="Afvis">
+          <option>WRONG_PERSON</option><option>WRONG_ENTITY_TYPE</option>
+          <option>CONTRADICTORY_EVIDENCE</option><option>OTHER_REJECT</option>
+        </optgroup>
+      </select>
+    </label>
+    <label>Note: <input name="note"></label>
+  </fieldset>
+  <button type="submit" name="decision" value="APPROVE_LINK" id="btn-approve">Godkend (A, derefter Enter)</button>
+  <button type="submit" name="decision" value="REJECT">Afvis (R)</button>
+  <button type="submit" name="decision" value="AMBIGUOUS">Tvetydig (M)</button>
+  <button type="submit" name="decision" value="DEFER">Udsæt (D)</button>
+</form>
+<script src="/static/review.js"></script>
+{% endblock %}

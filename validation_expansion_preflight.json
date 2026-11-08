@@ -1,0 +1,58 @@
+{
+ "expansion_db": {
+  "database": "pdfhist_pilot",
+  "user": "postgres",
+  "schema": "public",
+  "host": "<redacted link-local address>"
+ },
+ "expansion_run_id": 424244,
+ "prior_runs": [
+  424241,
+  424242,
+  424243
+ ],
+ "prior_observations": {
+  "424241": 5,
+  "424242": 27,
+  "424243": 547
+ },
+ "prior_documents": 547,
+ "prior_content_rows": 550,
+ "company_location_before": {
+  "rowcount": 4531,
+  "checksum_md5": "008170aeeae4abe1e24ca4940dc0716a"
+ },
+ "company_inventory_rows": 4531,
+ "selection": {
+  "new_companies": 150,
+  "types": {
+   "P/F": 40,
+   "Sp/F": 65,
+   "ÍVF": 45
+  },
+  "regnr_min": "59",
+  "regnr_max": "9397"
+ },
+ "policy": {
+  "concurrency": 1,
+  "search_gap_s": 1.0,
+  "pdf_gap_s": 1.2,
+  "lysing_fetch_cap_per_company": 50,
+  "stop_on_403_429_retry_after": true,
+  "bounded_retry_attempts": 2
+ },
+ "budget": {
+  "search": {
+   "planned": 180,
+   "basis": "150 companies x ~1.05 pages avg + pagination margin"
+  },
+  "pdf": {
+   "planned": 1000,
+   "basis": "~805 expected unique refs (100-cohort mean 5.37/company, older cohort expected richer) + bounded retry margin; cap 50 lysing/company"
+  },
+  "total": {
+   "planned": 1200,
+   "hard_cap": true
+  }
+ }
+}

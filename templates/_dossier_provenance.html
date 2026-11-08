@@ -1,0 +1,50 @@
+{# T1.5 (plan v1/F-19): fail-closed provenance for all three dossier reports.
+   Same classification contract as /kildeinformation (heimdal/modules/shared/
+   entity.py fetch_state): FETCHED_OK / FETCH_FAILED / NEVER_FETCHED.
+   NEVER_FETCHED and FETCH_FAILED must never present a register-extract chip:
+   the dossier then shows only what other lookups (where the entity appears as
+   counterparty) have contributed. Neutral wording — no invented fetch events,
+   no error semantics beyond the recorded error category. #}
+<div class="header-badges">
+  {% if fetch_state == 'FETCHED_OK' %}
+  {# T1.6: "OFFICIELT REGISTERUDSKRIFT" neutralized to truthful source-genre copy
+     until gates G1–G3 decide the final report genre. The chip states the fact
+     (a source snapshot from the register) without claiming an official
+     document genre. #}
+  <span class="chip chip-kilde">KILDE: REGISTER-SNAPSHOT (SG.VS.FO)</span>
+  {% elif fetch_state == 'FETCH_FAILED' %}
+  <span class="chip chip-kilde">KILDE: ALDRIG HENTET MED SUCCES</span>
+  {% else %}
+  <span class="chip chip-kilde">KILDE: ALDRIG HENTET DIREKTE</span>
+  {% endif %}
+  <span class="chip chip-beregnet">HEIMDAL DUE DILIGENCE DOSSIER</span>
+</div>
+{% if fetch_state == 'FETCH_FAILED' %}
+<p class="snapshot snapshot-failed mt-2">
+  <span class="snap-cap">Aldrig hentet med succes</span>
+  Kildens oplysninger blev aldrig hentet for denne enhed
+  {%- if provenance.last_fetched_at %}; seneste forsøg
+    <span class="mono">{{ provenance.last_fetched_at|dk }}</span>{% endif %}
+  {%- if provenance.last_http_status %} · HTTP
+    <span class="mono">{{ provenance.last_http_status }}</span>{% endif %}
+  {%- if provenance.last_error_category %} ·
+    <span class="mono">{{ provenance.last_error_category }}</span>{% endif %}.
+  Der findes intet lokalt snapshot. Oplysningerne i dette dossier stammer kun fra andre
+  opslag, hvor enheden optræder som modpart.
+</p>
+{% elif fetch_state == 'FETCHED_OK' %}
+<p class="snapshot mt-2">
+  <span class="snap-cap">Hentet fra kilden</span>
+  <span class="mono">{{ provenance.last_fetched_at|dk }}</span>
+  {%- if provenance.snapshot_sha256 %} · snapshot
+    <span class="mono">{{ provenance.snapshot_sha256[:12] }}</span>{% endif %}
+  {%- if provenance.last_http_status %} · HTTP
+    <span class="mono">{{ provenance.last_http_status }}</span>{% endif %}
+</p>
+{% else %}
+<p class="snapshot snapshot-blank mt-2">
+  <span class="snap-cap">Aldrig hentet direkte</span>
+  Denne enhed er aldrig selv blevet hentet fra kilden. Oplysningerne i dette dossier
+  stammer fra andre opslag, hvor enheden optræder som modpart. Det er ikke en fejl.
+</p>
+{% endif %}

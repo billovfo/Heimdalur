@@ -1,0 +1,80 @@
+{# Phase 4 — analytics supplement, now the company ANALYSE tab (product UX
+   consolidation §29). Derived layer only: current board/management stays in
+   the Personer panel (authoritative Felag source sections); this section adds
+   derived constellations + coverage, clearly labeled as the derived layer.
+
+   Product UX consolidation: constellation FAMILIES (§31-§35) — the maximal
+   member set is the headline; strict-subset groups fold under "Vis N
+   understøttede undergrupper" fully rendered (no data loss, §33); the
+   deterministic order key stays internal (§27 — human copy only, no tokens,
+   no score, §32). Historical person associations (§14) render in a separate
+   clearly-labeled block, visually distinct from current Felag roles. #}
+<section class="card section" id="analytics-company" aria-labelledby="h-analytics-company">
+  <div class="section-head">
+    <h2 id="h-analytics-company" class="section-title">Konstellationer i analyse-buildet</h2>
+    {{ m.stamp('udledt') }}
+  </div>
+
+  <div class="section-body">
+    {% if section.error %}
+      <p class="empty-state-body">Analytics-data kunne ikke indlæses. Øvrige sektioner på siden er uændrede.</p>
+    {% else %}
+
+    {% set groups = section.groups %}
+    {% if groups and groups.families %}
+      <ul class="actors">
+      {% for fam in groups.families[:8] %}{{ m.constellation_family(fam) }}{% endfor %}
+      </ul>
+      <p class="text-xs text-muted">Viser {{ groups.shown_families }} af {{ groups.family_total }} konstellations-familier ({{ groups.group_total }} underliggende grupper). {{ groups.order_text }}</p>
+      {% if groups.family_total > groups.shown_families %}
+      <details class="analytics-more">
+        <summary>Vis flere konstellations-familier ({{ groups.family_total - groups.shown_families }} til)</summary>
+        <ul class="actors">
+        {% for fam in groups.families[8:] %}{{ m.constellation_family(fam) }}{% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+      <p class="text-xs text-muted">Kernegruppe: delmængde, der opfylder den strammere kerneregel — vises sammen med den tilbagevendende konstellation, ikke som en separat stærkere relation.</p>
+    {% elif groups and groups.groups %}
+      {# fallback: flat groups (ingen subset-struktur muligt) #}
+      <ul class="actors">
+      {% for g in groups.groups %}{{ m.constellation_card(g) }}{% endfor %}
+      </ul>
+      <p class="text-xs text-muted">{{ groups.order_text }}</p>
+    {% else %}
+      <div class="empty-state"><div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-database"></use></svg></div><p class="empty-state-title">{{ section.labels.empty_groups }}</p><p class="empty-state-body">Kun analyse-buildet er berørt — kildeoplysningerne i Personer-fanen er uændrede.</p></div>
+    {% endif %}
+
+    {# coverage note (B36) — preserved, visually secondary (UX-08) #}
+    {% with cov = section.coverage %}
+    <details class="analytics-coverage" role="note" aria-label="Dækning og metode">
+      <summary>Dækning og metode</summary>
+      <p class="text-xs" style="color:var(--text-2);margin:.2rem 0;">
+        <strong>Dækning:</strong> Analytics bruger kun personer, som kan knyttes sikkert til Heimdal.
+        {% if cov.unresolved_text %}{{ cov.unresolved_text }}{% endif %}
+        {% if cov.web_observations == 0 %}{{ cov.web_note }}{% endif %}
+      </p>
+      <p class="text-xs" style="color:var(--text-2);">{{ section.labels.disclaimer }}</p>
+    </details>
+    {% endwith %}
+    {% endif %}
+  </div>
+</section>
+
+{# §14: historiske tilknytninger — adskilt fra current (kunne aldrig blive
+   current membership); kun sikkert kædede personer (fail closed). #}
+{% if section.people and section.people.historical %}
+<details class="analytics-coverage" role="note" aria-label="Historiske tilknytninger">
+  <summary>Tidligere personer / historiske roller ({{ section.people.historical|length }})</summary>
+  <p class="text-xs" style="color:var(--text-2);margin:.2rem 0 0 0;">Historiske registreringer fra analyse-buildet — ikke en påstand om nuværende medlemskab.</p>
+  <ul class="actors">
+    {% for p in section.people.historical[:12] %}
+    <li class="actor">
+      {{ m.entity_link(p.person_id, p.name, 'PERSON') }}
+      <span class="badge badge-sm">{{ p.context_label or 'Registreret' }}</span>
+      <span class="text-xs text-muted">{{ p.period_text or '' }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</details>
+{% endif %}

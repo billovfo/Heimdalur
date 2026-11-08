@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}Heimdal — Færøsk selskabsregister{% endblock %}
+
+{% macro top5(title, items, noun, unit='') %}
+<section class="card section" aria-labelledby="h-{{ noun }}">
+  <div class="section-head">
+    <h2 id="h-{{ noun }}" class="section-title">{{ title }}</h2>
+  </div>
+  <div class="section-body">
+    <table class="ledger top-table">
+      <caption class="sr-only">{{ title }}</caption>
+      <thead>
+        <tr><th scope="col">#</th><th scope="col">Person</th>
+          <th scope="col" class="num">{{ unit or 'Antal' }}</th></tr>
+      </thead>
+      <tbody>
+        {% for it in items %}
+        <tr>
+          <td class="mono num">{{ loop.index }}</td>
+          <td data-sort="{{ it.name }}">{{ m.entity_link(it.id, it.name, 'PERSON') }}</td>
+          <td class="mono num">{{ it.n }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro chartbars(title, rows, colors, slug) %}
+<section class="card section" aria-labelledby="h-{{ slug }}">
+  <div class="section-head">
+    <h2 id="h-{{ slug }}" class="section-title">{{ title }}</h2>
+    {{ m.stamp('beregnet') }}
+  </div>
+  <div class="section-body">
+    {% set maxn = rows|map(attribute='n')|max %}
+    <svg class="chart-svg" viewBox="0 0 440 {{ rows|length * 28 + 10 }}"
+         width="440" height="{{ rows|length * 28 + 10 }}" role="group"
+         aria-label="{{ title }}: {{ rows|map(attribute='label')|join(', ') }} — antal: {{ rows|map(attribute='n')|join(', ') }}">
+      {% for r in rows %}
+      <a href="{{ r.url or '/companies' }}" class="chart-bar-link" style="text-decoration: none; cursor: pointer;">
+        <text class="chart-label" x="0" y="{{ loop.index0 * 28 + 17 }}">{{ r.label }}</text>
+        <rect class="chart-track" x="145" y="{{ loop.index0 * 28 + 4 }}"
+              width="235" height="16" fill="rgba(255, 255, 255, 0.05)" rx="4"></rect>
+        <rect class="chart-bar" x="145" y="{{ loop.index0 * 28 + 4 }}"
+              width="{{ [235, (235 * r.n / maxn)]|max|round(1) if r.n > 0 else 0 }}" height="16"
+              fill="{{ colors[loop.index0 % colors|length] }}" rx="4"></rect>
+        <text class="chart-n mono" x="438" y="{{ loop.index0 * 28 + 17 }}" text-anchor="end">{{ r.n }}</text>
+      </a>
+      {% endfor %}
+    </svg>
+  </div>
+</section>
+{%- endmacro %}
+
+{% block main %}
+
+<!-- ZONE 1: HERO & UNIVERSAL SEARCH HUB -->
+<header class="card record mb-4">
+  <div class="hero-row">
+    <div>
+      <h1 class="record-name">Heimdal</h1>
+      <p class="record-badges mt-2">
+        <span class="verdict v-ok"><span class="v-mark" aria-hidden="true">●</span>Live Snapshot</span>
+        <span class="chip chip-kilde">Skráseting Føroya (IT-system under opbygning)</span>
+        <span class="hero-subtext">Færøsk selskabsregister — registrerede ejere, roller og relationer</span>
+      </p>
+    </div>
+    <div class="flex gap-2">
+      <a href="/bestand" class="btn btn-bestand"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-bar-chart-3"></use></svg> Datastatus &amp; bestand →</a>
+    </div>
+  </div>
+
+  <div class="mt-4 pt-3 border-t border-border">
+    <form action="/companies" method="get" class="flex gap-2 align-center" role="search" aria-label="Søg i registeret">
+      <input type="search" name="q" class="form-input text-base" style="flex: 1; padding: 0.75rem 1rem;" 
+             placeholder="Søg selskab, person eller S-nr…" aria-label="Søg selskab, person eller registreringsnummer">
+      <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.25rem;">Søg</button>
+      <span class="cmd-kbd" aria-hidden="true" style="align-self:center;">⌘K</span>
+    </form>
+  </div>
+</header>
+
+<!-- ZONE 2: EXECUTIVE MAKRO KPI STRIP -->
+<section class="macro-strip" aria-label="Nøgletal for registeret">
+  <a class="macro-kpi" href="/companies">
+    <span class="kpi-label">Aktive selskaber</span>
+    <span class="macro-kpi-val">{{ macro.total_companies }}</span>
+    <span class="text-xs text-muted mt-1">Registrerede virksomheder</span>
+  </a>
+  <a class="macro-kpi" href="/persons">
+    <span class="kpi-label">Reelle personer</span>
+    <span class="macro-kpi-val">{{ macro.total_persons }}</span>
+    <span class="text-xs text-muted mt-1">Ejere &amp; ledelsesroller</span>
+  </a>
+  <a class="macro-kpi" href="/companies">
+    <span class="kpi-label">Ejerrelationer</span>
+    <span class="macro-kpi-val">{{ macro.total_relations }}</span>
+    <span class="text-xs text-muted mt-1">Direkte ejerforbindelser</span>
+  </a>
+  <a class="macro-kpi" href="/groups">
+    <span class="kpi-label">Koncerner</span>
+    <span class="macro-kpi-val">{{ macro.total_groups }}</span>
+    <span class="text-xs text-muted mt-1">Større moderselskaber</span>
+  </a>
+  <a class="macro-kpi" href="/compliance">
+    <span class="kpi-label">Registerobservationer</span>
+    <span class="macro-kpi-val">{{ macro.total_observed_companies }}</span>
+    <span class="text-xs text-muted mt-1">Virksomheder med observationer</span>
+  </a>
+</section>
+
+<!-- ZONE 3: FEATURE ACTION HUB — Graf-Stifinder fjernet -->
+<section class="tool-grid" aria-label="Analyseværktøjer">
+  <a class="tool-card" href="/groups" style="border-top-color: var(--color-warning, #f59e0b);">
+    <div class="tool-card-title">
+      <span><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-layers"></use></svg></span> Koncerner
+    </div>
+    <div class="tool-card-desc">
+      Oversigt over de største moderselskaber, deres datterselskaber og ejerandele.
+    </div>
+    <div class="tool-card-meta">
+      Udforsk koncerntræer →
+    </div>
+  </a>
+
+  <a class="tool-card" href="/aendringer" style="border-top-color: var(--color-info, #06b6d4);">
+    <div class="tool-card-title">
+      <span><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-clock"></use></svg></span> Ændringslog
+    </div>
+    <div class="tool-card-desc">
+      Registrerede ændringer i ejerskab, roller og kontrol over tid.
+    </div>
+    <div class="tool-card-meta">
+      Se hændelsesfeed →
+    </div>
+  </a>
+</section>
+
+<!-- ZONE 4: POWER ANALYTICS & LIVE PULSE -->
+<div class="top5-grid mb-6">
+  <!-- Største Koncerner -->
+  <section class="card section">
+    <div class="section-head flex-between">
+      <h2 class="section-title"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-layers"></use></svg> Største koncerner</h2>
+      <a href="/groups" class="text-xs text-muted">Se alle koncerner →</a>
+    </div>
+    <div class="section-body">
+      <table class="ledger top-table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Moderselskab</th>
+            <th scope="col" class="num">Datterselskaber</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for g in tops.groups %}
+          <tr>
+            <td class="mono num">{{ loop.index }}</td>
+            <td>
+              <a href="/groups/{{ g.parent_id }}" class="entity-link entity-company"><strong>{{ g.parent_name }}</strong></a>
+              {% if g.parent_regnr %}
+                <span class="regnr-pill">{{ g.parent_regnr }}</span>
+              {% endif %}
+            </td>
+            <td class="mono num">{{ g.subsidiary_count }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="text-center text-muted">Ingen koncerner fundet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Seneste Hændelser i Registret (Live Pulse) -->
+  <section class="card section">
+    <div class="section-head flex-between">
+      <h2 class="section-title"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-clock"></use></svg> Seneste Selskabsbegivenheder</h2>
+      <a href="/aendringer" class="text-xs text-muted">Åbn fuld log →</a>
+    </div>
+    <div class="section-body">
+      <div class="table-scroll">
+      <table class="ledger top-table">
+        <thead>
+          <tr>
+            <th scope="col">Tidspunkt</th>
+            <th scope="col">Selskab / Entitet</th>
+            <th scope="col">Hændelse</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ev in tops.recent_events %}
+          <tr>
+            <td class="mono text-xs text-muted">{{ ev.event_timestamp|dk if ev.event_timestamp else 'Snapshot' }}</td>
+            <td>
+              {% if ev.entity_kind == 'PERSON' %}
+                <a href="/persons/{{ ev.canonical_entity_id }}" class="entity-link entity-person">{{ ev.entity_name }}</a>
+              {% else %}
+                <a href="/companies/{{ ev.canonical_entity_id }}" class="entity-link entity-company">{{ ev.entity_name }}</a>
+              {% endif %}
+            </td>
+            <td class="text-xs">
+              <span class="badge badge-info">{{ L.change_category_label(ev.change_category, ev.change_summary) or L.change_summary_label(ev.change_summary) or 'Registerændring' }}</span>
+              <span class="ml-1 text-muted">{{ L.change_summary_label(ev.change_summary) }}</span>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="text-center text-muted">Ingen hændelser fundet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ZONE 5: PERSON ALLIANCER, MAGTKORT & SVG DIAGRAMMER -->
+<div class="kpi-row">
+  <a class="kpi" href="/persons/{{ tops.direct[0].id }}">
+    <span class="kpi-label">Flest direkte ejerskaber</span>
+    <span class="kpi-name">{{ tops.direct[0].name }}</span>
+    <span class="kpi-n mono">{{ tops.direct[0].n }}</span>
+  </a>
+  <a class="kpi" href="/persons/{{ tops.indirect[0].id }}">
+    <span class="kpi-label">Flest indirekte ejerskaber</span>
+    <span class="kpi-name">{{ tops.indirect[0].name }}</span>
+    <span class="kpi-n mono">{{ tops.indirect[0].n }}</span>
+  </a>
+  <a class="kpi" href="/persons/{{ tops.nevn[0].id }}">
+    <span class="kpi-label">Flest bestyrelsesposter</span>
+    <span class="kpi-name">{{ tops.nevn[0].name }}</span>
+    <span class="kpi-n mono">{{ tops.nevn[0].n }}</span>
+  </a>
+  <a class="kpi" href="/persons/{{ tops.stjorn[0].id }}">
+    <span class="kpi-label">Flest direktørposter</span>
+    <span class="kpi-name">{{ tops.stjorn[0].name }}</span>
+    <span class="kpi-n mono">{{ tops.stjorn[0].n }}</span>
+  </a>
+</div>
+
+<div class="tablist-wrap" style="margin-top:1.5rem;">
+  <nav class="tablist" role="tablist" aria-label="Top 5 — skift ejer/rolle" data-tab-group="home-top5">
+    <button role="tab" aria-selected="true" data-tab="htop-direkte">Direkte ejerskab</button>
+    <button role="tab" data-tab="htop-nevn">Bestyrelse</button>
+    <button role="tab" data-tab="htop-indirekte">Indirekte</button>
+    <button role="tab" data-tab="htop-stjorn">Ledelse</button>
+  </nav>
+</div>
+<div class="tab-panel is-active" data-panel="htop-direkte" data-tab-group="home-top5">{{ top5('Top 5 — direkte ejerskab', tops.direct, 'top-direkte') }}</div>
+<div class="tab-panel" data-panel="htop-nevn" data-tab-group="home-top5" hidden>{{ top5('Top 5 — flest bestyrelsesposter', tops.nevn, 'top-nevn') }}</div>
+<div class="tab-panel" data-panel="htop-indirekte" data-tab-group="home-top5" hidden>{{ top5('Top 5 — indirekte ejerskab', tops.indirect, 'top-indirekte') }}</div>
+<div class="tab-panel" data-panel="htop-stjorn" data-tab-group="home-top5" hidden>{{ top5('Top 5 — flest ledelsesposter', tops.stjorn, 'top-stjorn') }}</div>
+
+<div class="chart-grid mt-6">
+  {{ chartbars('Enheder efter type', charts.kinds,
+     ['#8ab4f8', '#f0a6c8', '#e0b872', '#81c995', '#88929a'], 'chart-kinds') }}
+  {{ chartbars('Relationer efter type', charts.relations,
+     ['#8ab4f8', '#e0b872', '#f0a6c8'], 'chart-relations') }}
+  {{ chartbars('Ejerandele efter størrelse', charts.bands,
+     ['#8ab4f8', '#6d92d6', '#5773ab', '#3f5480', '#2c3a59'], 'chart-bands') }}
+</div>
+
+<section class="card section mt-6" aria-labelledby="h-top-relationer">
+  <div class="section-head flex-between">
+    <h2 id="h-top-relationer" class="section-title">Personer der går ofte igen sammen</h2>
+    <a href="/persons/relationer" class="text-xs text-muted">Se alle personrelationer →</a>
+  </div>
+  <div class="section-body">
+    <table class="ledger top-table">
+      <caption class="sr-only">Top relationer mellem personer</caption>
+      <thead>
+        <tr><th scope="col">#</th><th scope="col">Personpar</th>
+          <th scope="col" class="num">Fælles virksomheder</th></tr>
+      </thead>
+      <tbody>
+        {% for r in tops.relations %}
+        <tr>
+          <td class="mono num">{{ loop.index }}</td>
+          <td data-sort="{{ r.a_name }}">{{ m.entity_link(r.a_id, r.a_name, 'PERSON') }}
+            <span class="top5-x" aria-hidden="true">↔</span>
+            {{ m.entity_link(r.b_id, r.b_name, 'PERSON') }}</td>
+          <td class="mono num">{{ r.n }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card section mt-6" id="indgang" aria-labelledby="h-indgang">
+  <div class="section-head">
+    <h2 id="h-indgang" class="section-title">Gå til</h2>
+  </div>
+  <div class="section-body">
+    <ul class="actors">
+      <li class="actor"><a href="/companies">Virksomheder →</a></li>
+      <li class="actor"><a href="/persons">Personer →</a></li>
+      <li class="actor"><a href="/bestand">Bestand og datastatus →</a></li>
+    </ul>
+  </div>
+</section>
+
+{% endblock %}

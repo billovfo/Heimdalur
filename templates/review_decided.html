@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Afgjorte sager — Heimdal{% endblock %}
+{% block main %}
+<h1>Afgjorte sager</h1>
+<table>
+  <caption class="sr-only">Afgørelseshistorik</caption>
+  <thead><tr><th>Sag</th><th>Anmelder</th><th>Afgørelse</th><th>Kandidat</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for d in decisions %}
+    <tr><td>{{ d.case_key }}</td><td>{{ d.reviewer }}</td><td>{{ d.decision }}</td>
+        <td>{{ d.chosen_canonical_id or "" }}</td><td>{{ d.application_status }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

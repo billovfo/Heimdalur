@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Skráseting · {{ entity_name or canonical_entity_id }} · Heimdal{% endblock %}
+
+{% block main %}
+{# ======================================================================
+   SKRÁSETING / PDF-HISTORIK v1 - SEPARAT, KILDEMARKERET OVERFLADE.
+   Viser udelukkende data fra den ACTIVE registry_projection (FelagPdf
+   snapshot) + separat historik. Rører aldrig canonical felterne på
+   virksomhedssiden. Read-only: ingen redigeringshandlinger findes.
+   ====================================================================== #}
+<header class="card record hero">
+  <h1 class="record-name">Skráseting / PDF-historik</h1>
+  <p class="record-badges">
+    <span class="muted">Virksomhed:</span>
+    <a href="{{ url_for('entities.company', canonical_entity_id=canonical_entity_id) }}">{{ entity_name or canonical_entity_id }}</a>
+  </p>
+  <p class="record-note">Denne visning viser Skráseting-kilden separat — Heimdals øvrige oplysninger er ikke ændret.</p>
+</header>
+
+{% if not view.allowed %}
+  <section class="card" aria-live="polite">
+    <p class="spine-note">Denne visning er ikke aktiveret.</p>
+  </section>
+{% elif view.error %}
+  <section class="card" aria-live="polite" role="status">
+    <h2 class="card-title">{{ view.error_text }}</h2>
+    <p class="spine-note">Prøv igen senere. Virksomhedssiden er ikke påvirket.</p>
+  </section>
+{% elif not view.has_projection %}
+  <section class="card" aria-live="polite">
+    <h2 class="card-title">Skráseting</h2>
+    <p class="spine-note">{{ view.no_projection_text }}</p>
+  </section>
+{% else %}
+
+{# ---------------- 1) Registreret status ------------------------------- #}
+<section class="card" id="registreret-status" aria-labelledby="skr-status-h">
+  <h2 id="skr-status-h" class="card-title">
+    Registreret status pr. {{ view.snapshot_date_dk or view.snapshot_date }}
+  </h2>
+  <p class="record-badges">
+    <span class="badge">{{ view.source_label }}</span>
+    <span class="badge muted">Dokumenttype: {{ view.source_document_type }}</span>
+  </p>
+  <p class="spine-note">Registreret status ifølge Skráseting på snapshotdatoen
+    — ikke Heimdals øvrige registreringer.</p>
+
+  {% if view.registered_name %}
+  <p class="record-name">Registreret navn ifølge Skráseting: {{ view.registered_name }}</p>
+  {% endif %}
+
+  <dl class="kv-list">
+    {% for f in view.fields %}
+    <div class="kv">
+      <dt>{{ f.label }}</dt>
+      <dd>
+        {# Semantisk rendering (§13): aldrig rå dict/liste-repr i brugerfladen.
+           Strukturer formateres efter feltets kilde-semantik; rå kildeværdi
+           kan kun findes i evidence-detaljerne. #}
+        {% if f.human and f.human.kind == 'names' %}
+          <ul class="chip-list">
+            {% for n in f.human.names %}<li class="chip">{{ n }}</li>{% endfor %}
+          </ul>
+        {% elif f.human and f.human.kind == 'lines' %}
+          <span class="address-lines">{% for l in f.human.lines %}{{ l }}{% if not loop.last %}<br>{% endif %}{% endfor %}</span>
+        {% elif f.human and f.human.kind == 'dates' %}
+          <span>Seneste registrerede regnskabsdato: <time datetime="{{ f.human.latest.iso }}">{{ f.human.latest.dk }}</time></span>
+          {% if f.human.earlier %}<span class="text-xs" style="display:block;color:var(--text-2);">Tidligere: {% for d in f.human.earlier %}<time datetime="{{ d.iso }}">{{ d.dk }}</time>{{ ", " if not loop.last }}{% endfor %}</span>{% endif %}
+        {% elif f.human and f.human.kind == 'text' %}
+          {{ f.human.text }}
+        {% elif f.human and f.human.kind == 'hidden' %}
+          <span class="muted">Kildeoplysning — se Vis kildeoplysninger</span>
+        {% elif f.status == 'value' %}{{ f.value }}
+        {% elif f.status == 'empty' %}<span class="muted">{{ f.value }}</span>
+        {% else %}<span class="muted">{{ f.value }}</span>{% endif %}
+      </dd>
+    </div>
+    {% endfor %}
+  </dl>
+
+  {# Personer: adskilt fra virksomhedens adresse; ingen rolleadresse her.
+     Navne er klikbare KUN når person-linket er sikkert LINKED; ellers
+     almindelig tekst. #}
+  {% if view.board %}
+  <h3>Bestyrelse <span class="muted">(pr. snapshot)</span></h3>
+  <ul class="person-roles">
+    {% for p in view.board %}<li>{% if p.canonical_entity_id %}<a href="{{ url_for('entities.person', canonical_entity_id=p.canonical_entity_id) }}">{{ p.name }}</a>{% else %}<strong>{{ p.name }}</strong>{% endif %} — {{ p.role|product_role }}</li>{% endfor %}
+  </ul>
+  {% endif %}
+  {% if view.management %}
+  <h3>Ledelse <span class="muted">(pr. snapshot)</span></h3>
+  <ul class="person-roles">
+    {% for p in view.management %}<li>{% if p.canonical_entity_id %}<a href="{{ url_for('entities.person', canonical_entity_id=p.canonical_entity_id) }}">{{ p.name }}</a>{% else %}<strong>{{ p.name }}</strong>{% endif %} — {{ p.role|product_role }}</li>{% endfor %}
+  </ul>
+  {% endif %}
+
+  {# Auditor: aldrig en faktisk værdi — kun den eksplicitte usikkerhed. #}
+  <p class="spine-note">{{ view.auditor_current_text }}</p>
+
+  {# ---- Provenance: tekniske ids kun i collapsible detaljer ---- #}
+  <details class="source-details">
+    <summary>Vis kildeoplysninger</summary>
+    <dl class="kv-list">
+      <div class="kv"><dt>Snapshotdato</dt><dd>{{ view.snapshot_date }}</dd></div>
+      {% if view.provenance %}
+      <div class="kv"><dt>Projection run</dt><dd>{{ view.provenance.document_id is defined and view.provenance.get('document_id') }}{{ view.provenance.get('document_id') }}</dd></div>
+      <div class="kv"><dt>Dokument-id</dt><dd>{{ view.provenance.get('document_id') }}</dd></div>
+      <div class="kv"><dt>Observation-id</dt><dd>{{ view.provenance.get('observation_id') }}</dd></div>
+      <div class="kv"><dt>Parse-id</dt><dd>{{ view.provenance.get('parse_result_id') }}</dd></div>
+      <div class="kv"><dt>Autoritet</dt><dd>{{ view.provenance.get('authority_state') }}</dd></div>
+      {% endif %}
+    </dl>
+    <p class="spine-note">Virksomhedstype følger Heimdals eksisterende kilder — den er ikke fra denne PDF-projektion.</p>
+  </details>
+</section>
+
+{# ---------------- 2) Historik (separat fra current state) ------------- #}
+<section class="card" id="skr-historik" aria-labelledby="skr-hist-h">
+  {% set history_all = request.args.get("history") == "all" %}
+  <h2 id="skr-hist-h" class="card-title">Historik</h2>
+  {% if view.history and view.history|length > 10 %}
+    {% if not history_all %}<a class="btn btn-xs btn-outline" href="{{ request.path }}?history=all#skr-historik">Vis alle {{ view.history|length }}</a>{% else %}<a class="btn btn-xs btn-outline" href="{{ request.path }}#skr-historik">Vis seneste 10</a>{% endif %}
+  {% endif %}
+  {% if view.same_day_note or view.history_same_day_note %}
+  <p class="spine-note">Rækkefølgen mellem registreringer samme dag kan ikke fastslås.</p>
+  {% endif %}
+  {% if view.history %}
+  {% set display_history = view.history if history_all else view.history[:10] %}
+  <ol class="timeline">
+    {% for e in display_history %}
+    <li class="timeline-event">
+      <p>
+        {% if e.timeline_date %}<time datetime="{{ e.timeline_date }}">{{ e.timeline_date_dk or e.timeline_date }}</time>{% else %}<span class="muted">Dato kan ikke fastslås</span>{% endif %}
+        <span class="timeline-label">{{ e.timeline_date_label }}</span>
+        <strong class="event-type">{{ e.type }}</strong>
+        {# Rå entity-nøgle er kun brugertekst for ikke-rollehændelser
+           (navne-/kapitalændringer); rollehændelser viser personer korrekt
+           nedenfor med kanonisk identitet (§24). #}
+        {% if e.description and e.event_type not in ('BOARD_CHANGE', 'MANAGEMENT_CHANGE', 'AUDITOR_CHANGE') %}<span class="event-desc">{{ e.description }}</span>{% endif %}
+      </p>
+      {% for c in e.caveats %}<p class="spine-note">{{ c }}</p>{% endfor %}
+      {# Historiske rolle-personer: menneskelig række — hvem/hvad/rolle.
+         Klikbare KUN når sikkert LINKED; ellers kildenavn som tekst med
+         diskret markering (§24 fail closed). Handling ordlyd kun når
+         kildens action-kolonne bærer den (§23 — ingen inferens). #}
+      {% if e.persons %}
+      <ul class="person-roles history-persons">
+        {% for p in e.persons %}
+        <li>
+          {% if p.canonical_entity_id %}<a href="{{ url_for('entities.person', canonical_entity_id=p.canonical_entity_id) }}">{{ p.display_name or p.name }}</a>{% else %}<span class="person-unresolved">{{ p.name }}</span> <span class="text-xs muted">(Ikke sikkert knyttet til Heimdal-person)</span>{% endif %}
+          {% if e.action_label %}<span class="event-action"> — {{ e.action_label }}</span>{% endif %}
+          {% if p.role_label %} <span class="badge badge-sm">{{ p.role_label }}</span>{% endif %}
+          <details class="source-details">
+            <summary>Vis kilde</summary>
+            <p class="spine-note">Kildedokument-id: {{ e.source_document_id }} · Autoritet: {{ e.authority_state }}{% if p.role_title %} · Kilderolle: {{ p.role_title }}{% endif %}{% if p.display_name and p.name and p.name != p.display_name %} · Kildenavn: {{ p.name }}{% endif %}{% if e.action %} · Kildehandling: {{ e.action }}{% endif %}</p>
+          </details>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <details class="source-details">
+        <summary>Vis kilde</summary>
+        <p class="spine-note">Kildedokument-id: {{ e.source_document_id }} · Autoritet: {{ e.authority_state }}{% if e.action %} · Kildehandling: {{ e.action }}{% endif %}</p>
+      </details>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+  {% if not history_all and view.history|length > 10 %}
+  <p class="text-xs text-muted" style="margin-top:.6rem;">Viser de seneste 10 registreringer · <a href="{{ request.path }}?history=all#skr-historik">Vis alle {{ view.history|length }}</a></p>
+  {% endif %}
+  {% else %}
+  <p class="spine-note">Ingen historiske registreringer at vise.</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

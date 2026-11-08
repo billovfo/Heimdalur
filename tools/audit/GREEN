@@ -1,0 +1,12 @@
+# Audit checks that must stay green: tools/gate.sh fails if one of these fails.
+# One check name per line (check_x or check_x.py); `#` starts a comment.
+# Add a check here in the same commit as the fix that turns it green (02-FIX-PLAN §0.2).
+# Every check not listed runs report-only (expected red until its wave lands).
+check_b
+check_f
+check_e
+check_a
+check_d
+check_h
+check_g
+check_j

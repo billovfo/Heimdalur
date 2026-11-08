@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}{{ entity.display_name }} · Ejerayvirlit · Heimdal{% endblock %}
+
+{% block main %}
+<header class="card record">
+  <h1 class="record-name">{{ entity.display_name }}</h1>
+  <p class="record-badges">{{ m.kind_mark(entity.entity_kind) }}</p>
+  <nav class="crumbs" aria-label="Brødkrummer">
+    <a href="{{ url_for('entities.company', canonical_entity_id=entity.canonical_entity_id) }}">{{ entity.display_name }}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">Ejerayvirlit</span>
+  </nav>
+  {% if fetch_state == 'FETCHED_OK' %}
+  <p class="snapshot"><span class="snap-cap">Hentet fra kilden</span>
+    <span class="mono">{{ provenance.last_fetched_at|dk }}</span></p>
+  {% elif fetch_state == 'FETCH_FAILED' %}
+  <p class="snapshot snapshot-failed"><span class="snap-cap">Aldrig hentet med succes</span>
+    Kildens oplysninger blev aldrig hentet for denne virksomhed.</p>
+  {% else %}
+  <p class="snapshot snapshot-blank"><span class="snap-cap">Aldrig hentet direkte</span></p>
+  {% endif %}
+</header>
+
+{% if fetch_state == 'FETCH_FAILED' %}
+{# §9 D-8: en virksomhed, hvis egen hentning aldrig lykkedes, får ét klart
+   udsagn og intet personer-afsnit — et tomt afsnit ville lyde som "kilden viser
+   ingen", men kilden blev aldrig læst. #}
+<section class="card section" id="ikke-hentet" aria-labelledby="h-ikke-hentet">
+  <div class="section-head">
+    <h2 id="h-ikke-hentet" class="section-title">Aldrig hentet med succes</h2>
+    {{ m.stamp('ingen') }}
+  </div>
+  <div class="section-body">
+    <p class="empty">
+      Kildens oplysninger blev aldrig hentet for denne virksomhed — der findes intet lokalt snapshot,
+      så ejerkæderne kan ikke beregnes. Et tomt afsnit ville læses som en udmelding fra kilden,
+      som aldrig blev læst.
+    </p>
+  </div>
+</section>
+{% else %}
+<section class="card section" id="personer" aria-labelledby="h-personer">
+  <div class="section-head">
+    <h2 id="h-personer" class="section-title">Personer bag virksomheden</h2>
+    {{ m.stamp('beregnet') }}
+    <p class="section-lede">Ejerkæderne følges kun gennem ejerandele — ikke kontrolregistreringer eller roller.
+      Procenten er personens stærkeste sti og aldrig en sum.
+      Snapshot-oplysningerne kommer fra Skráseting Føroya; selve træet og procentsatserne er beregnet af Heimdal,
+      og beregningens kildegrundlag findes i Kildeinformation.</p>
+  </div>
+
+  <div class="section-body">
+    {% if cycle %}{{ m.cycle_explainer(cycle, entity) }}{% endif %}
+    {% if tree and tree.edges %}
+    <div class="table-scroll">
+      <svg class="tree-svg" viewBox="0 0 {{ tree.width }} {{ tree.height }}"
+           width="{{ tree.width }}" height="{{ tree.height }}"
+           role="group" aria-labelledby="tree-title">
+        <title id="tree-title">Ejertræ: virksomheden i bunden, alle grene af
+          ejere ovenover — grene der ender i virksomheder uden registrerede
+          ejere vises som døde ender. Samme oplysninger findes i listen nedenfor.</title>
+        {% for e in tree.edges %}
+          {% set a = tree.pos[e.from_id] %}
+          {% set b = tree.pos[e.to_id] %}
+          <line class="edge edge-ownership" x1="{{ a.x }}" y1="{{ a.y }}"
+                x2="{{ b.x }}" y2="{{ b.y }}"></line>
+          <text class="edge-label" x="{{ (a.x + b.x) / 2 }}" y="{{ (a.y + b.y) / 2 - 6 }}"
+                text-anchor="middle">{{ e.pct|pct }}&nbsp;%</text>
+        {% endfor %}
+        {% for n in tree.nodes %}
+          {% set k = m.KIND.get(n.kind, m.KIND['UNKNOWN_ENTITY']) %}
+          <a href="{{ entity_url(n.kind, n.id) }}">
+            <circle class="node {{ k.cls }} {{ 'node-center' if n.is_center }}"
+                    cx="{{ n.x }}" cy="{{ n.y }}" r="{{ 14 if n.is_center else 9 }}"></circle>
+            <text class="node-label {{ 'node-center-label' if n.is_center }}"
+                  x="{{ n.x }}" y="{{ n.y + 26 }}"
+                  text-anchor="middle">{{ n.name }}</text>
+          </a>
+        {% endfor %}
+      </svg>
+    </div>
+    {% endif %}
+    {% if persons %}
+    <ul class="indirect">
+      {% for p in persons %}
+      <li class="indirect-row">
+        <div class="indirect-head">
+          {{ m.entity_link(p.canonical_entity_id, p.display_name, p.entity_kind) }}
+          <span class="indirect-pct">
+            {% if p.best_pct is not none %}
+              <span class="pct">op til {{ p.best_pct|pct }}&nbsp;%</span>
+            {% else %}
+              <span class="pct-failed">andel ikke læst</span>
+            {% endif %}
+            {% if p.direct %}<small>direkte</small>{% endif %}
+          </span>
+        </div>
+        {% if p.paths %}
+        <details class="relation-detail">
+          <summary>Vis de {{ p.paths|length }} ejarstier</summary>
+          <div class="indirect-paths">
+            {% if p.paths|length > 1 %}<p class="path-count">{{ p.paths|length }} ejarstier</p>{% endif %}
+            {% for path in p.paths %}
+              <div class="path">
+                {{ m.path_chain(path) }}
+                {% if p.paths|length > 1 %}
+                  <p class="path-product">Produkt <strong>{{ path.percentage|pct }}&nbsp;%</strong></p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </details>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% if total_persons > persons|length %}
+      <p class="empty">Viser {{ persons|length }} af {{ total_persons }} {{ "person" if total_persons == 1 else "personer" }} — de resterende er svagere knyttet.</p>
+    {% endif %}
+    {% else %}
+      <p class="empty">Ingen personer bag denne virksomhed i dette snapshot.</p>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+<footer class="colophon">
+  <p>Heimdal gengiver kilden <span class="mono">sg.vs.fo</span> som gemt lokalt. Ingen tal rettes,
+    ingen huller udfyldes.</p>
+</footer>
+{% endblock %}

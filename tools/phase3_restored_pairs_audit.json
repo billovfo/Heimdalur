@@ -1,0 +1,185 @@
+{
+ "restored_count": 171,
+ "audit": [
+  {
+   "pair_id": 23086,
+   "person_a": 1150,
+   "person_b": 9298,
+   "company": 98,
+   "context": "BOARD",
+   "class": "SAME_COMPANY_EVER",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 3 same-build observations"
+  },
+  {
+   "pair_id": 23092,
+   "person_a": 9153,
+   "person_b": 9298,
+   "company": 98,
+   "context": "BOARD",
+   "class": "UNKNOWN_TEMPORAL_RELATION",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 4 same-build observations"
+  },
+  {
+   "pair_id": 23140,
+   "person_a": 1795,
+   "person_b": 2417,
+   "company": 162,
+   "context": "BOARD",
+   "class": "UNKNOWN_TEMPORAL_RELATION",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 4 same-build observations"
+  },
+  {
+   "pair_id": 23146,
+   "person_a": 2417,
+   "person_b": 2565,
+   "company": 162,
+   "context": "BOARD",
+   "class": "UNKNOWN_TEMPORAL_RELATION",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 4 same-build observations"
+  },
+  {
+   "pair_id": 23147,
+   "person_a": 2417,
+   "person_b": 5457,
+   "company": 162,
+   "context": "BOARD",
+   "class": "SAME_COMPANY_EVER",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 3 same-build observations"
+  },
+  {
+   "pair_id": 23148,
+   "person_a": 2417,
+   "person_b": 5627,
+   "company": 162,
+   "context": "BOARD",
+   "class": "SAME_COMPANY_EVER",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 3 same-build observations"
+  },
+  {
+   "pair_id": 23175,
+   "person_a": 5571,
+   "person_b": 6651,
+   "company": 207,
+   "context": "MANAGEMENT",
+   "class": "UNKNOWN_TEMPORAL_RELATION",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 3 same-build observations"
+  },
+  {
+   "pair_id": 23210,
+   "person_a": 92,
+   "person_b": 6419,
+   "company": 273,
+   "context": "BOARD",
+   "class": "UNKNOWN_TEMPORAL_RELATION",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 2 same-build observations"
+  },
+  {
+   "pair_id": 23222,
+   "person_a": 5389,
+   "person_b": 6419,
+   "company": 273,
+   "context": "BOARD",
+   "class": "UNKNOWN_TEMPORAL_RELATION",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 2 same-build observations"
+  },
+  {
+   "pair_id": 23227,
+   "person_a": 5389,
+   "person_b": 6419,
+   "company": 273,
+   "context": "MANAGEMENT",
+   "class": "UNKNOWN_TEMPORAL_RELATION",
+   "contributing_source_families": [
+    "PDF_HISTORY"
+   ],
+   "contributing_authorities": [
+    "AUTHORITATIVE_CURRENT_GOVERNANCE",
+    "HISTORICAL_PDF_OBSERVATION"
+   ],
+   "stored_source_family": "PDF_HISTORY",
+   "stored_authority_class": null,
+   "row_valid_because": "single family stored verbatim; >1 authority class -> NULL (metadata incompleteness-by-design); fact reconstructed from 2 same-build observations"
+  }
+ ]
+}

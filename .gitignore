@@ -1,0 +1,75 @@
+__pycache__/
+*.pyc
+.worktrees/
+*.dump
+node_modules/
+tmp-pdf-recon/
+tmp-pilot-review/
+tmp-250val-review/
+tmp-100val-review/
+
+# session/temp artifacts
+/tmp-*
+/tmp_*
+*.pkl
+*.out
+/*.log
+/board_crop.png
+/recovered_*.txt
+/RESUME_FULLRUN.md
+/run-lighthouse.js
+/run-lh.mjs
+/extract_task.py
+/audit*.json
+/skraseting_*.json
+/heimdal_skraseting_*.json
+/registry_projection_*.json
+/full_run_*.json
+/pilot_*.json
+/completeness_*.json
+/consumer_shadow_comparison.json
+/historical_current_state_backtest.json
+/human_pdf_render_verification.json
+/projection_*.json
+/rd1_*.json
+/rd1_*.html
+/changed_parses.json
+/final_closure_decision.json
+# root temp artefacts untracked in audit 2026-11 J-6 (kept on disk, still in git history)
+/validation_metrics_run.json
+/validation_preflight.json
+/*_junit.xml
+/run_batch.sh
+tools/.dev-pgpass
+
+# Local evidence, archives and backups hold personal data and old DSNs: keep them
+# out of `git add -A` (audit 2026-11 J-4). Ignored, never deleted. The `!` lines
+# re-include every docs/ subdir and docs/*.json that is tracked.
+/archive/
+/backups/
+/docs/*.json
+/docs/*/
+!/docs/audit-2026-11/
+!/docs/sources/
+!/docs/HEIMDAL-PRODUCT-SOURCE-OF-TRUTH.summary.json
+!/docs/phase0_scale_measurement.json
+!/docs/phase1_ownership_cutover_result.json
+!/docs/phase2_analytics_build_result.json
+!/docs/phase3_analytics_build_result.json
+!/docs/phase4_portal_integration_result.json
+!/docs/phase5_graph_ux_result.json
+!/docs/post_phase5_completion_audit.json
+
+# Real-data evidence lives in ~/.local/share/heimdal/evidence/2026-11-audit/ (audit
+# 2026-11 I-5); keep re-generated copies out of git.
+/validation_250_results.json
+/validation_results.json
+/validation_250_temporal_sample.json
+/validation_250_manual_review.json
+/validation_changed_parses_gatefix.json
+/expansion_reparse_targets*.json
+/manual_geocode_*.tsv
+/tools/phase4_real_data_audit.json
+/docs/HEIMDAL-PDF-HISTORIK-10-RANDOM-DATA-AUDIT-v1.md
+/fixtures/pdfhist/
+

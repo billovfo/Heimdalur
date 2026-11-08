@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}{{ entity.display_name }} · Kildeinformation · Heimdal{% endblock %}
+
+{% block main %}
+
+<header class="card record">
+  <h1 class="record-name">{{ entity.display_name }}</h1>
+  <p class="record-badges">{{ m.kind_mark(entity.entity_kind) }}</p>
+  <nav class="crumbs" aria-label="Brødkrummer">
+    <a href="{{ entity_url(entity.entity_kind, entity.canonical_entity_id) }}">{{ entity.display_name }}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">Kildeinformation</span>
+  </nav>
+
+  <dl class="record-facts">
+    <div><dt>Registreringsnummer</dt>
+      <dd>{% if entity.registration_number %}<span class="mono">{{ entity.registration_number }}</span>
+          {% else %}<span class="absent">ikke registreret i kilden</span>{% endif %}</dd></div>
+    {% if entity.raw_type_token %}
+    <div><dt>Kildens type</dt><dd>{{ m.raw(entity.raw_type_token, none) }}</dd></div>{% endif %}
+    <div><dt>Status i beholdning</dt>
+      <dd>{% if entity.inventory_status %}{{ entity.inventory_status }}
+          {% else %}<span class="absent">ikke i virksomhedsregisteret</span>{% endif %}</dd></div>
+    <div><dt>ID</dt><dd><span class="mono">{{ entity.canonical_entity_id }}</span>
+      <span class="absent">kilden: {{ entity.source_entity_id }}</span></dd></div>
+  </dl>
+
+  {% if entity.entity_kind == 'PERSON' %}
+  <p class="section-lede">Heimdal skelner personer kun på kildens entity-ID, ikke på navn — ingen
+    sammenlægning af personer med samme navn er foretaget.</p>
+  {% endif %}
+</header>
+
+<section class="card section" id="hentning" aria-labelledby="h-hent">
+  <div class="section-head">
+    <h2 id="h-hent" class="section-title">Hentning og snapshot</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+  <div class="section-body">
+    {% if fetch_state == 'FETCH_FAILED' %}
+    <p class="snapshot snapshot-failed">
+      <span class="snap-cap">Aldrig hentet med succes</span>
+      Kildens oplysninger blev aldrig hentet for denne enhed.
+      {%- if provenance.last_fetched_at %} Seneste forsøg
+        <span class="mono">{{ provenance.last_fetched_at|dk }}</span>{% endif %}
+      {%- if provenance.last_http_status %} · HTTP
+        <span class="mono">{{ provenance.last_http_status }}</span>{% endif %}
+      {%- if provenance.last_error_category %} ·
+        <span class="mono">{{ provenance.last_error_category }}</span>{% endif %}.
+      Der findes intet lokalt snapshot.
+    </p>
+    {% elif fetch_state == 'FETCHED_OK' %}
+    <p class="snapshot">
+      <span class="snap-cap">Hentet fra kilden</span>
+      <span class="mono">{{ provenance.last_fetched_at|dk }}</span>
+      {%- if provenance.snapshot_sha256 %} · snapshot
+        <span class="mono">{{ provenance.snapshot_sha256[:12] }}</span>{% endif %}
+      {%- if provenance.last_http_status %} · HTTP
+        <span class="mono">{{ provenance.last_http_status }}</span>{% endif %}
+      {%- if provenance.last_error_category %} ·
+        <span class="mono">{{ provenance.last_error_category }}</span>{% endif %}
+    </p>
+    {% else %}
+    <p class="snapshot snapshot-blank">
+      <span class="snap-cap">Aldrig hentet direkte</span>
+      Denne enhed er aldrig selv blevet hentet fra kilden. Alt, der vises om den andre steder,
+      stammer fra andre opslag, hvor den optræder som modpart. Det er ikke en fejl.
+    </p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="card section" id="retningssikkerhed" aria-labelledby="h-retn">
+  <div class="section-head">
+    <h2 id="h-retn" class="section-title">Direkte ejerskab med retningssikkerhed</h2>
+    {{ m.stamp('kilde') }}
+  </div>
+  <div class="section-body">
+    {% if rel_rows %}
+    <div class="table-scroll">
+    <table class="ledger">
+      <caption class="sr-only">Direkte ejerskab for denne enhed, med kildens betegnelse og retningssikkerhed</caption>
+      <thead>
+        <tr>
+          <th scope="col">Modpart</th>
+          <th scope="col">Retning</th>
+          <th scope="col">Kildens betegnelse</th>
+          <th scope="col">Retningssikkerhed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rel_rows %}
+        <tr>
+          <td data-sort="{{ r.owned_name if r.owner_id == entity.canonical_entity_id else r.owner_name }}">
+            {% if r.owner_id == entity.canonical_entity_id %}
+              {{ m.entity_link(r.owned_id, r.owned_name, r.owned_kind) }}
+            {% else %}
+              {{ m.entity_link(r.owner_id, r.owner_name, r.owner_kind) }}
+            {% endif %}
+          </td>
+          <td>{{ 'ejer' if r.owner_id == entity.canonical_entity_id else 'ejet af' }}</td>
+          <td>{{ m.raw(r.raw_percentage_label or 'ingen procenttekst', none) }}</td>
+          <td>{{ m.confidence(r.semantic_direction_confidence) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    {% else %}
+    <p class="empty">Ingen registrerede andele i dette snapshot.</p>
+    {% endif %}
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>Heimdal gengiver kilden <span class="mono">sg.vs.fo</span> som gemt lokalt. Ingen tal rettes,
+    ingen huller udfyldes.</p>
+</footer>
+{% endblock %}

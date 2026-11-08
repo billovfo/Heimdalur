@@ -1,0 +1,8 @@
+{
+ "company_location_before": {
+  "rowcount": 4531,
+  "checksum_md5": "008170aeeae4abe1e24ca4940dc0716a"
+ },
+ "company_inventory_rows": 4531,
+ "method": "SELECT count(*), md5(string_agg(t::text,'|' ORDER BY t::text)) FROM company_location t"
+}

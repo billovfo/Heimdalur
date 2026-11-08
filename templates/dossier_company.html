@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+
+{% block title %}Due Diligence Dossier: {{ entity.display_name }} — Heimdal{% endblock %}
+
+{% block main %}
+<div class="dossier-container">
+  {{ m.report_header(entity, generated_at, 'HEIMDAL DUE DILIGENCE DOSSIER') }}
+  {# T3.3: primær fund-summary → eksport-actions → sektioner → appendiks #}
+  {{ m.report_summary_line(
+       m.pluralize(incoming.rows|length, 'registreret direkte ejerforhold', 'registrerede direkte ejerforhold')
+       ~ ' · ' ~ m.pluralize(roles.NEVND|length + roles.STJORN|length + roles.ANNAD|length,
+                             'registreret rolle', 'registrerede roller')) }}
+
+  <div class="dossier-actions no-print flex-between align-center mb-6">
+    <div>
+      <a href="/companies/{{ entity.canonical_entity_id }}" class="btn btn-outline">← Tilbage til selskabsprofil</a>
+    </div>
+    <div class="flex gap-2">
+      <button type="button" class="btn btn-primary" data-action="print"><svg class="icon-inline" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-printer"></use></svg> Udskriv Dossier (Print/PDF)</button>
+      <a href="/api/export/company/{{ entity.canonical_entity_id }}/owners.csv" class="btn btn-secondary">Download CSV</a>
+    </div>
+  </div>
+
+    <div class="stats-grid mt-4">
+      <div class="stat-card">
+        <div class="stat-label">Registreringsnummer</div>
+        <div class="stat-value text-base">{{ entity.registration_number or 'Ikke oplyst' }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Enhedstype</div>
+        <div class="stat-value text-base">{{ m.KIND.get(entity.entity_kind, m.KIND['UNKNOWN_ENTITY']).label }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Status i beholdning</div>
+        <div class="stat-value text-base">{{ entity.inventory_status|inventory_status }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Registrerede strukturforhold</div>
+        <div class="stat-value text-base">
+          {% if structure_status.has_observations %}
+            <span>{{ structure_status.observation_count }} observationer i snapshot</span>
+          {% else %}
+            <span>Ingen struktur-observationer i snapshot</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <details class="source-details">
+      <summary>Tekniske kildedetaljer</summary>
+      <dl class="kv-list">
+        <div><dt>Formbetegnelse (kilden)</dt><dd class="mono">{{ entity.raw_type_token or '—' }}</dd></div>
+        <div><dt>Beholdningsstatus (teknisk token)</dt><dd class="mono">{{ entity.inventory_status or '—' }}</dd></div>
+        <div><dt>Kanonisk ID</dt><dd class="mono">{{ entity.canonical_entity_id }}</dd></div>
+        <div><dt>Kilde-ID</dt><dd class="mono">{{ entity.source_entity_id }}</dd></div>
+      </dl>
+    </details>
+  </header>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>1. Executive Summary &amp; Compliance Vurdering</h2>
+    </div>
+    <div class="card-body">
+      <p>Dette dossier sammenfatter alle tilgængelige stamdata, ejerforhold, ledelsesroller og automatiserede compliance-kontroller for <strong>{{ entity.display_name }}</strong> fra Færøernes virksomhedsregister.</p>
+
+      <div class="alert alert-warning mt-3 text-sm" style="border-left: 3px solid var(--warning); background: rgba(245, 158, 11, 0.06); padding: 0.75rem;">
+        <strong>Kildeforbehold (Skráseting Føroya):</strong> Skráseting Føroya har selv oplyst, at det færøske selskabsregisters IT-system fortsat er under opbygning og ikke er færdigudviklet. Registrerede observationer er matematiske beregninger af kildedata og udgør ikke en juridisk vurdering af selskabets reelle lovlighed.
+      </div>
+
+      {% if structure_status.has_observations %}
+        <div class="alert alert-info mt-3">
+          <h4 class="font-bold mb-2">Registrerede strukturforhold:</h4>
+          <ul class="list-disc pl-5">
+            {% for obs in structure_status.observations %}
+              <li>{{ obs.observation_label }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% else %}
+        <div class="alert alert-info mt-3">
+          <p>Ingen struktur-observationer i snapshot.</p>
+        </div>
+      {% endif %}
+
+      {% if group_info and group_info.is_in_group %}
+        <div class="mt-4 p-3 bg-card border rounded">
+          <strong>Koncernstruktur:</strong> 
+          {% if group_info.is_ultimate_parent %}
+            Selskabet er det øverste moderselskab i koncernen.
+          {% else %}
+            Tilhører koncern under moderselskabet <strong>{{ group_info.ultimate_parent.display_name }}</strong> (Hierarkiniveau: {{ group_info.chain_depth }}).
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>2. Direkte ejerskab</h2>
+    </div>
+    <div class="card-body">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Ejer</th>
+            <th>Type</th>
+            <th>Andel</th>
+            <th>Kildens registrering</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in incoming.rows %}
+          <tr>
+            <td><strong>{{ r.owner_name }}</strong></td>
+            <td><span class="badge badge-info">{{ m.KIND.get(r.owner_kind, m.KIND['UNKNOWN_ENTITY']).label }}</span></td>
+            <td class="font-mono">
+              {% if r.parsed_percentage %}{{ r.parsed_percentage|pct }} %{% else %}<span class="text-muted">—</span>{% endif %}
+            </td>
+            <td class="text-sm text-muted">{{ r.raw_percentage_label }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center text-muted">Ingen direkte ejere registreret i snapshot.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="2">Samlet registreret direkte andel:</th>
+            <th class="font-mono">{{ incoming.sum.total|pct }} %</th>
+            <th>
+              {% set _sum = L.SUM_STATE_LABELS.get(incoming.sum.state, (incoming.sum.state, 'badge-warning')) %}
+              <span class="badge {{ _sum[1] }}">{{ _sum[0] }}</span>
+              {% if incoming.sum.state == 'OVER_100' %}
+                <div class="text-xs text-muted">{{ L.SUM_STATE_LABELS['OVER_100'][2] }}</div>
+              {% endif %}
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>3. Ejerayvirlit — Reelle Ejerkæder (Fysiske Personer)</h2>
+    </div>
+    <div class="card-body">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Person</th>
+            <th>Beregnet ejerandel</th>
+            <th>Ejerform</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in ejarayvirlit %}
+          <tr>
+            <td><strong>{{ p.person_name }}</strong></td>
+            <td class="font-mono">{{ p.best_pct|pct }} %</td>
+            <td><span class="badge badge-outline">{{ p.path_type }}</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="text-center text-muted">Ingen personlige ejere fundet via ejerkæder.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>4. Ledelse og bestyrelse</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <h3 class="font-bold text-sm mb-2">Ledelse</h3>
+          <ul class="list-disc pl-5">
+            {% for r in roles.STJORN %}
+              <li>{{ r.person_name }} — <span class="text-muted">{{ r.canonical_role_label|product_role }}</span></li>
+            {% else %}
+              <li class="text-muted">Ingen ledelsesmedlemmer registreret.</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-sm mb-2">Bestyrelse</h3>
+          <ul class="list-disc pl-5">
+            {% for r in roles.NEVND %}
+              <li>{{ r.person_name }} — <span class="text-muted">{{ r.canonical_role_label|product_role }}</span></li>
+            {% else %}
+              <li class="text-muted">Ingen bestyrelsesmedlemmer registreret.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card mb-6">
+    <div class="card-header">
+      <h2>5. Kontrolregistrering</h2>
+    </div>
+    <div class="card-body">
+      {% if control.state == 'REGISTERED_ACTORS' %}
+        <p>Registrerede reelle ejere / kontrolaktører:</p>
+        <ul class="list-disc pl-5 mt-2">
+          {% for act in control.actors %}
+            <li><strong>{{ act.actor_name }}</strong> ({{ act.actor_kind }}) — {{ act.raw_source_relation_label|product_role }}</li>
+          {% endfor %}
+        </ul>
+      {% elif control.state == 'NO_REGISTERED_CONTROL_ACTOR' %}
+        <p class="text-warning"><strong>Kildens status:</strong> {{ control.raw_status_label or 'Ongin Veruligur Eigari (O.V.E.)' }}</p>
+      {% else %}
+        <p class="text-muted">Ingen kontrolregistrering oplyst i kildens data for dette selskab.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  {{ m.report_provenance_appendix(entity, provenance) }}
+</div>
+{% endblock %}

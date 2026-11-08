@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block title %}Relationer mellem personer · Heimdal{% endblock %}
+
+{% block main %}
+{% set qs = '' %}
+<header class="page-header" style="padding:0 0 1rem;">
+  <h1>Relationer mellem personer</h1>
+  <p class="lead">Hvert personpars fælles virksomheder — udadtil tæller én relation pr. virksomhed.</p>
+</header>
+<section class="card section" id="par" aria-labelledby="h-par">
+  <div class="section-head">
+    <h2 id="h-par" class="section-title">Alle personpar</h2>
+    {{ m.stamp('beregnet') }}
+    <p class="section-lede">Hvert personpars fælles virksomheder — udadtil tæller én relation pr. virksomhed.</p>
+  </div>
+
+  <div class="section-body">
+    <p class="count">
+      <strong class="mono">{{ '{:,}'.format(total).replace(',', '.') }}</strong>
+      personpar · side {{ page }} af {{ pages }}
+    </p>
+    <div class="table-scroll">
+      <table class="ledger">
+        <caption class="sr-only">Relationer mellem personer</caption>
+        <thead>
+          <tr>
+            {{ m.sort_header('/persons/relationer', qs, {'sort': sort}, 'a', 'Person A') }}
+            {{ m.sort_header('/persons/relationer', qs, {'sort': sort}, 'b', 'Person B') }}
+            {{ m.sort_header('/persons/relationer', qs, {'sort': sort}, 'n', 'Fælles virksomheder') }}
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rows %}
+          <tr>
+            <td data-sort="{{ r.a_name }}">{{ m.entity_link(r.a_id, r.a_name, 'PERSON') }}</td>
+            <td data-sort="{{ r.b_name }}">{{ m.entity_link(r.b_id, r.b_name, 'PERSON') }}</td>
+            <td class="mono num">{{ r.n }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <nav class="pager" aria-label="Sideinddeling">
+      {% if page > 1 %}
+        <a href="/persons/relationer?page=1{{ '&sort=' ~ sort if sort != '-n' else '' }}">Første</a>
+        <a href="/persons/relationer?page={{ page - 1 }}{{ '&sort=' ~ sort if sort != '-n' else '' }}">Forrige</a>
+      {% else %}<span class="pager-off">Første</span><span class="pager-off">Forrige</span>{% endif %}
+      <span class="pager-at mono">{{ page }} / {{ pages }}</span>
+      {% if page < pages %}
+        <a href="/persons/relationer?page={{ page + 1 }}{{ '&sort=' ~ sort if sort != '-n' else '' }}">Næste</a>
+        <a href="/persons/relationer?page={{ pages }}{{ '&sort=' ~ sort if sort != '-n' else '' }}">Sidste</a>
+      {% else %}<span class="pager-off">Næste</span><span class="pager-off">Sidste</span>{% endif %}
+    </nav>
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>Heimdal gengiver kilden <span class="mono">sg.vs.fo</span> som gemt lokalt. Ingen tal rettes,
+    ingen huller udfyldes.</p>
+</footer>
+{% endblock %}

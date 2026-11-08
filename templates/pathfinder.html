@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+
+{% block title %}Find forbindelse — Heimdal{% endblock %}
+
+{% block main %}
+<section class="pathfinder-workspace mb-6" aria-labelledby="pathfinder-title">
+  <div class="pathfinder-intro">
+    <h1 id="pathfinder-title">Find forbindelse</h1>
+    <p class="lead">Find dokumenterede forbindelser mellem to personer eller virksomheder. Søgningen bruger kun registrerede navne og ID'er i det lokale snapshot.</p>
+  </div>
+
+  <datalist id="recent-entities"></datalist>
+  <form method="get" action="/find-forbindelse" class="pathfinder-form">
+    <div class="pathfinder-inputs-grid">
+      <div class="form-group pathfinder-field">
+        <label for="pf-from">Fra</label>
+        <input type="search" id="pf-from" name="from" value="{{ from_id or '' }}" placeholder="Person eller virksomhed" class="form-input" required list="recent-entities" autocomplete="off">
+        <div id="pf-from-choices" class="pathfinder-choices" hidden></div>
+        {% if from_entity %}
+          <div class="selected-entity-chip mt-2">
+            <span class="badge badge-info">{{ m.KIND.get(from_entity.entity_kind, m.KIND['UNKNOWN_ENTITY']).label }}</span>
+            <strong>{{ from_entity.display_name }}</strong>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="pathfinder-swap-row">
+        <button type="button" class="pathfinder-swap btn btn-secondary" id="pf-swap" aria-label="Byt retning mellem Fra og Til" title="Byt retning">⇄</button>
+      </div>
+
+      <div class="form-group pathfinder-field">
+        <label for="pf-to">Til</label>
+        <input type="search" id="pf-to" name="to" value="{{ to_id or '' }}" placeholder="Person eller virksomhed" class="form-input" required list="recent-entities" autocomplete="off">
+        <div id="pf-to-choices" class="pathfinder-choices" hidden></div>
+        {% if to_entity %}
+          <div class="selected-entity-chip mt-2">
+            <span class="badge badge-info">{{ m.KIND.get(to_entity.entity_kind, m.KIND['UNKNOWN_ENTITY']).label }}</span>
+            <strong>{{ to_entity.display_name }}</strong>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {# T4.6 (F-32): resolver-status + tvetydigheds-valg — UI-lovet navnesøgning
+       fungerer reelt (genbruger /api/search); tvetydige navne giver eksplicit valg,
+       aldrig gæt. Int-ID virker som i dag. #}
+    <p id="pf-resolver-status" role="status" aria-live="polite" class="text-sm pathfinder-status"></p>
+    <div class="pathfinder-actions">
+      <button type="submit" class="btn btn-primary pathfinder-submit">Find forbindelse</button>
+    </div>
+  </form>
+</section>
+
+{% if result %}
+<section class="card mb-6">
+  <div class="card-header flex-between">
+    <div>
+      <h2>Fundne forbindelser</h2>
+      <span class="muted">
+        {% if result.found %}
+          Korteste forbindelse: {{ result.length }} led · {{ result.path_count }} {{ 'sti' if result.path_count == 1 else 'stier' }} fundet
+        {% else %}
+          Ingen forbindelse fundet
+        {% endif %}
+      </span>
+    </div>
+  </div>
+
+  <div class="card-body">
+    {% if not result.found %}
+      <div class="alert alert-info">
+        {% if result.truncated %}
+        <p><strong>Søgningen blev for bred:</strong> {{ result.summary_explanation }}</p>
+        {% else %}
+        <p><strong>Ingen forbindelse fundet:</strong> Der blev ikke fundet nogen dokumenteret forbindelse mellem de to valgte enheder inden for fire led.</p>
+        {% endif %}
+      </div>
+    {% elif result.length == 0 %}
+      <div class="alert alert-info">
+        <p>Start- og målentiteten er identiske.</p>
+      </div>
+    {% else %}
+      {% if result.intermediary_hubs %}
+      <div class="alert alert-info mb-6" style="border-left: 4px solid var(--color-primary, #3b82f6); background: rgba(59, 130, 246, 0.06); padding: 1rem;">
+        <h4 class="font-bold text-sm mb-2 text-primary">Går igen i de fleste forbindelser:</h4>
+        <div class="flex gap-2 flex-wrap">
+          {% for hub in result.intermediary_hubs %}
+            <div class="chip" style="background:rgba(217,119,6,.15); border:1px solid #D97706;">
+              {% if hub.entity_kind == 'PERSON' %}
+                <a href="/persons/{{ hub.canonical_entity_id }}" class="entity-link entity-person"><strong>{{ hub.display_name }}</strong></a>
+              {% else %}
+                <a href="/companies/{{ hub.canonical_entity_id }}" class="entity-link entity-company"><strong>{{ hub.display_name }}</strong></a>
+              {% endif %}
+              <span class="text-xs text-muted ml-1">(indgår i {{ hub.path_count }} {{ 'sti' if hub.path_count == 1 else 'stier' }})</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div id="pathfinder-mini-graph" class="network-graph-container" style="height:280px;min-height:280px;margin-bottom:1rem;border:1px solid var(--rule);border-radius:var(--r-lg);display:block;" tabindex="0" role="application" aria-roledescription="netværkskort" aria-label="Mini-graf: forenede stier"></div>
+      <div class="flex gap-2 mb-3 flex-wrap align-center">
+        <button type="button" class="btn btn-secondary btn-sm" data-pf-action="png">PNG</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-pf-action="csv">CSV</button>
+        <span class="text-xs text-muted">Enheder der går igen i flere forbindelser er fremhævet — grafen er den primære visning; tabel og transskript står under detaljer</span>
+      </div>
+
+      {# T4.7 (F-31): grafen er den ENHOLDE primære sti-flade; sammenlignings-
+         tabel og transskript er disclosures — information bevares. #}
+      <details class="source-details mb-6">
+      <summary>Sammenligningstabel — vælg sti til fremhævelse i grafen</summary>
+      <div class="table-scroll mb-6">
+        <table class="ledger path-comparison-table">
+          <thead><tr><th scope="col" style="width:3rem;"></th><th scope="col">Forbindelse</th><th scope="col" class="num">Længde</th><th scope="col">Relationstyper</th><th scope="col" class="num">Undervejs</th></tr></thead>
+          <tbody>
+            {% for path in result.paths %}
+            {% set weakest = path|map(attribute='edge_label')|join(' / ') %}
+            <tr data-path-idx="{{ loop.index0 }}" class="pf-row" style="cursor:pointer;">
+              <td><input type="radio" name="pf-select" value="{{ loop.index0 }}" {% if loop.first %}checked{% endif %} aria-label="Vælg sti {{ loop.index }}"></td>
+              <td><span class="badge badge-primary">Sti {{ loop.index }}</span> <span class="text-xs text-muted">{{ path[0].from_node.display_name }} → {{ path[-1].to_node.display_name }}</span></td>
+              <td class="num">{{ path|length }} led</td>
+              <td class="text-xs">{{ path|map(attribute='edge_label')|join(', ') }}</td>
+              <td class="num">{{ path|length - 1 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      </details>
+
+      <details class="source-details mb-6">
+      <summary>Sti-transskript — alle led som tekst med links</summary>
+      <div class="path-chains-list">
+        {% for path in result.paths %}
+        <div class="path-chain-card mb-6">
+          <div class="path-chain-header">
+            <span class="badge badge-primary">Sti {{ loop.index }}</span>
+            <span class="text-sm text-muted">{{ path|length }} relationer</span>
+          </div>
+
+          <div class="chain-visual-track">
+            {% for hop in path %}
+              {# Render From Node if first hop #}
+              {% if loop.first %}
+              <div class="chain-node">
+                <div class="node-badge">{{ m.KIND.get(hop.from_node.entity_kind, m.KIND['UNKNOWN_ENTITY']).label }}</div>
+                {% if hop.from_node.entity_kind == 'PERSON' %}
+                  <a href="/persons/{{ hop.from_node.canonical_entity_id }}" class="node-title entity-person">{{ hop.from_node.display_name }}</a>
+                {% else %}
+                  <a href="/companies/{{ hop.from_node.canonical_entity_id }}" class="node-title entity-company">{{ hop.from_node.display_name }}</a>
+                {% endif %}
+                <div class="node-id">#{{ hop.from_node.canonical_entity_id }}</div>
+              </div>
+              {% endif %}
+
+              {# Render Edge Hop #}
+              <div class="chain-edge">
+                <div class="edge-line"></div>
+                <div class="edge-label-box" title="{{ hop.edge_type }}">
+                  <span class="edge-type-tag">{{ hop.edge_label }}</span>
+                </div>
+                <div class="edge-arrow">▶</div>
+              </div>
+
+              {# Render To Node #}
+              <div class="chain-node">
+                <div class="node-badge">{{ m.KIND.get(hop.to_node.entity_kind, m.KIND['UNKNOWN_ENTITY']).label }}</div>
+                {% if hop.to_node.entity_kind == 'PERSON' %}
+                  <a href="/persons/{{ hop.to_node.canonical_entity_id }}" class="node-title entity-person">{{ hop.to_node.display_name }}</a>
+                {% else %}
+                  <a href="/companies/{{ hop.to_node.canonical_entity_id }}" class="node-title entity-company">{{ hop.to_node.display_name }}</a>
+                {% endif %}
+                <div class="node-id">#{{ hop.to_node.canonical_entity_id }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      </details>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+{% if result and result.found and result.paths %}
+<script type="application/json" id="pf-data">{{ {'paths': result.paths, 'hubs': result.intermediary_hubs or []}|tojson }}</script>
+{% endif %}
+<script src="/static/graph_shell.js"></script>
+<script src="/static/graph_network.js"></script>
+<script src="/static/pathfinder.js"></script>
+
+{% endblock %}

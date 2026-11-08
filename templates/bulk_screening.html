@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+
+{% block title %}Bulk Screening — Heimdal{% endblock %}
+
+{% block main %}
+<header class="card record mb-6">
+  <div class="hero-row">
+    <div>
+      <h1 class="record-name"><svg class="icon-inline" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-file-text"></use></svg> Bulk Screening</h1>
+      <p class="record-badges mt-2">
+        <span class="hero-subtext">Slå en liste af virksomheder og personer op i snapshotet — med PEP-oplysninger og registerobservationer (op til 500).</span>
+      </p>
+    </div>
+  </div>
+</header>
+
+<div class="grid grid-cols-3 gap-6 mb-6">
+  <!-- INPUT FORM -->
+  <div class="card p-4 col-span-1">
+    <h2 class="text-base font-bold mb-2">1. Indsæt Enhedsliste</h2>
+    <p class="text-xs text-muted mb-4">Indtast registreringsnumre (f.eks. 3690, 5396), kilde-ID'er (kilde:1234) eller fulde navne — ét pr. linje, højst 200, eller træk en fil hertil:</p>
+
+    <div id="drop-zone" class="drop-zone mb-3 p-3 text-center border-2 border-dashed border-border rounded">
+      <div class="text-xs text-muted">Drop CSV/TXT her eller</div>
+      <input type="file" id="file-upload" accept=".csv,.txt" style="display: none;" aria-label="Upload CSV eller TXT fil med enhedsliste">
+      <button type="button" class="btn btn-xs btn-outline mt-2" data-bulk-action="pick-file">Vælg fil</button>
+    </div>
+
+    <label for="bulk-input" class="sr-only">Enhedsliste til opslag</label>
+    <textarea id="bulk-input" class="w-full font-mono text-sm p-3 rounded" style="min-height: 180px; background: var(--surface); border: 1px solid var(--rule); color: var(--text);" placeholder="3690&#10;5396" aria-label="Enhedsliste til opslag, én pr. linje"></textarea>
+
+    <div class="mt-4 flex flex-col gap-2">
+      <button type="button" class="btn btn-primary w-full" data-bulk-action="run"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-zap"></use></svg> Slå op i Snapshot</button>
+      <button type="button" class="btn btn-outline w-full text-xs" data-bulk-action="example">Vis eksempel</button>
+    </div>
+  </div>
+
+  <!-- BATCH RESULTS -->
+  <div class="card p-4 col-span-2">
+    <div class="flex-between align-center mb-4">
+      <div>
+        <h2 class="text-base font-bold">2. Opslagsresultat</h2>
+        <span id="bulk-count" class="text-xs text-muted">Ingen opslag kørt endnu</span>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" class="btn btn-secondary btn-sm" data-action="print"><svg class="icon-inline" width="16" height="16" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-printer"></use></svg> Udskriv</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-bulk-action="csv"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-download"></use></svg> Eksportér CSV</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-bulk-action="watch-all"><svg class="icon-inline" width="14" height="14" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-star"></use></svg> Overvåg alle</button>
+      </div>
+    </div>
+
+    <!-- Empty state — vises indtil et opslag har resultat (§53) -->
+    <div id="bulk-empty-state" class="empty-state">
+      <div class="empty-state-icon"><svg width="22" height="22" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-file-text"></use></svg></div>
+      <p class="empty-state-title">Ingen opslag kørt endnu</p>
+      <p class="empty-state-body">Tilføj virksomheder eller personer i feltet til venstre og vælg «Slå op». Resultatet vises her.</p>
+    </div>
+
+    <!-- EXECUTIVE KPI SUMMARY STRIP -->
+    <div id="bulk-kpi-bar" class="grid grid-cols-3 gap-3 mb-4" style="display: none;">
+      <div class="stat-card kpi-box p-2 bg-surface rounded border border-border text-center">
+        <div class="text-xs text-muted font-bold">Total opslag</div>
+        <div id="kpi-total" class="text-lg font-bold">0</div>
+      </div>
+      <div class="stat-card kpi-box p-2 bg-surface rounded border border-border text-center">
+        <div class="text-xs text-muted font-bold">Med struktur-observationer</div>
+        <div id="kpi-obs" class="text-lg font-bold">0</div>
+      </div>
+      <div class="stat-card kpi-box p-2 bg-surface rounded border border-border text-center">
+        <div class="text-xs text-muted font-bold"><svg class="icon-inline" width="12" height="12" aria-hidden="true"><use href="/static/icons/lucide.svg#lucide-landmark"></use></svg> PEP-oplysninger</div>
+        <div id="kpi-pep" class="text-lg font-bold">0</div>
+      </div>
+    </div>
+
+    <!-- FILTER CHIPS -->
+    <div id="bulk-filters-wrap" class="flex gap-2 mb-3 align-center flex-wrap" style="display: none;">
+      <span class="text-xs font-bold text-muted">Filter:</span>
+      <button type="button" class="btn btn-xs filter-chip btn-primary" data-bulk-filter="ALL">Alle (<span id="count-all">0</span>)</button>
+      <button type="button" class="btn btn-xs filter-chip btn-outline" data-bulk-filter="OBS">Med struktur-observationer</button>
+      <button type="button" class="btn btn-xs filter-chip btn-outline" data-bulk-filter="PEP">Med PEP-oplysninger</button>
+    </div>
+
+    <div class="skeleton-ledger" id="bulk-skeleton" aria-busy="true" aria-hidden="true" style="display:none">
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+    </div>
+    <div class="table-scroll" id="bulk-result-wrap" style="display:none;">
+      <table class="ledger" id="bulk-table">
+        <thead>
+          <tr>
+            <th scope="col">Forespørgsel</th>
+            <th scope="col">Matchet Enhed</th>
+            <th scope="col">PEP Status</th>
+            <th scope="col" class="num">Struktur-observationer</th>
+            <th scope="col">Handling</th>
+          </tr>
+        </thead>
+        <tbody id="bulk-results-body">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="/static/bulk_screening.js"></script>
+{% endblock %}
