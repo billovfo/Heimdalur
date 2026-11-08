@@ -1,0 +1,16 @@
+Copyright (c) 2026 the Heimdalur author. All rights reserved.
+
+This repository is published so that it can be read. No license is granted.
+Without prior written permission from the copyright holder you may not use,
+copy, modify, merge, publish, distribute, sublicense or sell this software or
+its documentation, in whole or in part.
+
+Viewing and forking on GitHub are allowed only as far as the GitHub Terms of
+Service require for public repositories.
+
+Not covered by this notice:
+- Data from the public Faroese registers in this repository. It remains subject
+  to the terms of its sources.
+- Third-party components, which keep their own licenses: Leaflet in
+  static/vendor/leaflet (BSD 2-Clause, see static/vendor/leaflet/LICENSE) and
+  the fonts in static/fonts (SIL Open Font License 1.1, see static/fonts/OFL-*.txt).
