@@ -21,10 +21,15 @@ Chrome is unavailable — the owner acceptance flow still requires it.
 import os
 import re
 import sys
+from html.parser import HTMLParser
 
-os.environ.setdefault("PDF_HISTORY_UI_ENABLED", "true")
-os.environ.setdefault("REGISTRY_ANALYTICS_ENABLED", "1")
-os.environ.setdefault("REGISTRY_ANALYTICS_GRAPH_ENABLED", "1")
+# X5b NIT: tools/test_env.sh pins the flags false; this acceptance run needs
+# them on (the old setdefault inherited the caller's shell instead).
+# X5c: integration is the fourth flag it needs, for the Skráseting routes.
+os.environ["PDF_HISTORY_INTEGRATION_ENABLED"] = "true"
+os.environ["PDF_HISTORY_UI_ENABLED"] = "true"
+os.environ["REGISTRY_ANALYTICS_ENABLED"] = "1"
+os.environ["REGISTRY_ANALYTICS_GRAPH_ENABLED"] = "1"
 os.environ.setdefault("HEIMDAL_READ_DB", qa_dsn())
 
 from heimdal.app import app  # noqa: E402
@@ -47,6 +52,53 @@ def visible(html):
     html = re.sub(r"<[^>]+>", " ", html)
     html = re.sub(r"\s+", " ", html)
     return html
+
+
+class _ConstellationFamilyCounter(HTMLParser):
+    """Count constellation family cards by element, split into headline / folded.
+
+    A family card is an `<li>` whose class token list contains both
+    `constellation-card` and `constellation-family`. Cards inside the
+    `<details class="analytics-more">` disclosure are the "Vis flere
+    konstellations-familier" remainder: they are fully rendered on purpose
+    (UX consolidation R1 — nothing is lost, §33), but they are not headlines
+    and must not count against the cap (§87/§124).
+    """
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self._more_details = []  # one bool per open <details>: is analytics-more
+        self.headlines = 0
+        self.folded = 0
+
+    def handle_starttag(self, tag, attrs):
+        classes = (dict(attrs).get("class") or "").split()
+        if tag == "details":
+            self._more_details.append("analytics-more" in classes)
+        elif tag == "li" and {"constellation-card",
+                              "constellation-family"} <= set(classes):
+            if any(self._more_details):
+                self.folded += 1
+            else:
+                self.headlines += 1
+
+    def handle_endtag(self, tag):
+        if tag == "details" and self._more_details:
+            self._more_details.pop()
+
+
+def constellation_family_counts(html):
+    """(headline, folded) constellation-family card counts for one page.
+
+    Exact element counting: removes the old substring over-count, where each
+    folded family card inside the "Vis flere" disclosure (build 15 on
+    /companies/9667: 6 of them) inflated `html.count("constellation-family")`
+    to 14 even though exactly 8 headlines were rendered.
+    """
+    counter = _ConstellationFamilyCounter()
+    counter.feed(html)
+    counter.close()
+    return counter.headlines, counter.folded
 
 
 RAW_ENUM = re.compile(
@@ -137,14 +189,17 @@ def layer_a():
             check("same-day disclaimer logic present in template",
                   "samme dag kan ikke fastslås" in open("templates/company_history.html").read())
 
-        # §87/§124 constellation DOM noise: families collapsed, capped headlines
+        # §87/§124 constellation DOM noise: families collapsed, capped headlines.
+        # Only top-level family cards are headlines; the rest live fully
+        # rendered inside <details class="analytics-more"> ("Vis flere").
         html = pages["/companies/9667"]
-        fam_cards = html.count("constellation-family")
+        fam_headlines, fam_folded = constellation_family_counts(html)
         sub_details = html.count("family-subgroups")
         check("constellation families collapse (subgroups inside <details>)",
-              sub_details > 0, f"families={fam_cards} subgroup-details={sub_details}")
+              sub_details > 0,
+              f"headlines={fam_headlines} folded={fam_folded} subgroup-details={sub_details}")
         check("constellation headlines capped at 8",
-              fam_cards <= 8, str(fam_cards))
+              fam_headlines <= 8, f"headlines={fam_headlines} (folded={fam_folded})")
 
         # §5 reading width classes present on descriptive blocks
         check("reading-width applied (css + template)",

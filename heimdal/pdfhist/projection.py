@@ -29,6 +29,7 @@ from datetime import date
 import psycopg
 
 from .flags import integration_enabled, ui_enabled, ui_exposure_allowed  # noqa: F401
+from .parse import FOUNDING_ORIGIN
 from .temporal import governing_date
 
 CODE_VERSION = "registry-projection-v1"
@@ -96,7 +97,7 @@ SNAPSHOT_FIELDS = (
 HISTORY_EVENT_TYPES = (
     "NAME_CHANGE", "ADDRESS_CHANGE", "CAPITAL_CHANGE", "PURPOSE_CHANGE",
     "SIGNING_RULE_CHANGE", "BOARD_CHANGE", "MANAGEMENT_CHANGE",
-    "AUDITOR_CHANGE", "ARTICLES_CHANGE", "OTHER_CHANGE",
+    "AUDITOR_CHANGE", "ARTICLES_CHANGE", "OTHER_CHANGE", "MERGER",
 )
 MEMBERSHIP_TYPES = {"BOARD_CHANGE", "MANAGEMENT_CHANGE", "AUDITOR_CHANGE"}
 MEMBERSHIP_ROLE_TYPE = {"BOARD_CHANGE": "BOARD",
@@ -169,6 +170,54 @@ def _norm_text(x) -> str:
     return unicodedata.normalize("NFC", str(x or "")).strip().lower()
 
 
+def merger_counterpart(change: dict, company_regnr=None) -> dict | None:
+    """Counterpart of a MERGER change: 'counterpart' when the source names it,
+    else the party on the OTHER side of the notice's own registration number.
+    Side B is the register's counterpart convention when the company cannot be
+    matched to a party; never infer beyond the source parties."""
+    if change.get("type") != "MERGER" \
+            and change.get("event_type") != "MERGER":
+        return None
+    if change.get("counterpart"):
+        return change["counterpart"]
+    parties = change.get("parties") or []
+    if not parties:
+        return None
+    # Consumer payloads carry the projected entity_key (the counterpart's
+    # registration number); select that party when it is unambiguous.
+    key = change.get("entity_key")
+    if key is not None:
+        match = next((p for p in parties
+                      if _norm_regnr(p.get("registration_number"))
+                      == _norm_regnr(key)), None)
+        if match is not None:
+            return match
+    own = _norm_regnr(company_regnr)
+    others = [p for p in parties
+              if _norm_regnr(p.get("registration_number")) != own]
+    if len(others) == 1:
+        return others[0]
+    by_side = next((p for p in parties if p.get("side") == "B"), None)
+    return by_side or (others[0] if others else parties[-1])
+
+
+def _change_entity_key(change: dict, company_regnr=None) -> str:
+    """Semantic entity key for history dedupe/insertion.
+
+    MERGER: the counterpart's registration number (the other party's for a
+    plan). Every other change keeps the pre-existing entity/raw fallback.
+    """
+    if change.get("type") == "MERGER":
+        counterpart = merger_counterpart(change, company_regnr) or {}
+        key = _norm_text(counterpart.get("registration_number")) \
+            or _norm_text(counterpart.get("name"))
+        if key:
+            return key
+    return _norm_text(change.get("entity_normalized") or change.get("entity")) \
+        or hashlib.md5((change.get("raw_text") or "").encode(
+            "utf-8")).hexdigest()
+
+
 def _text(x):
     return str(x) if x is not None else None
 
@@ -221,8 +270,17 @@ def _warn(conn, run_id, company_id, code, severity, details,
 # ---------------------------------------------------------------------------
 # population queries (evidence layer is READ ONLY here)
 
-def _latest_snapshots(conn, source_collection_run_id):
-    return conn.execute("""
+def _latest_snapshots(conn, source_collection_run_id, parser_version=None):
+    # The view emits one row per parser version (migration.sql): pin both the
+    # parse and its source view row so versions can never be mixed. The None
+    # path stays byte-identical to the pre-pin SQL.
+    parser_filter = ("\n             AND p.parser_version = %s"
+                     "\n             AND s.parser_version = p.parser_version"
+                     if parser_version is not None else "")
+    params = [source_collection_run_id]
+    if parser_version is not None:
+        params.append(parser_version)
+    return conn.execute(f"""
         SELECT DISTINCT ON (s.company_id)
                s.company_id, s.valid_from, p.id, p.structured_data,
                p.parser_version, o.document_id, o.id, s.sha256
@@ -231,19 +289,30 @@ def _latest_snapshots(conn, source_collection_run_id):
              AND o.collection_run_id = %s
         JOIN pdf_parse_result p ON p.document_observation_id = o.id
              AND p.document_kind = 'COMPANY_SNAPSHOT'
-             AND p.parse_status = 'PARSED'
+             AND p.parse_status = 'PARSED'{parser_filter}
         JOIN pdf_document d ON d.id = o.document_id AND d.pdf_type = 'FelagPdf'
         ORDER BY s.company_id, s.valid_from DESC, o.id DESC  -- D-10: newest
-        """, (source_collection_run_id,)).fetchall()
+        """, params).fetchall()
 
 
-def _history_events(conn, source_collection_run_id):
+def _history_events(conn, source_collection_run_id, parser_version=None):
     """VERIFIED-attributed Lysing change events for one collection run.
 
     Hard invariant (task section 46): a contributor enters the projection only
     if its parse registration_number normalizes equal to the verified source
     row's row_skrasnr. Anything else is excluded and counted, never inserted.
     """
+    # Add the version filter only when pinned; appending it to the preceding
+    # clause keeps the None path byte-identical to the pre-pin SQL.
+    parser_filter = ("\n             AND p.parser_version = %s"
+                     if parser_version is not None else "")
+    run_filter = ("WHERE o.collection_run_id = %s"
+                  if source_collection_run_id is not None else "")
+    params = []
+    if parser_version is not None:
+        params.append(parser_version)
+    if source_collection_run_id is not None:
+        params.append(source_collection_run_id)
     sql = """
         SELECT ev.id, ev.company_id, ev.row_skrasnr, ev.source_event_date,
                ev.raw_text, d.id AS document_id, o.id AS observation_id,
@@ -255,15 +324,13 @@ def _history_events(conn, source_collection_run_id):
         JOIN pdf_document_observation o ON o.document_id = d.id
         JOIN pdf_parse_result p ON p.document_observation_id = o.id
              AND p.document_kind = 'REGISTRATION_NOTICE'
-             AND p.parse_status = 'PARSED'
+             AND p.parse_status = 'PARSED'{parser_filter}
         {run_filter}
         ORDER BY ev.id, p.id
         """
     rows = conn.execute(
-        sql.format(run_filter="WHERE o.collection_run_id = %s"
-                   if source_collection_run_id is not None else ""),
-        (source_collection_run_id,) if source_collection_run_id is not None
-        else None).fetchall()
+        sql.format(parser_filter=parser_filter, run_filter=run_filter),
+        params or None).fetchall()
     verified, rejected = [], 0
     for (ev_id, company_id, skrasnr, sed, ev_raw, doc_id, obs_id, parse_id,
          sd, run_id) in rows:
@@ -318,7 +385,7 @@ def _semantic_hash(sd) -> str:
                                   default=str).encode("utf-8")).hexdigest()
 
 
-def latest_snapshots_cross_run(conn):
+def latest_snapshots_cross_run(conn, parser_version=None):
     """Latest VERIFIED authoritative Felag snapshot per company ACROSS runs.
 
     Selection policy (v2 task sections 2/4/5/6):
@@ -336,7 +403,11 @@ def latest_snapshots_cross_run(conn):
     Returns (selection_rows, stats) with rows shaped like
     _latest_snapshots so _build_content can consume them unchanged.
     """
-    cand = conn.execute("""
+    # Pin both the parse and its version-aware view row (see _latest_snapshots).
+    parser_filter = ("\n             AND p.parser_version = %s"
+                     "\n             AND s.parser_version = p.parser_version"
+                     if parser_version is not None else "")
+    cand = conn.execute(f"""
         SELECT s.company_id, s.valid_from, p.id, p.structured_data,
                p.parser_version, o.document_id, o.id, s.sha256,
                o.collection_run_id
@@ -344,11 +415,11 @@ def latest_snapshots_cross_run(conn):
         JOIN pdf_document_observation o ON o.id = s.document_observation_id
         JOIN pdf_parse_result p ON p.document_observation_id = o.id
              AND p.document_kind = 'COMPANY_SNAPSHOT'
-             AND p.parse_status = 'PARSED'
+             AND p.parse_status = 'PARSED'{parser_filter}
         JOIN pdf_document d ON d.id = o.document_id
              AND d.pdf_type = 'FelagPdf'
         ORDER BY s.company_id, s.valid_from, o.id
-        """).fetchall()
+        """, (parser_version,) if parser_version is not None else None).fetchall()
     # VERIFIED attribution gate per candidate document (task v2 section 4)
     linked = conn.execute("""
         SELECT sed.document_id, e.row_skrasnr
@@ -413,7 +484,7 @@ def latest_snapshots_cross_run(conn):
     return rows, stats
 
 
-def _history_events_cross_run(conn):
+def _history_events_cross_run(conn, parser_version=None):
     """VERIFIED Lysing events across ALL runs with semantic dedupe.
 
     Same attribution gate as the run-scoped variant. The same logical source
@@ -423,7 +494,8 @@ def _history_events_cross_run(conn):
     (lowest source_event_id, then document/parse id) and records the dropped
     duplicates' provenance so no provenance is lost.
     """
-    verified, rejected = _history_events(conn, None)
+    verified, rejected = _history_events(conn, None,
+                                         parser_version=parser_version)
     seen: dict[tuple, dict] = {}
     duplicates: list[dict] = []
     for e in sorted(verified, key=lambda x: (x["source_event_id"],
@@ -445,10 +517,7 @@ def _history_events_cross_run(conn):
             etype, action = ch.get("type"), ch.get("action")
             if etype not in HISTORY_EVENT_TYPES or not action:
                 continue
-            entity_key = _norm_text(ch.get("entity_normalized")
-                                    or ch.get("entity")) \
-                or hashlib.md5((ch.get("raw_text") or "").encode(
-                    "utf-8")).hexdigest()
+            entity_key = _change_entity_key(ch, e.get("row_skrasnr"))
             gov = governing_date(ch, e["source_event_date"])
             key = (e["company_id"], etype, action, entity_key, str(gov))
             if key not in seen:
@@ -477,7 +546,8 @@ def build_shadow(conn, *, projection_version: str,
                  source_collection_run_id=None,
                  cross_run: bool = False,
                  code_version: str = CODE_VERSION,
-                 notes: str = "") -> int:
+                 notes: str = "",
+                 parser_version=None) -> int:
     """Build a NEW projection generation with status SHADOW.
 
     cross_run=True selects the latest VERIFIED snapshot per company across
@@ -495,7 +565,10 @@ def build_shadow(conn, *, projection_version: str,
          notes))
     run_id = cur.fetchone()[0]
     try:
-        metrics = _build_content(conn, run_id, stored_run, cross_run=cross_run)
+        metrics = _build_content(conn, run_id, stored_run, cross_run=cross_run,
+                                 parser_version=parser_version)
+        if parser_version is not None:
+            metrics["source_parser_version"] = parser_version
         content = content_hash(conn, run_id)
         conn.execute(
             "UPDATE registry_projection.projection_run SET status='SHADOW', "
@@ -527,10 +600,12 @@ def build_shadow(conn, *, projection_version: str,
 
 
 def _build_content(conn, run_id: int, source_collection_run_id,
-                   cross_run: bool = False) -> dict:
+                   cross_run: bool = False, parser_version=None) -> dict:
     if cross_run:
-        snaps, snap_stats = latest_snapshots_cross_run(conn)
-        events, rejected, event_duplicates = _history_events_cross_run(conn)
+        snaps, snap_stats = latest_snapshots_cross_run(
+            conn, parser_version=parser_version)
+        events, rejected, event_duplicates = _history_events_cross_run(
+            conn, parser_version=parser_version)
         for conflict in snap_stats["snapshot_conflicts"]:
             _warn(conn, run_id, conflict["company_id"],
                   "SNAPSHOT_CONFLICT", "ERROR",
@@ -565,8 +640,10 @@ def _build_content(conn, run_id: int, source_collection_run_id,
              "companies_selected_from_snapshots":
                  snap_stats["companies_selected"]}
     else:
-        snaps = _latest_snapshots(conn, source_collection_run_id)
-        events, rejected = _history_events(conn, source_collection_run_id)
+        snaps = _latest_snapshots(conn, source_collection_run_id,
+                                  parser_version=parser_version)
+        events, rejected = _history_events(conn, source_collection_run_id,
+                                           parser_version=parser_version)
         event_duplicates = []
         snap_stats = None
         m = {"companies": 0, "fields": 0, "history_events": 0,
@@ -708,9 +785,7 @@ def _build_content(conn, run_id: int, source_collection_run_id,
             if etype not in HISTORY_EVENT_TYPES or not action:
                 continue
             entity = ch.get("entity")
-            entity_key = _norm_text(ch.get("entity_normalized") or entity) \
-                or hashlib.md5((ch.get("raw_text") or "").encode(
-                    "utf-8")).hexdigest()
+            entity_key = _change_entity_key(ch, e.get("row_skrasnr"))
             key = (e["source_event_id"], etype, action, entity_key,
                    e["document_id"])
             if key in seen_pairs:
@@ -718,6 +793,25 @@ def _build_content(conn, run_id: int, source_collection_run_id,
             seen_pairs.add(key)
             dates = [ch.get("effective_date"), ch.get("registration_date"),
                      ch.get("notice_date"), e["source_event_date"]]
+            # E2: a founding date is the source's own first-state date, not a
+            # later notice's artifact (lys_5053: 1977) - never warn on it.
+            artifact_dates = dates
+            if ch.get("origin") == FOUNDING_ORIGIN:
+                founding_day = _to_date(ch.get("effective_date"))
+                artifact_dates = [d for d in dates
+                                  if _to_date(d) != founding_day]
+            # E2: carry the parser's origin marker (e.g. FOUNDING) in the
+            # existing value_json column - no DDL, no migration change.
+            value = {"entity": entity, "raw_text": ch.get("raw_text")}
+            if ch.get("origin"):
+                value["origin"] = ch["origin"]
+            if etype == "MERGER":
+                # counterpart evidence only; a MERGER is not a membership.
+                value = {"raw_text": ch.get("raw_text")}
+                if ch.get("parties") is not None:
+                    value["parties"] = ch["parties"]
+                if ch.get("counterpart") is not None:
+                    value["counterpart"] = ch["counterpart"]
             conn.execute(
                 "INSERT INTO registry_projection.company_history_event "
                 "(projection_run_id, company_id, registration_number, "
@@ -728,15 +822,14 @@ def _build_content(conn, run_id: int, source_collection_run_id,
                 "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,"
                 "'HISTORICAL_EVENT_ONLY')",
                 (run_id, e["company_id"], e["row_skrasnr"], etype, action,
-                 entity_key, _dump({"entity": entity, "raw_text":
-                                    ch.get("raw_text")}),
+                 entity_key, _dump(value),
                  _to_date(ch.get("effective_date")),
                  _to_date(ch.get("registration_date")),
                  _to_date(ch.get("notice_date")), e["source_event_date"],
                  e["source_event_id"], e["document_id"], e["observation_id"],
                  e["parse_id"], ch.get("raw_text") or e["source_raw"]))
             m["history_events"] += 1
-            if artifact := any(_is_artifact(d) for d in dates):
+            if artifact := any(_is_artifact(d) for d in artifact_dates):
                 _warn(conn, run_id, e["company_id"], "SOURCE_DATE_ARTIFACT",
                       "WARN",
                       {"event_type": etype, "action": action,

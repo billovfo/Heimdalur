@@ -38,7 +38,8 @@ from heimdal.pdfhist import entity_links as el  # noqa: E402
 from heimdal.pdfhist.entity_links import (  # noqa: E402
     match_company, match_person, normalize_person_name)
 
-UI_ENV = {"PDF_HISTORY_UI_ENABLED": "true"}
+UI_ENV = {"PDF_HISTORY_UI_ENABLED": "true",
+          "PDF_HISTORY_INTEGRATION_ENABLED": "true"}
 
 KNOWN_5534 = 5988   # Betri Banki
 KNOWN_5711 = 8811   # Krittika u. tvingsilsavtøku

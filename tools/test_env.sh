@@ -22,4 +22,11 @@ export HEIMDAL_PG_DSN=$_pg/$HEIMDAL_TEST_CLONE
 export HEIMDAL_DB=$_pg/$HEIMDAL_TEST_CLONE
 export HEIMDAL_PDFHIST_PROJECTION_DSN=$_pg/$HEIMDAL_TEST_DB
 export HEIMDAL_PDFHIST_DB=$_pg/$HEIMDAL_TEST_DB
+# X5b NIT (review #13): dev_env.sh defaults these to true since X5. The test env
+# pins them off so a gate run never depends on the caller's shell; tests that
+# need a flag monkeypatch.setenv it themselves.
+export PDF_HISTORY_INTEGRATION_ENABLED=false
+export PDF_HISTORY_UI_ENABLED=false
+export REGISTRY_ANALYTICS_ENABLED=false
+export REGISTRY_ANALYTICS_GRAPH_ENABLED=false
 unset HEIMDAL_PDFHIST_TEST_DB HEIMDAL_ALLOW_LIVE _pg

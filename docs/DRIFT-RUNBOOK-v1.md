@@ -110,3 +110,29 @@ this on 2026-11-06 as a documented external dependency, under the OSM tile usage
 - Each Geo-Kort view sends the user's IP address to the OSM tile servers (12–16 tiles, no
   prefetch). The map data itself is local.
 - An offline basemap would remove this request. It is not planned.
+
+## 10. Public CI (Heimdalur)
+
+GitHub Actions runs only in the public snapshot, Heimdalur: the repo is public,
+Actions is enabled there, and the run is free. **The private repo has Actions disabled**, so
+no workflow may run there.
+
+`.github/workflows/ci.yml` starts an `ubuntu-latest` job with Python 3.14 and a `postgres:18`
+service, installs `requirements.txt`, and calls `bash tools/ci_public.sh`. The job carries a
+job-level `if:` that names the public repository exactly, so it cannot run in a private fork
+even if Actions is enabled there. That script runs the public subset of `tools/gate.sh` in its
+inline test env: offline tests, the phase scripts, the isolated tests that build their own DB
+from the repo migrations, and the audit checks that need only the repo and that DB. It never
+needs the fixtures, a heimdal clone, a dump, the baseline projection or anything under an
+export-ignored path; those parts SKIP with a reason, and the run prints every gate SKIP row,
+every pytest-level skip (`-rs`) and every check-internal `SKIP ...` line.
+
+Credentials come from the environment only: `PGHOST`/`PGPASSWORD`, or one
+`HEIMDAL_CI_PG=postgresql://user:<pw>@host:port/db` (only the authority is used; the database
+path and query are ignored). The script never reads a passfile. The gate's test DB ends in
+`_ci`; auxiliary DBs (`review_e_check_test`, `<test>_raw`) are dropped by their checks/tests.
+To check a local export: `PGHOST=127.0.0.1 PGPASSWORD=<pw> tools/ci_public.sh` from the export
+directory. A raw `tools/export_public.sh` snapshot has no `.git`, so the script first
+initialises a throwaway repo inside that directory: `check_j` and `test_export_public.py` need
+git metadata.
+

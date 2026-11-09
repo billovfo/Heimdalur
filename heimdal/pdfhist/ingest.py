@@ -26,7 +26,7 @@ from psycopg.types.json import Json
 from .extract import TextExtractionError, extract_text
 from .parse import FELAG_PDF_TYPE, LYSING_PDF_TYPE, parse_felag_pdf, parse_lysing_pdf
 
-PARSER_VERSION_DEFAULT = "1"
+PARSER_VERSION_DEFAULT = "2"
 
 
 def _parser_for(pdf_type: str, parser_fn) :
@@ -37,6 +37,22 @@ def _parser_for(pdf_type: str, parser_fn) :
     if pdf_type == LYSING_PDF_TYPE:
         return parse_lysing_pdf
     raise ValueError(f"no parser for pdf_type {pdf_type!r}")
+
+
+def parse_extracted_text(parser, text: str):
+    """Parse already-extracted text; shared by ingest and the offline reparse.
+
+    Returns (struct, parse_status, needs_review, review_reason). Parser
+    exceptions propagate: ingest keeps its existing fail-loud behaviour and
+    reparse counts the observation as skipped.
+    """
+    struct = parser(text)
+    parse_status = "PARSED"
+    if struct.get("needs_review"):
+        parse_status = "REVIEW"
+    needs_review = bool(struct.get("needs_review"))
+    review_reason = ",".join(struct.get("review_reasons") or []) or None
+    return struct, parse_status, needs_review, review_reason
 
 
 def _cell_role(pdf_type: str) -> str:
@@ -179,20 +195,18 @@ def ingest_pdf_observation(
     # -- 6. extraction + parse; failure never loses the document -------------
     try:
         extracted_text = extract_text(pdf_bytes)
-        struct = parser(extracted_text)
-        raw_text = extracted_text
-        parse_status = "PARSED"
-        if struct.get("needs_review"):
-            parse_status = "REVIEW"
     except TextExtractionError as error:
         struct = {"document_kind": "OTHER", "needs_review": True,
                   "review_reasons": [error.review_reason]}
         raw_text = ""
         extracted_text = ""
         parse_status = "REVIEW"
-
-    needs_review = bool(struct.get("needs_review"))
-    review_reason = ",".join(struct.get("review_reasons") or []) or None
+        needs_review = bool(struct.get("needs_review"))
+        review_reason = ",".join(struct.get("review_reasons") or []) or None
+    else:
+        raw_text = extracted_text
+        struct, parse_status, needs_review, review_reason = \
+            parse_extracted_text(parser, extracted_text)
     snapshot_date = _snapshot_date_of(struct)
 
     # materialize extracted text + snapshot date on the observation (also

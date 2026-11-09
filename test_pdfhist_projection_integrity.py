@@ -143,8 +143,9 @@ def _canon(dsn):
 
 
 def _frozen(tmp_path, conn, run, canonical_person_id):
-    role, sha, sd = conn.execute(
-        "SELECT pr.source_event_id, o.sha256, p.structured_data FROM "
+    role, sha, sd, person_name = conn.execute(
+        "SELECT pr.source_event_id, o.sha256, p.structured_data, "
+        "pr.person_name FROM "
         "registry_projection.company_person_role pr JOIN "
         "pdf_document_observation o ON o.id = pr.source_observation_id JOIN "
         "pdf_parse_result p ON p.id = pr.source_parse_result_id WHERE "
@@ -155,6 +156,7 @@ def _frozen(tmp_path, conn, run, canonical_person_id):
     path = tmp_path / "h1_frozen.json"
     path.write_text(json.dumps([{
         "immutable_source_key": cov_source_key(sha, role, occ),
+        "person_name": person_name,
         "canonical_person_id": canonical_person_id}]))
     return str(path)
 

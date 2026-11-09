@@ -20,7 +20,7 @@ DSN = os.environ.get("HEIMDAL_READ_DB",
                      qa_dsn())
 
 from heimdal.modules.analytics import repository as repo
-from tests_baseline import ANALYTICS_BUILD
+from tests_baseline import ANALYTICS_BUILD, ANALYTICS_UNRESOLVED_HISTORICAL
 from heimdal.modules.analytics import views as av
 
 _FAILS = []
@@ -249,7 +249,7 @@ def test_coverage_from_build():
         b = av.get_active_analytics_build(c)
         cov = av.get_coverage(c, build=b)
         check("coverage loaded from pinned build",
-              cov["coverage"]["unresolved_historical"] == 7126
+              cov["coverage"]["unresolved_historical"] == ANALYTICS_UNRESOLVED_HISTORICAL
               and cov["build_run_id"] == ANALYTICS_BUILD)
         check("web zero-wording present (B37)", "canonical-linkede" in cov["coverage"]["web_note"])
 

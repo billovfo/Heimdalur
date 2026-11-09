@@ -24,12 +24,12 @@ export HEIMDAL_QA_DB="${HEIMDAL_QA_DB:-$_pg/$HEIMDAL_DEV_DB}"
 export HEIMDAL_DB="${HEIMDAL_DB:-$_pg/$HEIMDAL_DEV_DB}"
 export HEIMDAL_TEST_ADMIN_DSN="${HEIMDAL_TEST_ADMIN_DSN:-$_pg/postgres}"
 export HEIMDAL_TEST_DB="${HEIMDAL_TEST_DB:-pdfhist_test}"
-# PDF history stays OFF until fix waves W3a (D-01/D-02) and W4d are green: the
-# recovered pilot restores with its DB switches ON, and env wins over the DB.
-export PDF_HISTORY_INTEGRATION_ENABLED="${PDF_HISTORY_INTEGRATION_ENABLED:-false}"
-export PDF_HISTORY_UI_ENABLED="${PDF_HISTORY_UI_ENABLED:-false}"
+# PDF history ON by default (owner gate G2, decision plan X5, 2026-11-08): run 34 is
+# ACTIVE. Env wins over the DB switches; set a flag to false here to turn it off.
+export PDF_HISTORY_INTEGRATION_ENABLED="${PDF_HISTORY_INTEGRATION_ENABLED:-true}"
+export PDF_HISTORY_UI_ENABLED="${PDF_HISTORY_UI_ENABLED:-true}"
 unset _pg
-# Analytics parked (owner D6, fix plan W4c): build 13 holds wrong ownership
-# observations (C-1). Off until the owner decides on a rebuild.
-export REGISTRY_ANALYTICS_ENABLED="${REGISTRY_ANALYTICS_ENABLED:-false}"
-export REGISTRY_ANALYTICS_GRAPH_ENABLED="${REGISTRY_ANALYTICS_GRAPH_ENABLED:-false}"
+# Analytics ON by default (owner gate G2, 2026-11-08): build 15 on run 34 replaced
+# build 13 (C-1 fixed, decision plan X4).
+export REGISTRY_ANALYTICS_ENABLED="${REGISTRY_ANALYTICS_ENABLED:-true}"
+export REGISTRY_ANALYTICS_GRAPH_ENABLED="${REGISTRY_ANALYTICS_GRAPH_ENABLED:-true}"

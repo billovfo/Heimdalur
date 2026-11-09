@@ -11,7 +11,7 @@ on 127.0.0.1 only.
 
 | Topic | Document |
 |---|---|
-| Product scope and rules | [SOT v2.4](docs/HEIMDAL-PRODUCT-SOURCE-OF-TRUTH.md) (pending owner approval) |
+| Product scope and rules | [SOT v2.5](docs/HEIMDAL-PRODUCT-SOURCE-OF-TRUTH.md) (approved 2026-11-09) |
 | PDF-history rules | [MASTERPLAN v3.1.2](docs/HEIMDAL-PDF-HISTORIK-MASTERPLAN-v3.1.2.md) |
 | Projection contract | [architecture](docs/HEIMDAL-REGISTRY-PROJECTION-ARCHITECTURE-v1.md), [consumer](docs/HEIMDAL-REGISTRY-PROJECTION-CONSUMER-v1.md) |
 | Person review | [system plan](docs/HEIMDAL-PERSON-HUMAN-REVIEW-SYSTEM-PLAN-v1.md), [contract freeze](docs/HEIMDAL-HUMAN-REVIEW-PRE-P1-CONTRACT-FREEZE-v1.md) |

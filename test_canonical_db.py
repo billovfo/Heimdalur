@@ -2,8 +2,9 @@
 
 Runs on the heimdal test clone (HEIMDAL_DB, made by tools/test_db_refresh.sh,
 which applies the canonical ledger) and on two throwaway DBs: the pdfhist test
-DB and <HEIMDAL_TEST_DB>_ledger. Every write to the clone is rolled back or
-undone (the watchlist toggle runs twice).
+DB and <HEIMDAL_TEST_DB>_ledger. The four clone-bound tests skip when no clone
+is reachable (the public snapshot); the ledger test runs on the test DB alone.
+Every write to the clone is rolled back or undone (the watchlist toggle runs twice).
 B-17: an empty DB + the ledger has exactly the clone's catalog; a 2nd apply is a no-op.
 B-9:  the portal reads as heimdal_reader (read-only session), writes through tx().
 B-12: either_side() returns exactly the rows of the OR form.
@@ -54,10 +55,14 @@ def catalog(dsn):
 
 @pytest.fixture(scope="module")
 def clone():
-    assert CLONE, "HEIMDAL_DB must name the heimdal test clone (tools/test_env.sh)"
-    with psycopg.connect(CLONE) as c:
-        st = canonical_migrations.status(c)
-        c.rollback()
+    if not CLONE:
+        pytest.skip("no heimdal clone in HEIMDAL_DB (not in the public snapshot)")
+    try:
+        with psycopg.connect(CLONE, connect_timeout=3) as c:
+            st = canonical_migrations.status(c)
+            c.rollback()
+    except psycopg.OperationalError as exc:
+        pytest.skip(f"no heimdal clone in HEIMDAL_DB: {exc}")
     behind = [n for n, (s, _) in st.items() if s != "APPLIED"]
     assert not behind, f"clone not at the ledger head {behind}: run tools/test_db_refresh.sh"
     return CLONE

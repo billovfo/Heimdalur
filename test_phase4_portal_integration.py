@@ -20,7 +20,7 @@ os.environ.setdefault("HEIMDAL_READ_DB",
                       qa_dsn())
 
 from heimdal.app import app
-from tests_baseline import ANALYTICS_BUILD  # noqa: E402
+from tests_baseline import ANALYTICS_BUILD, ANALYTICS_UNRESOLVED_HISTORICAL  # noqa: E402
 
 _FAILS = []
 app.config["TESTING"] = True
@@ -280,8 +280,10 @@ def test_coverage_unresolved_surfaced():
     try:
         with _client() as cl:
             body = cl.get(f"/persons/{_IDS()['person_groups']}").get_data(as_text=True)
+            # the page formats the count with the Danish thousands separator
+            unresolved_dk = f"{ANALYTICS_UNRESOLVED_HISTORICAL:,}".replace(",", ".")
             check("unresolved count surfaced as limitation",
-                  "7.126" in body and "ikke med" in body)
+                  unresolved_dk in body and "ikke med" in body)
             check("web zero honest wording",
                   "canonical-linkede web governance" in body)
     finally:

@@ -19,9 +19,14 @@ connection and makes no network request. Exits 1 while any finding is open.
   D-09 delete_non_active() deletes entity_link rows before the run
   D-10 a single-run build picks the newest Felag snapshot (valid_from DESC)
   D-13 one date precedence (temporal.governing_date) for build, consumer, UI
+  D-14 X2: the parser pin filters the parse AND its version-aware view row,
+        and only when a pin is given
+  D-15 X2: reparse refuses every parser version but PARSER_VERSION_DEFAULT
+  D-16 X2: activate refuses a run with zero entity_link rows
 
 Run from the repo root:  python tools/audit/check_d.py
 """
+import argparse
 import os
 import re
 import signal
@@ -41,6 +46,7 @@ from heimdal.pdfhist.fixture_pdf import make_hostile_pdf  # noqa: E402
 from heimdal.pdfhist.parse import parse_lysing_pdf  # noqa: E402
 import heimdal.modules.entities.routes as routes  # noqa: E402
 from heimdal.modules.skraseting import views as skr_views  # noqa: E402
+from scripts import registry_projection_admin as admin  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__))))
@@ -238,8 +244,18 @@ def check_d06_lysing_keeps_board_changes():
         f"lys_38088: {len(board)} board appointments, not the 3 pinned ones"
     founding = parse_lysing_pdf(open(os.path.join(
         fixtures, "lys_33208_20-06-2022.bin.txt"), encoding="utf-8").read())
-    assert "MEMBERSHIP_UNSORTED" in founding["review_reasons"], \
-        "unsorted founding Stjórn line has no review flag"
+    appointed = [(c["action"], c["origin"], c["effective_date"],
+                  pii_digest(c["entity"]))
+                 for c in founding["changes"]
+                 if c.get("origin") == "FOUNDING"]
+    assert appointed == [("APPOINTED", "FOUNDING", "2022-06-16",
+                          '385eb151942ca1fb')], \
+        f"lys_33208 founding Stjórn entry is {appointed}"
+    assert "MEMBERSHIP_UNSORTED" not in founding["review_reasons"], \
+        "founding Stjórn line is still an unsorted leftover"
+    assert not any(c["entity"] and c["entity"].startswith("(")
+                   for c in founding["changes"]), \
+        "founding notice created a pseudo person"
     assert founding["notice_date"] == "2022-06-20", \
         f"lys_33208 notice_date {founding['notice_date']} (founding date?)"
 
@@ -278,6 +294,21 @@ def check_d08_entity_links_fail_closed():
     assert "/home/" not in src and '"docs/cov-historical' not in src, \
         "frozen COV map path is hard-coded"
     assert entity_links._load_cov_historical_frozen(None) == {}
+    # X3a: the frozen map also carries the NAME_FALLBACK index
+    # (document_sha256, source_event_id, entity_normalized, role_type).
+    import json as _json
+    import pathlib as _pathlib
+    import tempfile as _tempfile
+    with _tempfile.TemporaryDirectory() as td:
+        p = _pathlib.Path(td) / "h1_frozen.json"
+        p.write_text(_json.dumps([{
+            "document_sha256": "d", "source_event_id": 2,
+            "occurrence_index": 3, "entity_normalized": "A Person",
+            "role_type": "BOARD", "canonical_person_id": 1}]))
+        by_key, by_name = entity_links._load_cov_frozen(str(p))
+    assert list(by_key) == ["d|2|3"], "frozen immutable key map changed"
+    assert list(by_name) == [("d", 2, "a person", "BOARD")], \
+        "COV-HISTORICAL NAME_FALLBACK index is missing"
 
     class _NoPin(_SqlRecorder):
         def fetchone(self):
@@ -326,6 +357,145 @@ def check_d13_one_date_precedence():
             f"{path} has its own date precedence"
 
 
+def check_d14_x2_parser_pin_filters():
+    rec = _SqlRecorder()
+    projection._latest_snapshots(rec, 1, parser_version="2")
+    sql = rec.sqls[-1]
+    assert "p.parser_version = %s" in sql, \
+        "pinned _latest_snapshots has no parse-version filter"
+    assert "s.parser_version = p.parser_version" in sql, \
+        "pinned _latest_snapshots reads the other parser versions' view rows"
+
+    rec = _SqlRecorder()
+    projection._latest_snapshots(rec, 1)
+    sql = rec.sqls[-1]
+    assert "p.parser_version = %s" not in sql, \
+        "unpinned _latest_snapshots filters on a parser version"
+    assert "s.parser_version" not in sql, \
+        "unpinned _latest_snapshots pins the view source"
+
+    rec = _SqlRecorder()
+    projection.latest_snapshots_cross_run(rec, parser_version="2")
+    sql = rec.sqls[0]
+    assert "p.parser_version = %s" in sql and \
+        "s.parser_version = p.parser_version" in sql, \
+        "pinned cross-run selector misses the parse/view version filters"
+
+    rec = _SqlRecorder()
+    projection.latest_snapshots_cross_run(rec)
+    sql = rec.sqls[0]
+    assert "p.parser_version = %s" not in sql and \
+        "s.parser_version" not in sql, \
+        "unpinned cross-run selector filters on a parser version"
+
+    rec = _SqlRecorder()
+    projection._history_events(rec, 1, parser_version="2")
+    assert "p.parser_version = %s" in rec.sqls[-1], \
+        "pinned _history_events has no parse-version filter"
+    rec = _SqlRecorder()
+    projection._history_events(rec, 1)
+    assert "p.parser_version = %s" not in rec.sqls[-1], \
+        "unpinned _history_events filters on a parser version"
+
+
+def check_d15_x2_reparse_version_guard():
+    admin._parser_version_guard(admin.ingest.PARSER_VERSION_DEFAULT)
+    try:
+        admin._parser_version_guard("1")
+    except SystemExit as exc:
+        assert "refused" in str(exc).lower(), \
+            f"reparse guard message is {str(exc)!r}"
+    else:
+        raise AssertionError("reparse accepted a non-default parser version")
+
+
+class _Ctx:
+    def __init__(self, conn):
+        self.conn = conn
+
+    def __enter__(self):
+        return self.conn
+
+    def __exit__(self, *exc):
+        return False
+
+
+class _ZeroLinks(_SqlRecorder):
+    def fetchone(self):
+        return (0,)
+
+
+def check_d16_x2_activate_link_guard():
+    rec = _ZeroLinks()
+    orig = admin._connect
+    admin._connect = lambda args: _Ctx(rec)
+    try:
+        try:
+            admin.cmd_activate(argparse.Namespace(run_id=1, dsn=None))
+        except SystemExit as exc:
+            msg = str(exc).lower()
+            assert "entity_link" in msg and "build-links" in msg, \
+                f"activate zero-link message is {str(exc)!r}"
+        else:
+            raise AssertionError("activate accepted a run with zero links")
+    finally:
+        admin._connect = orig
+    assert not any(q.startswith("UPDATE") for q in rec.sqls), \
+        "activate wrote before refusing a run with zero links"
+
+
+def check_d17_x3b_liquidator_and_merger_ops():
+    """X3b: liquidator/trustee ops and the two exact merger shapes."""
+    notice = parse_lysing_pdf(
+        "12.03.2021\n"
+        "Skrásetingar-nr.  P/F  9001,  P/F Test, 100 Tórshavn.\n"
+        "Stjórn:  Innkomin sum likvidator: Eitt Testnavn, Vegur 1, "
+        "100 Tórshavn\n"
+        "Innkomin sum kurator: Annað Testnavn, Vegur 2, 100 Tórshavn\n"
+        "Fusión:  Skráseting Føroya hevur í dag móttikið fusiónsæ tlan "
+        "samsv. § 134 a í P/F-lógini:\n"
+        "A. Navn: P/F Test (P/F-nr.9001), 100 Tórshavn\n"
+        "B: Navn: P/F Test B (P/F-nr. 9002), 200 Klaksvík.\n"
+        "Harumframt hava vit móttikið váttan.\n")
+    assert notice["review_reasons"] == [], notice["review_reasons"]
+    roles = [(c["entity"], c["role"]) for c in notice["changes"]
+             if c["type"] == "MANAGEMENT_CHANGE"]
+    assert roles == [("Eitt Testnavn", "Likvidator"),
+                     ("Annað Testnavn", "Kurator")], roles
+    plan = next(c for c in notice["changes"] if c["type"] == "MERGER")
+    assert plan["action"] == "PLAN_REGISTERED", plan
+    assert [p["registration_number"] for p in plan["parties"]] == \
+        ["9001", "9002"], plan["parties"]
+    assert "Harumframt hava vit móttikið váttan." in plan["raw_text"], plan
+    assert not any(c["type"] in ("NAME_CHANGE", "ADDRESS_CHANGE")
+                   for c in notice["changes"]), notice["changes"]
+    completed = parse_lysing_pdf(
+        "12.03.2021\n"
+        "Skrásetingar-nr.  P/F  9001,  P/F Test, 100 Tórshavn.\n"
+        "Fusión:  Felagið er samanlagt við skrásetingar-nr. P/F 9003, "
+        "P/F Test C, sum samstundis verður strikað.\n"
+        "Fusiónin er ein fusión við virknað beinanvegin.\n")
+    merger = next(c for c in completed["changes"] if c["type"] == "MERGER")
+    assert merger["action"] == "COMPLETED", merger
+    assert merger["counterpart"] == {
+        "registration_number": "9003", "name": "P/F Test C"}, merger
+    assert "Fusiónin er ein fusión við virknað beinanvegin." \
+        in merger["raw_text"], merger
+    oneline = parse_lysing_pdf(
+        "12.03.2021 Skrásetingar-nr.  P/F  9001,  P/F Test, "
+        "100 Tórshavn. Fusión:  Skráseting Føroya hevur í dag móttikið "
+        "fusiónsæ tlan samsv. § 134 a í P/F-lógini: A. Navn: P/F Test "
+        "(P/F-nr.9001), 100 Tórshavn B: Navn: P/F Test B "
+        "(P/F-nr. 9002), 200 Klaksvík. Harumframt hava vit móttikið "
+        "váttan.")
+    flat_plan = next(c for c in oneline["changes"]
+                     if c["type"] == "MERGER")
+    assert flat_plan["action"] == "PLAN_REGISTERED", flat_plan
+    assert [p["registration_number"] for p in flat_plan["parties"]] == \
+        ["9001", "9002"], flat_plan["parties"]
+    assert "Harumframt hava vit móttikið váttan." in flat_plan["raw_text"]
+
+
 if __name__ == "__main__":
     import logging
     logging.disable(logging.CRITICAL)
@@ -341,7 +511,11 @@ if __name__ == "__main__":
                check_d08_entity_links_fail_closed,
                check_d09_delete_non_active_fk_order,
                check_d10_build_shadow_newest_snapshot,
-               check_d13_one_date_precedence):
+               check_d13_one_date_precedence,
+               check_d14_x2_parser_pin_filters,
+               check_d15_x2_reparse_version_guard,
+               check_d16_x2_activate_link_guard,
+               check_d17_x3b_liquidator_and_merger_ops):
         try:
             fn()
             print("PASS", fn.__name__)

@@ -133,6 +133,22 @@ def test_event_01_event_only_passthrough_without_interval_semantics():
     assert history["review"] == []
 
 
+def test_event_02_merger_is_event_only_passthrough():
+    """Review #4: a MERGER carries no membership interval semantics."""
+    changes = [{
+        "type": "MERGER", "action": "COMPLETED",
+        "counterpart": {"registration_number": "9003", "name": "P/F C"},
+        "effective_date": None, "notice_date": "2010-04-15",
+        "registration_date": "2010-04-15",
+        "raw_text": "Fusión: Felagið er samanlagt ...",
+    }]
+    history = build_change_history(changes)
+    assert [(e["family"], e["action"], e["from_date"], e["to_date"])
+            for e in history["entries"]] == [
+        ("EVENT_ONLY", "COMPLETED", "2010-04-15", None)]
+    assert history["review"] == []
+
+
 def test_change_date_missing_is_a_review_entry():
     changes = [_scalar_change("NAME_CHANGE", "P/F UdenDato")]
     history = build_change_history(changes)

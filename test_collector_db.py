@@ -10,6 +10,7 @@ A-1:  a crashed `process-relations --rebuild` rolls back completely, sequence
 Both scratch DBs are dropped at the end.
 """
 import io
+import os
 import pathlib
 import types
 import urllib.error
@@ -114,7 +115,13 @@ SEQUENCE = "SELECT last_value FROM registry_ownership.relation_relation_id_seq"
 
 @pytest.fixture(scope="module")
 def rebuild_db():
-    clone = pdb.require_test_db_name(conninfo_to_dict(hc.DB_URI or "").get("dbname") or "")
+    dbname = conninfo_to_dict(hc.DB_URI or "").get("dbname") or ""
+    try:
+        clone = pdb.require_test_db_name(dbname)
+    except ValueError:
+        if os.environ.get("HEIMDAL_GATE_INLINE") == "1":
+            pytest.skip(f"no heimdal test clone in HEIMDAL_DB ({dbname or 'unset'})")
+        raise
     name = pdb.require_test_db_name(clone + "_rebuild")
     with psycopg.connect(pdb.admin_dsn(), autocommit=True) as admin:
         if not admin.execute("SELECT 1 FROM pg_database WHERE datname = %s", (clone,)).fetchone():

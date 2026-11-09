@@ -1,13 +1,13 @@
 ---
 title: Heimdal Product Source of Truth
 document_type: GOVERNING_PRODUCT_DEFINITION
-status: PENDING_OWNER_APPROVAL
+status: APPROVED
 owner: Sole Human Owner
 owner_approval_required: true
-implementation_authorized: false
-document_version: 2.4
-generated_at: 2026-11-06
-previous_version: 2.3
+implementation_authorized: true
+document_version: 2.5
+generated_at: 2026-11-09
+previous_version: 2.4
 source_permission: GRANTED
 reconnaissance_status: COMPLETED_FOR_PLANNED_ACQUISITION
 additional_reconnaissance_required: false
@@ -15,10 +15,9 @@ additional_reconnaissance_required: false
 
 # Heimdal Product Source of Truth
 
-> Dette dokument er **ikke normativt**, før Sole Human Owner har godkendt det eksplicit.
-> `implementation_authorized: false` gælder indtil godkendelse er givet skriftligt.
-> v2.4 beskriver det, der faktisk er bygget og kører (§1a). Godkender ejeren v2.4, sættes
-> `status: APPROVED` og `implementation_authorized: true` for det byggede scope, og datoen noteres i §0.7.
+> v2.5 er **godkendt** af Sole Human Owner 2026-11-09 (beslutningsplanens G2b, §0.8) og er
+> normativ. Den beskriver det, der er bygget og kører efter beslutningsplanens bølger X0–X5
+> (§1a). `implementation_authorized: true` gælder for det byggede scope.
 
 ## 0. Versionsnote
 
@@ -74,7 +73,69 @@ v2.3 blev aldrig godkendt, og arbejdet efter den gik længere end teksten (audit
 
 Uændret: produktvisionen, canonical ID-modellen, Fase 1-reglerne (§5–§25), terminologien (§14a, §14b) og ejerbeslutningerne i §29–§29b.
 
-Ejergodkendelse af v2.4: *afventer* (dato og ordlyd noteres her).
+Ejergodkendelse af v2.4: **2026-11-07**, «Jeg er enig med dine anbefalinger» (beslutning E6). v2.4 er godkendt, som den er, og implementeringen er autoriseret for det byggede scope. Historiksemantikken for stiftelsesmeddelelser (E2) kommer i v2.5 (§0.8).
+
+### 0.8 Ændringer i v2.5 — beslutningsplanen X0–X5 (2026-11-08)
+
+v2.5 er **ikke en ny produktstrategi**. Den beskriver resultatet af beslutningsplanen
+`docs/audit-2026-11/04-DECISION-PLAN.md` (rev 2 og tillæg). Beslutningerne står i §29d.
+Bølgerapporterne ligger i `docs/audit-2026-11/waves/`.
+
+1. **Projection-run 34 er ACTIVE.** Ejerens G1 blev givet 2026-11-08. Run 33 er RETIRED og kan
+   rulles tilbage.
+   - **Forbehold ved rollback:** run 33 indeholder de 81 forkerte COV-koblinger (punkt 4).
+     Med flagene til ville de blive vist.
+   - Run 34 er bygget af parser v2 fra den gemte tekst, offline (E3): 16.449 parses.
+   - Byggeriet er låst til parserversionen.
+   - Forskelsrapporten ligger i `waves/X3-run-diff.md`.
+2. **Stiftelsessemantik (E2).** Medlemmerne i en stiftelsesmeddelelse bliver
+   APPOINTED-historikposter.
+   - De er dateret ved `Stovningardato`, markeret `origin = FOUNDING` og vist som "ved
+     stiftelse".
+   - Brevets dato forbliver `notice_date`.
+   - **Forbehold:** For meget gamle selskaber ligger stiftelsesdatoen 13–107 år før
+     registreringen. Medlemmerne er dem ved registreringen, men de vises "ved stiftelse".
+   - `Leiðsla`, `Daglig leiðsla` og `Filialleiðari` giver ingen stiftelsesposter.
+3. **Nye meddelelsestyper.**
+   - Likvidator og kurator er ledelsesroller, med rolletitlen bevaret.
+   - `Umsjónarráð` (sparekassens tilsynsråd) er en bestyrelse.
+   - `Innkomin sum grannskoðari` registreres.
+   - **Fusion** er den nye historiktype `MERGER`, med `PLAN_REGISTERED` (fusionsplan modtaget)
+     og `COMPLETED` (fusion gennemført). Modparten og den ordrette tekst er beviset. Der udledes
+     intet om, hvilket selskab der ophører.
+   - Stavefejl og ukendte former gættes ikke.
+   - **Præcisering 2026-11-09 (review):** står fejlen på første linje i en
+     medlemssektion, går meddelelsen til review (`MEMBERSHIP_UNSORTED`).
+   - Står en fejlskrevet linje længere nede, bliver den bevaret ordret som en ukendt sektion
+     uden review-flag, hvis meddelelsen har andre ændringer. Den hændelse indgår så ikke i
+     historikken.
+   - 22 meddelelser står i REVIEW og er ikke i historikken (fail-closed).
+4. **Personkoblinger.**
+   - COV-HISTORICAL er **slået fra**. Det frosne kort pegede på forkerte personer (82 af 85),
+     fordi dets id'er stammede fra en ældre database.
+   - R-ADDR læser nu personens egen hændelsestekst. Matchreglen (navn og adresse, strengt) er
+     uændret.
+   - Alle tidligere korrekte koblinger er bevaret, på nær 3, der ligger i meddelelser, som nu er
+     REVIEW.
+5. **Registry analytics er genopbygget (E5).**
+   - Build 15 bygger på run 34 og er ACTIVE. Build 13 er SUPERSEDED.
+   - C-1 er rettet, og `check_c` er nu en del af gaten.
+   - Phase 0-hukommelsesgrænsen er 1.300 MB (ejerbeslutning, X4).
+   - `origin = FOUNDING` føres ikke med over i analytics. Forbeholdet for gamle selskaber
+     (punkt 2) gælder derfor også de analytics-perioder, der bygger på stiftelsesposter.
+6. **Flagene er til (E4, ejerens G2, 2026-11-08).** PDF-historik og analytics er slået til som
+   standard i `tools/dev_env.sh`.
+7. **Oprydning (X0).**
+   - E1: 5 godkendelser uden for de viste kandidater er STALE `OFF-LIST-D15`.
+   - E7: 4 døde indsamlingskørsler er STOPPED.
+   - E9: 5 gamle volumes er slettet.
+8. **Nyt kvalitetsværktøj.** `tools/route_matrix.py` kalder alle GET-ruter. Med flagene til gav
+   den 0×5xx.
+
+Uændret: produktvisionen, canonical ID-modellen, Fase 1-reglerne (§5–§25), terminologien og
+ejerbeslutningerne i §29–§29c.
+
+Ejergodkendelse af v2.5: **2026-11-09** (G2b).
 
 ---
 
@@ -88,7 +149,7 @@ Dokumentet er organiseret i tre dele:
 - **Del B — Fase 1 (nu): aktuelle relationer fra sg.vs.fo.** Dette er det primære, aktive produktscope.
 - **Del C — Fase 2 (bygget, slået fra; §27): PDF-baseret historik.** Bevaret fra v1.0–v1.2, men blokerer ikke Fase 1.
 
-## 1a. Byggetilstand (as-built, 2026-11-06)
+## 1a. Byggetilstand (as-built, 2026-11-08)
 
 Tallene kommer fra `docs/STATUS.md`, som er målt med `tools/status_check.py`. Hvis STATUS og dette afsnit er uenige om et tal, gælder STATUS. Dette afsnit beskriver scope.
 
@@ -106,9 +167,9 @@ Tallene kommer fra `docs/STATUS.md`, som er målt med `tools/status_check.py`. H
 | Fase 1: canonical graf og `registry_ownership` (direkte og indirekte ejerskab, cyklusdetektion) | ja | ja | Ved en cyklus tilbageholdes den indirekte procent, og stien får en markør (D8) |
 | Portal (Flask, `heimdal/`): virksomheds- og personportaler, søgning, ejerskabsoversigt, koncerner, netværk, find forbindelse | ja | ja | |
 | Portal, ud over v2.3-teksten: screening og bulk-screening, compliance-matrix, dossier/KYC, Geo-Kort, ændringsfeed (snapshots), overvågning (watchlist), CSV-eksport | ja | ja | Ikke beskrevet i v2.3. Godkendes med v2.4 |
-| Registry analytics (plan v1.3.1, faser 1–5), build 13 | ja | **nej, flag fra** | Parkeret (D6): build 13's ejerskabsobservationer er forkerte (audit C-1). Koden er rettet (W4c). En genopbygning kræver en ejerbeslutning |
-| Fase 2: PDF-historik (`heimdal/pdfhist/`, MASTERPLAN v3.1.2): corpus, parsing, projection, entity links og Skráseting-visning | ja | **nej, flag fra** | Projection-run 33 er ACTIVE, med 16.400 PDF'er, der er sha256-verificeret. `PDF_HISTORY_INTEGRATION_ENABLED` og `PDF_HISTORY_UI_ENABLED` er `false` i `tools/dev_env.sh`. Efter D7 slås de til, når W3 og W4d er grønne. Det er et separat ejerskridt |
-| Personreview (`/persons/review`, kræver `HEIMDAL_REVIEW_UI=1`) | ja | kun med flag | 12 genskabte ejerbeslutninger er PENDING (5 APPROVE_LINK, 7 DEFER). Rækkefølgen er: de anvendes på en SHADOW-run, ejeren gennemser dry-run, og først derefter aktiveres de (W4a). Livscyklussen er den, der findes i koden (D9) |
+| Registry analytics (plan v1.3.1, faser 1–5), build 15 | ja | **ja** (G2) | Build 15 er genopbygget på projection-run 34 (E5, X4) og er ACTIVE. Build 13 er SUPERSEDED. C-1 er rettet, og `check_c` er i gaten |
+| Fase 2: PDF-historik (`heimdal/pdfhist/`, MASTERPLAN v3.1.2): corpus, parsing, projection, entity links og Skráseting-visning | ja | **ja** (G2) | Projection-run 34 er ACTIVE (parser v2, G1). Der er 16.400 PDF'er, der er sha256-verificeret, og 16.449 parses. `PDF_HISTORY_INTEGRATION_ENABLED` og `PDF_HISTORY_UI_ENABLED` er som standard `true` i `tools/dev_env.sh`. Env kan slå dem fra |
+| Personreview (`/persons/review`, kræver `HEIMDAL_REVIEW_UI=1`) | ja | kun med flag | Af de 12 genskabte ejerbeslutninger er de 5 APPROVE_LINK STALE `OFF-LIST-D15` (E1), og de 7 DEFER er PENDING. 4 af dem gælder PDF-CURRENT-sager, hvis nøgle bærer parse-id'et. Derfor dukker de op som nye sager på run 34 og skal tages igen. Livscyklussen er den, der findes i koden (D9) |
 | PEP-screening | kun skema | tom | Der er ingen PEP-data, og der matches ikke på navn. UI'en viser "PEP-data ikke indlæst", indtil der findes en kildebelagt, dateret import (D14) |
 
 ### 1a.3 Drift
@@ -479,7 +540,7 @@ afventning af sourcekontaktens tilbagekomst = IKKE påkrævet
 
 **To ting, tilladelsen ikke ændrer.** For det første er interfacet stadig `NOT_OFFICIALLY_DOCUMENTED` og `NOT_ASSUMED_STABLE` (§6) — tilladelse til at hente data er ikke en garanti for, hvordan data ser ud. For det andet gælder den konservative collector-adfærd ovenfor uændret: at have lov til at hente alt er ikke en grund til at hente det hurtigt. At source-supporten midlertidigt er utilgængelig, er ikke en adgangsblokering, men det er grunden til, at stopreglerne ved 403, 429 og gentagne 5xx er hårde stop uden automatisk genstart — der er indtil videre ingen, der kan kontaktes, hvis collectoren opfører sig forkert.
 
-Sole Human Owner skal fortsat **separat autorisere implementationen**. `implementation_authorized` er uændret `false`.
+Implementationen blev autoriseret separat: ejerens godkendelse af v2.4 (2026-11-07, §0.7) satte `implementation_authorized: true` for det byggede scope.
 
 ## 10. Ingen live runtime-afhængighed
 
@@ -915,8 +976,10 @@ Disse må ikke snige sig ind som blokeringer for det aktuelle relationsprodukt.
 
 ```
 PHASE_2_HISTORICAL_ENRICHMENT
-STATUS = BUILT_FLAGS_OFF        (v2.3: PAUSED)
+STATUS = BUILT_FLAGS_ON         (v2.4: BUILT_FLAGS_OFF, v2.3: PAUSED)
 ```
+
+**v2.5:** Projection-run 34 er ACTIVE. Integration og UI er som standard slået til (E4, ejerens G2, 2026-11-08). Fase 2 må stadig ikke blokere Fase 1. Portalen er fortsat fail-closed: er et flag slået fra, eller kan projection-DB'en ikke nås, viser den Fase 1 uændret.
 
 **v2.4:** Fase 2 er bygget efter `HEIMDAL-PDF-HISTORIK-MASTERPLAN-v3.1.2.md`, som er normativ for PDF-reglerne. Dataene ligger i dev-DB'en som projection-run 33 (§1a.2). Integration og UI er slået fra i `tools/dev_env.sh`. Fase 2 må fortsat ikke blokere Fase 1, og ingen Fase 1-funktion må afhænge af PDF-data. Portalen er fail-closed: er flagene fra, eller kan projection-DB'en ikke nås, viser den Fase 1 uændret.
 
@@ -1075,6 +1138,30 @@ Truffet 2026-11-05 og 2026-11-06 ("Ja til dine anbefalinger"). Fuld tekst: `docs
 | D13 | FK'en `source.documents` | droppes |
 | D14 | PEP | seed fjernes; PEP er tom, indtil der findes en kildebelagt import |
 | D15 | Review-godkendelser uden for de viste kandidater | forbudt |
+
+## 29d. OWNER DECISIONS (beslutningsplan 2026-11-07/08)
+
+Planen er `docs/audit-2026-11/04-DECISION-PLAN.md`. Ejeren svarede 2026-11-07: «Jeg er enig
+med dine anbefalinger». Senere enkeltbeslutninger blev truffet 2026-11-08.
+
+| # | Beslutning | Valgt |
+|---|---|---|
+| E1 | 5 APPROVE_LINK uden for de viste kandidater (D15) | STALE `OFF-LIST-D15`; de 7 DEFER forbliver PENDING |
+| E2 | Stiftelsesmeddelelser | APPOINTED ved `Stovningardato`, `origin = FOUNDING`, "ved stiftelse" |
+| E3 | Run 33 (parse fra før W4d) | genlæs teksten offline; ny run som SHADOW; aktivér efter ejerens review |
+| E4 | PDF-historik-flag | til, efter den nye run er ACTIVE (G2) |
+| E5 | Analytics | genopbyg fase 2 og 3 på den nye run |
+| E6 | SOT v2.4 | godkendt som den er; E2 kommer i v2.5 |
+| E7 | Hængende RUNNING-kørsler 7, 8, 22, 23 | STOPPED med `stop_reason` |
+| E8 | Push | noreply-adressen; hver push kræver et særskilt OK (G3) |
+| E9 | Oprydning | de 5 gamle `heimdal-*`-volumes slettes |
+| X3a | COV-nøgler der rykkede | navne-fallback (entydigt, fail-closed); den frosne fil røres ikke |
+| X3b | Likvidator, kurator og fusioner | læres før run N; parserversionen forbliver "2" |
+| COV | Det frosne COV-kort (forkerte mål-id'er) | slået fra i run 34; et nyt kort er separat arbejde |
+| G1 | Run 34 erstatter run 33 | godkendt |
+| X4 | Phase 0-hukommelsesgrænse | 553 → 1.300 MB |
+| G2 | Flagene slås til som standard | godkendt |
+| G2b | SOT v2.5 | godkendt 2026-11-09 |
 
 ## 30. Companion documents
 

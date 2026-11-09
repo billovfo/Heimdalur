@@ -177,6 +177,9 @@ ACTION_LEAVE = {
     "MANAGEMENT_CHANGE": "fratrådte ledelsen",
     "AUDITOR_CHANGE": "fratrådte som revisor",
 }
+# E2: founding appointments are dated at Stovningardato and rendered with
+# this explicit source marker.
+FOUNDING_ACTION_SUFFIX = "ved stiftelse"
 NEUTRAL_ACTION_TEXT = "ændring registreret"
 
 # Presentation vocabulary for source role titles (§25): deterministic
@@ -191,6 +194,7 @@ ROLE_TITLE_LABELS = {
     "Stjóri": "Direktør",
     "Forstjóri": "Direktør",
     "Kurator": "Kurator",
+    "Likvidator": "Likvidator",
     "Starvsfólkavalt umboð": "Medarbejderrepræsentant",
 }
 
@@ -205,9 +209,16 @@ _EVENT_TYPE_LABELS = {
     "PURPOSE_CHANGE": "Formål ændret",
     "ADDRESS_CHANGE": "Adresse ændret",
     "OTHER_CHANGE": "Registrering ændret",
+    "MERGER": "Fusion registreret",
 }
 
 EVENT_LABELS = _EVENT_TYPE_LABELS  # single label map (§43 — no parallel maps)
+
+# MERGER actions are the source's own two shapes; no join/leave inference.
+MERGER_ACTION_LABELS = {
+    "PLAN_REGISTERED": "Fusionsplan modtaget",
+    "COMPLETED": "Fusion gennemført",
+}
 
 
 def _dk_date_str(iso) -> str | None:
@@ -228,16 +239,32 @@ def _event_view(event: dict) -> dict:
     label = _EVENT_TYPE_LABELS.get(event.get("event_type"),
                                    event.get("event_type") or "Registrering")
     entity = event.get("entity_key") or ""
+    # MERGER: show the counterpart's name and registration number from the
+    # source party/counterpart evidence (never inferred from entity_key).
+    counterpart = (consumer.merger_counterpart(event)
+                   if event.get("event_type") == "MERGER" else None)
+    counterpart_name = (counterpart or {}).get("name")
+    counterpart_registration_number = \
+        (counterpart or {}).get("registration_number")
+    if event.get("event_type") == "MERGER" and counterpart:
+        entity = " ".join(bit for bit in (
+            counterpart_name,
+            f"({counterpart_registration_number})"
+            if counterpart_registration_number else None) if bit)
     # internal normalized tokens (e.g. hex identifiers) are not user text
     if _HEX_TOKEN.match(entity):
         entity = ""
     action = event.get("action")
-    if action == "APPOINTED":
+    if event.get("event_type") == "MERGER":
+        action_label = MERGER_ACTION_LABELS.get(action)
+    elif action == "APPOINTED":
         action_label = ACTION_JOIN.get(event.get("event_type"))
     elif action == "REMOVED":
         action_label = ACTION_LEAVE.get(event.get("event_type"))
     else:
         action_label = None  # unknown/CHANGED never becomes join/leave (§23)
+    if action_label and event.get("origin") == "FOUNDING":
+        action_label = f"{action_label} {FOUNDING_ACTION_SUFFIX}"
     effective = event.get("effective_date")
     registration = event.get("registration_date")
     if effective:
@@ -245,9 +272,17 @@ def _event_view(event: dict) -> dict:
     else:
         timeline_date, timeline_label = registration, "Registreringsdato"
     caveats: list[str] = []
-    if timeline_date and str(timeline_date)[:4] < "1990":
-        timeline_date = None  # never order by an implausible artifact date
-        caveats.append(SOURCE_DATE_ARTIFACT_NOTE)
+    # E2: a founding date is the source's own first-state date, not a later
+    # notice's artifact; pre-1990 foundations (lys_5053: 1977) stay dated.
+    # NEW-3: a malformed date string skips the caveat instead of raising.
+    if timeline_date and event.get("origin") != "FOUNDING":
+        try:
+            year = int(str(timeline_date)[:4])
+        except (TypeError, ValueError):
+            year = None
+        if year is not None and year < _ARTIFACT_YEAR_BEFORE:
+            timeline_date = None  # never order by an implausible artifact date
+            caveats.append(SOURCE_DATE_ARTIFACT_NOTE)
     return {
         "event_type": event.get("event_type"),
         "timeline_date": timeline_date,
@@ -258,7 +293,10 @@ def _event_view(event: dict) -> dict:
         "type": label,
         "action": action,
         "action_label": action_label,
+        "origin": event.get("origin"),
         "description": entity,
+        "counterpart_name": counterpart_name,
+        "counterpart_registration_number": counterpart_registration_number,
         "source_document_id": event.get("source_document_id"),
         "source_event_id": event.get("source_event_id"),
         "authority_state": event.get("authority_state"),

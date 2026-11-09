@@ -462,24 +462,87 @@ def match_person(normalized_name, role_type, company_canonical_id,
     return ("UNRESOLVED", None, [], "EXACT_MULTI_ATTRIBUTE")
 
 
-def _load_cov_historical_frozen(path):
-    """Load frozen H1 COV-HISTORICAL v1.1 mapping (read-only artifact).
+def _cov_record_key(rec):
+    """Immutable source key of one frozen record (its own key if present)."""
+    return rec.get("immutable_source_key") or (
+        f"{rec['document_sha256']}|{rec['source_event_id']}|{rec['occurrence_index']}")
 
-    Returns dict cov_source_key -> {canonical_person_id, provenance}. The
-    artefact (85 identities, immutable source-key v1; untracked, originally
+
+def _cov_normalized_name(rec):
+    """Normalised frozen person name, or None when it cannot be normalised."""
+    try:
+        return normalize_person_name(rec.get("entity_normalized")
+                                     or rec.get("person_name"))
+    except (TypeError, ValueError, AttributeError):
+        return None
+
+
+def _name_tokens(name):
+    """Ordered lower-case word tokens of a person name (no fuzzy matching)."""
+    return [token for token in re.findall(r"\w+", normalize_person_name(name))
+            if token]
+
+
+def _cov_target_name_matches(rec, canonical_name):
+    """Fail-closed target guard (review #6, made strict in fix round 1).
+
+    A frozen record may link only when BOTH the first and the last normalised
+    token of its own person name appear in the canonical target's display
+    name. One shared first name or surname (the three known-stale H1 targets)
+    is not enough. A record without any frozen name cannot prove the target
+    and stays fail-closed.
+    """
+    frozen_name = rec.get("person_name") or rec.get("entity_normalized")
+    if not frozen_name:
+        return False
+    frozen_tokens = _name_tokens(frozen_name)
+    canonical_tokens = set(_name_tokens(canonical_name))
+    if not frozen_tokens or not canonical_tokens:
+        return False
+    return (frozen_tokens[0] in canonical_tokens
+            and frozen_tokens[-1] in canonical_tokens)
+
+
+def _load_cov_frozen(path):
+    """Load the frozen H1 map and its NAME_FALLBACK index (read-only).
+
+    Returns (by_key, by_name):
+      by_key  immutable_source_key -> record (unchanged public shape)
+      by_name (document_sha256, source_event_id, entity_normalized,
+              role_type) -> [record, ...]
+
+    The name index only holds records that carry the four key parts; a
+    minimal record (key + canonical id only) stays positional-only. A record
+    whose name/event cannot be normalised is skipped for the name index only
+    and stays in by_key. The artefact (85 identities, immutable source-key
+    v1; untracked, originally
     docs/cov-historical-person-source-implementation/h1_frozen.json) is keyed
     on the surrogate source_event_id of the DB it was frozen against. D-08:
     the path comes only from the caller or HEIMDAL_COV_H1_FROZEN; no path
     means the COV tier is off. A configured but unreadable file raises.
     """
     if not path:
-        return {}
-    m = {}
+        return {}, {}
+    by_key = {}
+    by_name: dict[tuple, list] = {}
     for rec in json.loads(pathlib.Path(path).read_text(encoding="utf-8")):
-        k = rec.get("immutable_source_key") or (
-            f"{rec['document_sha256']}|{rec['source_event_id']}|{rec['occurrence_index']}")
-        m[k] = rec
-    return m
+        by_key[_cov_record_key(rec)] = rec
+        doc_sha = rec.get("document_sha256")
+        evt = rec.get("source_event_id")
+        role_type = rec.get("role_type")
+        try:
+            norm = _cov_normalized_name(rec)
+            name_key = (doc_sha, int(evt), norm, role_type)
+        except (TypeError, ValueError, AttributeError):
+            continue
+        if doc_sha is not None and evt is not None and norm and role_type:
+            by_name.setdefault(name_key, []).append(rec)
+    return by_key, by_name
+
+
+def _load_cov_historical_frozen(path):
+    """Load only the immutable-key map of the frozen H1 COV-HISTORICAL map."""
+    return _load_cov_frozen(path)[0]
 
 
 def build_entity_links(projection_run_id, *, projection_conn,
@@ -521,18 +584,25 @@ def build_entity_links(projection_run_id, *, projection_conn,
         canonical_conn, ownership_pin_meta=ownership_pin_meta)
 
     # history raw_text by source_event_id — deterministic: smallest id wins for duplicate source_event_id
+    # X3c: the same notice may hold several membership events, so also index
+    # the raw text by (source_event_id, entity_key). The history entity_key is
+    # the person-role entity_normalized (projection.py person-role INSERT);
+    # smallest id wins here too.
     history_raw: dict = {}
+    history_raw_by_role: dict = {}
     hrows = projection_conn.execute(
-        "SELECT source_event_id, raw_text FROM registry_projection.company_history_event WHERE projection_run_id = %s ORDER BY id ASC",
+        "SELECT source_event_id, entity_key, raw_text FROM registry_projection.company_history_event WHERE projection_run_id = %s ORDER BY id ASC",
         (projection_run_id,),
     ).fetchall()
     for row in hrows:
         if isinstance(row, dict):
-            sid=row["source_event_id"]; rt=row["raw_text"]
+            sid=row["source_event_id"]; ekey=row["entity_key"]; rt=row["raw_text"]
         else:
-            sid, rt=row
+            sid, ekey, rt=row
         if sid is not None and rt is not None:
             history_raw.setdefault(sid, rt)
+            if ekey is not None:
+                history_raw_by_role.setdefault((sid, ekey), rt)
 
     stats = {"COMPANY": {"LINKED": 0, "UNRESOLVED": 0, "AMBIGUOUS": 0},
              "PERSON": {"LINKED": 0, "UNRESOLVED": 0, "AMBIGUOUS": 0},
@@ -548,13 +618,18 @@ def build_entity_links(projection_run_id, *, projection_conn,
              "COV_HISTORICAL_ELIGIBLE": 0,
              "COV_HISTORICAL_ATTEMPTED": 0,
              "COV_HISTORICAL_LINKED": 0,
+             "COV_HISTORICAL_FALLBACK_LINKED": 0,
              "COV_HISTORICAL_AMBIGUOUS": 0,
+             "COV_HISTORICAL_TARGET_NAME_MISMATCH": 0,
              "COV_HISTORICAL_OUTSIDE_H1": 0}
 
     # COV-HISTORICAL v1.1 frozen H1 map (read-only artifact)
     cov_frozen_path = cov_frozen_path or os.environ.get("HEIMDAL_COV_H1_FROZEN")
     stats["COV_HISTORICAL_FROZEN_PATH"] = cov_frozen_path
-    cov_frozen = _load_cov_historical_frozen(cov_frozen_path)
+    cov_frozen, cov_frozen_by_name = _load_cov_frozen(cov_frozen_path)
+    # immutable frozen keys already linked in THIS build (positional or
+    # fallback); the name fallback never links one record twice.
+    cov_used_keys: set[str] = set()
     # Preload COV helpers: observation sha and parse structured for occurrence_index derivation
     cov_obs_sha: dict[int, str] = {}
     cov_parse_struct: dict[int, dict] = {}
@@ -578,12 +653,17 @@ def build_entity_links(projection_run_id, *, projection_conn,
                 cov_parse_struct[int(pid)] = sd or {}
 
     with projection_conn.transaction():
-        # Hard guard: never mutate ACTIVE projection
+        # Hard guard: only a SHADOW run may be (re)built. ACTIVE is never
+        # mutated; RETIRED and FAILED must stay exactly as they were, because
+        # rollback_to() restores a RETIRED run (review #4).
         st = projection_conn.execute("SELECT status FROM registry_projection.projection_run WHERE projection_run_id=%s", (projection_run_id,)).fetchone()
         if st is None:
             raise ValueError(f"unknown projection_run_id {projection_run_id}")
-        if (st["status"] if isinstance(st, dict) else st[0]) == "ACTIVE":
-            raise RuntimeError(f"COV-HISTORICAL guard: refusing to mutate ACTIVE projection {projection_run_id}")
+        run_status = st["status"] if isinstance(st, dict) else st[0]
+        if run_status != "SHADOW":
+            raise RuntimeError(
+                f"projection guard: refusing to mutate {run_status} "
+                f"projection {projection_run_id} (only SHADOW may be built)")
         projection_conn.execute(
             "DELETE FROM registry_projection.entity_link "
             "WHERE projection_run_id = %s", (projection_run_id,))
@@ -653,6 +733,7 @@ def build_entity_links(projection_run_id, *, projection_conn,
                     source_observation_id = None; source_parse_result_id = None
             normalized = normalize_person_name(entity_normalized or person_name)
             anchor = company_anchor.get(company_id)
+            address_text_source = None
 
             # Tier 1: legacy v1 decision (preserved)
             legacy_status, legacy_cid, legacy_cands, legacy_method = match_person(
@@ -717,7 +798,20 @@ def build_entity_links(projection_run_id, *, projection_conn,
                         raw_candidates_for_meta = None
                     else:
                         stats["R_ADDR_ELIGIBLE"] += 1
-                        raw_text = history_raw.get(source_event_id)
+                        # X3c: prefer the role's own membership event text
+                        # (source_event_id + entity_normalized as stored);
+                        # fall back to the notice's first event text only.
+                        role_raw_text = (
+                            history_raw_by_role.get(
+                                (source_event_id, entity_normalized))
+                            if entity_normalized is not None else None)
+                        if role_raw_text:
+                            raw_text = role_raw_text
+                            address_text_source = "ROLE_EVENT"
+                        else:
+                            raw_text = history_raw.get(source_event_id)
+                            address_text_source = ("FIRST_EVENT"
+                                                   if raw_text else None)
                         if not raw_text:
                             stats["R_ADDR_NO_ADDRESS"] += 1
                             status, canonical_id, candidates, method = ws_status, ws_cid, ws_cands, ws_method
@@ -838,37 +932,81 @@ def build_entity_links(projection_run_id, *, projection_conn,
                         None)
                 _cov_key = cov_source_key(_doc_sha, int(source_event_id), int(_occ_idx)) if _occ_idx is not None else None
                 _rec = cov_frozen.get(_cov_key) if _cov_key is not None else None
-                _canonical = _rec.get("canonical_person_id") if _rec is not None else None
                 if _rec is not None:
-                    stats["COV_HISTORICAL_ATTEMPTED"] += 1
-                if _canonical is None:
-                    stats["COV_HISTORICAL_OUTSIDE_H1"] += 1
-                elif int(_canonical) not in person_names:
-                    # fail closed: the frozen target is no canonical PERSON in
-                    # this DB (D-08: this guard was a no-op before)
+                    _frozen_name = (_rec.get("entity_normalized")
+                                    or _rec.get("person_name"))
+                    if _frozen_name and _cov_normalized_name(_rec) != normalized:
+                        # the positional key names a different frozen person: a
+                        # parser shift, not this role's record. Treat it as a
+                        # miss. A minimal record without a name stays
+                        # positional-only.
+                        _rec = None
+                _cov_match = "POSITIONAL" if _rec is not None else None
+                _cov_ambiguous = False
+                if _rec is None:
+                    # Parser v2 drops a non-person change, shifting every later
+                    # positional key in the same document/event. Fall back to
+                    # the frozen name: link only a single, unused record.
+                    _cands = []
+                    if _doc_sha:
+                        _cands = cov_frozen_by_name.get(
+                            (_doc_sha, int(source_event_id), normalized,
+                             role_type), [])
+                    if len(_cands) > 1:
+                        _cov_ambiguous = True
+                    elif len(_cands) == 1:
+                        _rec = _cands[0]
+                        _cov_match = "NAME_FALLBACK"
+                if _cov_ambiguous:
                     stats["COV_HISTORICAL_AMBIGUOUS"] += 1
+                elif _rec is None:
+                    stats["COV_HISTORICAL_OUTSIDE_H1"] += 1
                 else:
-                    status = "LINKED"
-                    canonical_id = int(_canonical)
-                    candidates = [{"canonical_entity_id": canonical_id, "display_name": person_names.get(canonical_id)}]
-                    method = "EXACT_MULTI_ATTRIBUTE"
-                    resolution_rule = "COV-HISTORICAL-PERSON-SOURCE"
-                    rule_version = "v1.1"
-                    # preserve pdf address fields as None for COV
-                    pdf_address_raw = None
-                    pdf_address_normalized = None
-                    pdf_tokens_for_meta = None
-                    raw_source_id = None
-                    raw_source_label = None
-                    raw_address_normalized = None
-                    address_match_mode = None
-                    raw_candidates_for_meta = None
-                    stats["COV_HISTORICAL_LINKED"] += 1
-                    # COV-specific metadata extensions, injected below
-                    _cov_document_sha256 = _doc_sha
-                    _cov_occurrence_index = int(_occ_idx)
-                    _cov_immutable_key = _cov_key
-                    _cov_canonical_provenance = _rec
+                    stats["COV_HISTORICAL_ATTEMPTED"] += 1
+                    _canonical = _rec.get("canonical_person_id")
+                    _rec_key = _cov_record_key(_rec)
+                    if _rec_key in cov_used_keys:
+                        # a frozen record links at most once per build
+                        # (positional and fallback both claim keys here)
+                        stats["COV_HISTORICAL_AMBIGUOUS"] += 1
+                    elif _canonical is None:
+                        stats["COV_HISTORICAL_OUTSIDE_H1"] += 1
+                    elif int(_canonical) not in person_names:
+                        # fail closed: the frozen target is no canonical PERSON in
+                        # this DB (D-08: this guard was a no-op before)
+                        stats["COV_HISTORICAL_AMBIGUOUS"] += 1
+                    elif not _cov_target_name_matches(
+                            _rec, person_names.get(int(_canonical))):
+                        # fail closed: the frozen source name and the canonical
+                        # target's name share no token (review #6 stale target)
+                        stats["COV_HISTORICAL_TARGET_NAME_MISMATCH"] += 1
+                    else:
+                        status = "LINKED"
+                        canonical_id = int(_canonical)
+                        candidates = [{"canonical_entity_id": canonical_id, "display_name": person_names.get(canonical_id)}]
+                        method = "EXACT_MULTI_ATTRIBUTE"
+                        resolution_rule = "COV-HISTORICAL-PERSON-SOURCE"
+                        rule_version = "v1.1"
+                        # preserve pdf address fields as None for COV
+                        pdf_address_raw = None
+                        pdf_address_normalized = None
+                        pdf_tokens_for_meta = None
+                        raw_source_id = None
+                        raw_source_label = None
+                        raw_address_normalized = None
+                        address_match_mode = None
+                        raw_candidates_for_meta = None
+                        cov_used_keys.add(_rec_key)
+                        stats["COV_HISTORICAL_LINKED"] += 1
+                        if _cov_match == "NAME_FALLBACK":
+                            stats["COV_HISTORICAL_FALLBACK_LINKED"] += 1
+                        # COV-specific metadata extensions, injected below
+                        _cov_document_sha256 = _doc_sha
+                        _rec_occ = _rec.get("occurrence_index")
+                        _cov_occurrence_index = (int(_rec_occ) if _rec_occ is not None
+                                                 else (int(_occ_idx) if _occ_idx is not None else None))
+                        _cov_immutable_key = _rec_key
+                        _cov_canonical_provenance = _rec
 
             # Build metadata — keep base metadata, add full R-ADDR provenance when applicable
             metadata = {
@@ -892,6 +1030,8 @@ def build_entity_links(projection_run_id, *, projection_conn,
                 metadata["pdf_source_event_id"] = source_event_id
                 metadata["pdf_source_document_id"] = source_document_id
                 metadata["pdf_normalized_name"] = normalized
+                if resolution_rule == "R-ADDR" and address_text_source is not None:
+                    metadata["address_text_source"] = address_text_source
                 if pdf_address_raw is not None:
                     metadata["pdf_address_raw"] = pdf_address_raw
                 if pdf_address_normalized is not None:
@@ -931,6 +1071,7 @@ def build_entity_links(projection_run_id, *, projection_conn,
                     metadata["rule_version"] = "v1.1"
                     metadata["source_key_version"] = "COV-HISTORICAL-SOURCE-KEY v1"
                     metadata["immutable_source_key"] = _cov_immutable_key
+                    metadata["cov_match"] = _cov_match
                     metadata["document_sha256"] = _cov_document_sha256
                     metadata["occurrence_index"] = _cov_occurrence_index
                     metadata["canonical_person_id"] = canonical_id

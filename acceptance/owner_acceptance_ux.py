@@ -27,8 +27,28 @@ Covers:
 import os
 import re
 
-from heimdal.app import app
-from tests_baseline import ANALYTICS_BUILD, ANALYTICS_HASH
+# X5c: tools/test_env.sh pins all four feature flags false (X5b), but this
+# runner accepts the flags-on product. Set them explicitly (setdefault is not
+# enough: the test env already exports them) before the app is imported. The
+# UX-54 sub-check below switches the same flags off again for its flag-off
+# assertions.
+_FEATURE_FLAGS = (
+    "PDF_HISTORY_INTEGRATION_ENABLED",
+    "PDF_HISTORY_UI_ENABLED",
+    "REGISTRY_ANALYTICS_ENABLED",
+    "REGISTRY_ANALYTICS_GRAPH_ENABLED",
+)
+
+
+def set_feature_flags(enabled):
+    for flag in _FEATURE_FLAGS:
+        os.environ[flag] = "true" if enabled else "false"
+
+
+set_feature_flags(True)
+
+from heimdal.app import app  # noqa: E402
+from tests_baseline import ANALYTICS_BUILD, ANALYTICS_HASH  # noqa: E402
 
 DSN = qa_dsn()
 PERSON_WITH_GROUPS = 7412
@@ -50,11 +70,6 @@ def check(name, ok, detail=""):
         _fail += 1
 
 
-def set_flags(analytics, graph):
-    os.environ["REGISTRY_ANALYTICS_ENABLED"] = analytics or ""
-    os.environ["REGISTRY_ANALYTICS_GRAPH_ENABLED"] = graph or ""
-
-
 RAW_PATTERNS = [r"\['[^'\]]+'(,\s*'[^'\]]+')+\]", r"\{'[a-z_]+':\s",
                 r"&#39;amount&#39;:", r"&#39;city&#39;:", r"&#39;currency&#39;:",
                 r"&#39;lines&#39;:", r"'amount':\s*\d", r"'city':\s*'"]
@@ -69,15 +84,14 @@ def main():
 
     with app.test_client() as cl:
         # ---- UX-54: flag matrix still gates everything -----------------
-        set_flags(None, None)
+        set_feature_flags(False)
         body_off = cl.get(f"/persons/{PERSON_WITH_GROUPS}").get_data(as_text=True)
         check("flags off: no analytics section",
               "Observeret samarbejde (analyse)" not in body_off)
         check("flag-off page still functional", "record-name" in body_off)
 
         # ---- UX-44/§13: raw structures (skraseting + overview) ---------
-        os.environ["PDF_HISTORY_UI_ENABLED"] = "true"
-        set_flags("1", "1")
+        set_feature_flags(True)
         skr = cl.get(f"/companies/{COMPANY_OWNER_CASE}/skraseting").get_data(as_text=True)
         check("skraseting: no raw list repr", not re.search(r"\['[^'\]]+'(,\s*'[^'\]]+')*\]", skr))
         check("skraseting: no raw dict repr", not re.search(r"&#39;[a-z_]+&#39;:\s", skr))

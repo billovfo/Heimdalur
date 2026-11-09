@@ -49,12 +49,39 @@ SKRASETING_EVENT_LABELS = {
     "PURPOSE_CHANGE": "Formål ændret",
     "ADDRESS_CHANGE": "Adresse ændret",
     "OTHER_CHANGE": "Registrering ændret",
+    "MERGER": "Fusion",
 }
 SKRASETING_ACTION_LABELS = {
     "APPOINTED": "Tiltrådt",
     "REMOVED": "Fratrådt",
     "CHANGED": "Ændret",
+    "PLAN_REGISTERED": "Fusionsplan modtaget",
+    "COMPLETED": "Fusion gennemført",
 }
+SKRASETING_FOUNDING_SUFFIX = "ved stiftelse"
+
+
+def _skraseting_action_label(action, origin=None):
+    """Human action wording; a founding appointment says so explicitly."""
+    label = SKRASETING_ACTION_LABELS.get(action or "", action)
+    if action == "APPOINTED" and origin == "FOUNDING" and label:
+        return f"{label} {SKRASETING_FOUNDING_SUFFIX}"
+    return label
+
+
+def _skraseting_merger_detail(event, action_label):
+    """Action wording plus the MERGER counterpart's name and reg. number."""
+    counterpart = consumer.merger_counterpart(event) \
+        if event.get("event_type") == "MERGER" else None
+    if not counterpart:
+        return action_label
+    party = " ".join(bit for bit in (
+        counterpart.get("name"),
+        f"({counterpart.get('registration_number')})"
+        if counterpart.get("registration_number") else None) if bit)
+    return " · ".join(bit for bit in (action_label, party) if bit) or None
+
+
 # Heimdal snapshot change-feed presentation (existing global vocabulary,
 # reused - the global log keeps its own semantics).
 HEIMDAL_SOURCE_LABEL = "Heimdal snapshot"
@@ -396,8 +423,7 @@ def _merged_entity_timeline(heimdal_events, skraseting_events):
     for ev in skraseting_events or []:
         label = SKRASETING_EVENT_LABELS.get(
             ev.get("event_type") or "", "Registrering ændret")
-        action = SKRASETING_ACTION_LABELS.get(ev.get("action") or "",
-                                              ev.get("action"))
+        action = _skraseting_action_label(ev.get("action"), ev.get("origin"))
         if "person_role_id" in ev:
             # person history entry (consumer.get_skraseting_person_history)
             title = label if ev.get("event_type") else "Historisk registrering"
@@ -416,6 +442,7 @@ def _merged_entity_timeline(heimdal_events, skraseting_events):
                 "detail": " · ".join(detail_bits) if detail_bits else None,
                 "event_type": ev.get("event_type"),
                 "action": ev.get("action"),
+                "origin": ev.get("origin"),
                 "company_canonical_entity_id":
                     ev.get("company_canonical_entity_id"),
                 "company_display_name": ev.get("company_display_name"),
@@ -426,15 +453,21 @@ def _merged_entity_timeline(heimdal_events, skraseting_events):
             # company history entry (consumer.get_projected_company_history);
             # event_date carries the shared precedence (temporal, D-13)
             iso, display = _date_parts(ev.get("event_date"))
+            counterpart = (consumer.merger_counterpart(ev)
+                           if ev.get("event_type") == "MERGER" else None) or {}
             merged.append({
                 "date": iso,
                 "date_display": display,
                 "source": SKRASETING_SOURCE_LABEL,
                 "source_kind": "skraseting",
                 "title": label,
-                "detail": action,
+                "detail": _skraseting_merger_detail(ev, action),
                 "event_type": ev.get("event_type"),
                 "action": ev.get("action"),
+                "origin": ev.get("origin"),
+                "counterpart_name": counterpart.get("name"),
+                "counterpart_registration_number":
+                    counterpart.get("registration_number"),
                 "source_document_id": ev.get("source_document_id"),
                 "source_event_id": ev.get("source_event_id"),
             })

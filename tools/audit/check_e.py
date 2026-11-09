@@ -16,8 +16,14 @@ import os
 import sys
 
 DB = "review_e_check_test"  # test-named: migrate refuses others (D-05)
-ADMIN = "postgresql://postgres@localhost:5432/postgres"
-DSN = "postgresql://postgres@localhost:5432/" + DB
+# Same admin/test server as the caller: HEIMDAL_TEST_ADMIN_DSN (set by
+# tools/test_env.sh and by the gate's inline env), or the libpq PG* variables.
+ADMIN = os.environ.get("HEIMDAL_TEST_ADMIN_DSN") or (
+    "postgresql://%s@%s:%s/postgres" % (
+        os.environ.get("PGUSER", "postgres"),
+        os.environ.get("PGHOST", "localhost"),
+        os.environ.get("PGPORT", "5432")))
+DSN = ADMIN.rsplit("/", 1)[0] + "/" + DB
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, REPO)
 os.environ.update(HEIMDAL_TEST_DB=DB, HEIMDAL_TEST_ADMIN_DSN=ADMIN,

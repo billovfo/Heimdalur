@@ -342,6 +342,11 @@ def get_projection_warnings(registration_number: str, *,
             return []
 
 
+def merger_counterpart(event: dict, company_regnr=None) -> dict | None:
+    """Public view-layer helper for the counterpart on a MERGER event."""
+    return projection.merger_counterpart(event, company_regnr)
+
+
 def get_projected_company_history(registration_number: str, *, conn=None,
                                   integration_enabled: bool | None = None,
                                   limit: int | None = None
@@ -364,19 +369,26 @@ def get_projected_company_history(registration_number: str, *, conn=None,
             row = _company_row(c, run_id, regnr)
             if row is None:
                 return None
-            return [
+            events = [
                 {"event_type": et, "action": action, "entity_key": key,
                  "effective_date": str(ed) if ed else None,
                  "registration_date": str(rd) if rd else None,
                  "event_date": str(evd) if evd else None,
                  "source_document_id": doc,
                  "source_event_id": src_event,
-                 "authority_state": auth}
-                for (et, action, key, ed, rd, evd, doc, src_event, auth)
+                 "authority_state": auth,
+                 "origin": origin,
+                 # MERGER evidence (None for every other event type)
+                 "counterpart": counterpart,
+                 "parties": parties}
+                for (et, action, key, ed, rd, evd, doc, src_event, auth,
+                     origin, counterpart, parties)
                 in c.execute(
                     "SELECT event_type, action, entity_key, effective_date, "
                     f"registration_date, {governing_date_sql()}, "
-                    "source_document_id, source_event_id, authority_state "
+                    "source_document_id, source_event_id, authority_state, "
+                    "value_json->>'origin', value_json->'counterpart', "
+                    "value_json->'parties' "
                     "FROM registry_projection.company_history_event "
                     "WHERE projection_run_id = %s AND company_id = %s "
                     # D-03: newest first, so a LIMIT keeps the newest
@@ -386,6 +398,14 @@ def get_projected_company_history(registration_number: str, *, conn=None,
                     + ("LIMIT %s" if limit else "") + "",
                     (run_id, row[0]) + ((limit,) if limit else ())).fetchall()
             ]
+            for event in events:
+                # a plan stores only its parties; expose the counterpart side
+                # as a derived payload field (value_json itself stays source-
+                # shaped, parties or counterpart only).
+                if event["event_type"] == "MERGER" \
+                        and event["counterpart"] is None and event["parties"]:
+                    event["counterpart"] = projection.merger_counterpart(event)
+            return events
         except psycopg.Error as exc:
             _operational_event("projection_read_failed",
                                {"error": repr(exc)})
@@ -745,22 +765,46 @@ def get_skraseting_person_history(
             # D-03: dedup (one source event may repeat across notices)
             # BEFORE the LIMIT, newest first; count and first date are
             # window aggregates over the whole deduplicated set.
+            # Fix round 1 #1: company_person_role is unique without
+            # source_event_id, so one event may have only a role row of the
+            # other type (e.g. a BOARD_CHANGE with only a MANAGEMENT role).
+            # Reach each history event through ANY linked role of this person
+            # in the same company/source event, then label it from the EVENT
+            # type, never from the role row. role_title comes from a role row
+            # whose role_type matches the event type, when one exists.
+            event_role_type = """CASE he.event_type
+                         WHEN 'BOARD_CHANGE' THEN 'BOARD'
+                         WHEN 'MANAGEMENT_CHANGE' THEN 'MANAGEMENT'
+                         WHEN 'AUDITOR_CHANGE' THEN 'AUDITOR'
+                       END"""
+            event_date_sql = governing_date_sql("he")
             rows = c.execute(
                 f"""SELECT d.*, count(*) OVER () AS total_events,
                           min(d.event_date) OVER () AS first_event_date
                    FROM (
-                   SELECT DISTINCT ON (pr.id, he.event_type, he.action,
-                                       event_date)
+                   SELECT DISTINCT ON (pr.company_id, he.source_event_id,
+                                       he.event_type, he.action, he.entity_key,
+                                       {event_date_sql},
+                                       he.value_json->>'origin',
+                                       CASE WHEN he.id IS NULL THEN pr.id
+                                            ELSE 0 END)
                           l.canonical_entity_id AS person_canonical_id,
                           l.registration_number AS person_registration_number,
-                          pr.id AS person_role_id, pr.company_id,
-                          pr.role_type, pr.role_title, pr.person_name,
+                          COALESCE(match_role.id, pr.id) AS person_role_id,
+                          pr.company_id,
+                          CASE he.event_type
+                            WHEN 'BOARD_CHANGE' THEN 'BOARD'
+                            WHEN 'MANAGEMENT_CHANGE' THEN 'MANAGEMENT'
+                            WHEN 'AUDITOR_CHANGE' THEN 'AUDITOR'
+                          END AS role_type,
+                          match_role.role_title, pr.person_name,
                           pr.entity_normalized, pr.source_document_id,
-                          pr.source_event_id,
+                          he.source_event_id,
                           s.registration_number AS company_registration_number,
                           cl.canonical_entity_id AS company_canonical_id,
                           he.event_type, he.action,
-                          {governing_date_sql("he")} AS event_date
+                          he.value_json->>'origin' AS origin,
+                          {event_date_sql} AS event_date
                    FROM registry_projection.entity_link l
                    JOIN registry_projection.company_person_role pr
                      ON pr.id = l.person_role_id
@@ -776,15 +820,27 @@ def get_skraseting_person_history(
                      ON he.projection_run_id = l.projection_run_id
                     AND he.company_id = pr.company_id
                     AND he.source_event_id = pr.source_event_id
-                    AND (pr.entity_normalized IS NULL
-                         OR he.entity_key = pr.entity_normalized)
+                    AND he.entity_key = pr.entity_normalized
+                    AND he.event_type IN ('BOARD_CHANGE',
+                                          'MANAGEMENT_CHANGE',
+                                          'AUDITOR_CHANGE')
+                   LEFT JOIN registry_projection.company_person_role match_role
+                     ON match_role.projection_run_id = pr.projection_run_id
+                    AND match_role.company_id = pr.company_id
+                    AND match_role.source_event_id = pr.source_event_id
+                    AND match_role.entity_normalized = pr.entity_normalized
+                    AND match_role.source_scope = pr.source_scope
+                    AND match_role.role_type = {event_role_type}
                    WHERE l.projection_run_id = %s
                      AND l.entity_type = 'PERSON'
                      AND l.link_status = 'LINKED'
                      AND l.canonical_entity_id = %s
                      AND pr.source_scope = 'HISTORICAL_EVENT'
-                   ORDER BY pr.id, he.event_type, he.action, event_date,
-                            cl.canonical_entity_id) d
+                   ORDER BY pr.company_id, he.source_event_id,
+                            he.event_type, he.action, he.entity_key,
+                            {event_date_sql},
+                            he.value_json->>'origin',
+                            CASE WHEN he.id IS NULL THEN pr.id ELSE 0 END) d
                    ORDER BY d.event_date DESC NULLS LAST, d.person_role_id"""
                 + (" LIMIT %s" if limit else ""),
                 (run_id, canonical_entity_id)
@@ -796,7 +852,7 @@ def get_skraseting_person_history(
                 (person_canonical_id, _preg, role_id, company_id, role_type,
                  role_title, person_name, entity_normalized, source_doc,
                  source_event_id, company_registration_number,
-                 company_canonical_id, event_type, action, event_date,
+                 company_canonical_id, event_type, action, origin, event_date,
                  total_events, first_event_date) = row
                 events.append({
                     "person_role_id": role_id,
@@ -809,6 +865,7 @@ def get_skraseting_person_history(
                     "normalized_name": entity_normalized,
                     "event_type": event_type,
                     "action": action,
+                    "origin": origin,
                     "event_date": str(event_date) if event_date else None,
                     "source_document_id": source_doc,
                     "source_event_id": source_event_id,

@@ -302,12 +302,17 @@ def test_pilot_foundation_lysing_layout_is_lossless():
     """Live discovery (c8023/c8664): FOUNDATION notices (Stovningardato,
     Stovnarar, Kapitalur, Inngjaldingarháttur...) are a layout the parser
     does not structure - everything must be retained verbatim, the regnr
-    gate must still verify, and no address may be misattributed."""
+    gate must still verify, and no address may be misattributed.
+
+    E2 changes the initial-member semantics: the action-prefix-free Stjórn
+    line is an APPOINTED founding entry (origin='FOUNDING'), not a lost
+    change - while the surrounding scalar sections stay verbatim evidence.
+    """
     notice = parse_lysing_pdf(_fixture("lys_33208_20-06-2022.bin.txt"))
     assert notice["registration_number"] == "8023"
     assert notice["journal_number"] == "22-478"
-    # D-06: the unsorted Stjórn line is a possibly lost change -> review
-    assert notice["review_reasons"] == ["MEMBERSHIP_UNSORTED"]
+    # the founding member is structured, so nothing is left unsorted
+    assert notice["review_reasons"] == []
     labels = {u["label"] for u in notice["unknown_sections"]}
     assert {"Stovningardato", "Viðtøkudato", "Inngjaldingarháttur",
             "Roknskaparár", "Fyrsta roknskaparár"} <= labels
@@ -315,20 +320,49 @@ def test_pilot_foundation_lysing_layout_is_lossless():
     types = {(c["type"], c["action"]) for c in notice["changes"]}
     assert ("NAME_CHANGE", "CHANGED") in types
     assert ("CAPITAL_CHANGE", "CHANGED") in types
-    # the founding Stjórn line (member-paren without action prefix) stays
-    # verbatim as leftover evidence, never a fabricated change
-    leftover = [u for u in notice["unknown_sections"]
-                if u["label"] == "(Stjórn usorterede linjer)"]
-    assert leftover and '385eb151942ca1fb' in {
-        H(part.strip()) for part in re.split(r"[,\n]", leftover[0]["verbatim"])}
+    # the founding Stjórn line becomes the dated first management entry
     structured_stjorn = [c for c in notice["changes"]
                          if c["type"] == "MANAGEMENT_CHANGE"]
-    assert structured_stjorn == []
+    assert [(c["action"], c["origin"], c["effective_date"],
+             H(c["entity"])) for c in structured_stjorn] == [
+        ("APPOINTED", "FOUNDING", "2022-06-16", '385eb151942ca1fb')]
+    assert '385eb151942ca1fb' in {
+        H(part.strip())
+        for part in re.split(r"[,\n]", structured_stjorn[0]["raw_text"])}
+    # nothing is left under the Stjórn membership label
+    assert not [u for u in notice["unknown_sections"]
+                if u["label"] == "(Stjórn usorterede linjer)"]
 
 
 # ---------------------------------------------------------------------------
 # 100-company validation parser fixes (each backed by a real fetched fixture)
 # ---------------------------------------------------------------------------
+
+def test_stovningardato_with_op_line_in_any_section_is_not_founding():
+    """Fix round 1 #4: scan EVERY section for an op line.
+
+    The splitter attaches ``Farin úr nevndini:`` to the non-membership
+    ``Navn`` section when no ``Nevnd:`` label precedes it. The founding
+    decision must still see it, so the bare ``Grannskoðari`` line stays a
+    leftover under review instead of becoming a FOUNDING auditor.
+    """
+    text = (
+        "12.03.2021\n"
+        "Skrásetingar-nr.  P/F  9001,  P/F Test, 100 Tórshavn.\n"
+        "Stovningardato:  25-10-1977\n"
+        "Navn:  P/F Nýtt Navn\n"
+        "Farin úr nevndini: Anna Ø, Øvegisgøta 5, 100 Tórshavn\n"
+        "Grannskoðari:\n"
+        "Jógvan Test, Vegur 3, 100 Tórshavn\n"
+        "Skráseting Føroya tann  12. mars 2021\n"
+    )
+    notice = parse_lysing_pdf(text)
+    assert [c["type"] for c in notice["changes"]] == ["NAME_CHANGE"]
+    assert not [c for c in notice["changes"] if c.get("origin") == "FOUNDING"]
+    assert "MEMBERSHIP_UNSORTED" in notice["review_reasons"]
+    assert any(u["label"] == "(Grannskoðari usorterede linjer)"
+               for u in notice["unknown_sections"])
+
 
 def test_100val_glued_nevnd_oneline_board_removal():
     """c2400 lys 27798: 'Nevnd  Farin úr nevndini:' glued on one line."""

@@ -151,7 +151,7 @@ def test_person_history_page_renders_entity_context(client):
     assert 'i fuld log' not in r.text and 'Åbn fuld log' not in r.text
 
 
-@pytest.mark.usefixtures("active_projection")  # needs run 33 (H-6)
+@pytest.mark.usefixtures("active_projection")  # needs the baseline run (H-6)
 def test_person_history_only_this_persons_events(client):
     """Historical Skráseting events are only this person's (section 8/9).
 
@@ -162,7 +162,13 @@ def test_person_history_only_this_persons_events(client):
     recent 10 with budget note.
     """
     events = consumer.get_skraseting_person_history(9298) or []
-    assert len(events) == 25
+    # run 34 (X3): 25 in run 33 + 10 founding entries + 1 R-ADDR link = 36.
+    # X5b review #7's role/event join briefly hid 3 real BOARD_CHANGE
+    # appointments (companies 8320/8404/8818) that have only a MANAGEMENT
+    # role row. Fix round 1 keeps them, labelled from the event type, and
+    # still shows every event exactly once: re-measured on the run-34
+    # projection clone pdfhist_test_x5b_proj = 36, no duplicates.
+    assert len(events) == 36
     # default budget: 10 most recent + Vis alle
     r = client.get("/persons/9298/history")
     assert r.status_code == 200
