@@ -87,6 +87,33 @@ export REGISTRY_ANALYTICS_GRAPH_ENABLED=false
 export CI_ADMIN_DSN="postgresql://${PGUSER}@${PGHOST}:${PGPORT}/postgres"
 export PYTHONDONTWRITEBYTECODE=1
 
+# A fresh cluster (the postgres:18 service container) has no heimdal_reader
+# role, but schema.sql and the migration ledger grant to it. Create the roles
+# the tests and migrations expect, idempotently, before the gate.
+# HEIMDAL_CI_EXTRA_ROLES exists only for the local proof: it adds LOGIN roles
+# with no privileges, so a role that is absent here can exercise the same SQL.
+ensure_roles() {
+  python3 - <<'PY'
+import os
+
+import psycopg
+from psycopg import sql
+
+roles = ["heimdal_reader"] + os.environ.get("HEIMDAL_CI_EXTRA_ROLES", "").split()
+with psycopg.connect(os.environ["CI_ADMIN_DSN"], autocommit=True) as conn:
+    for role in roles:
+        conn.execute(sql.SQL("""
+DO $do$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = {role}) THEN
+    EXECUTE format('CREATE ROLE %I LOGIN', {role});
+  END IF;
+END
+$do$
+""").format(role=sql.Literal(role)))
+PY
+}
+
 drop_test_db() {
   python3 - "$HEIMDAL_TEST_DB" <<'PY' >/dev/null 2>&1 || true
 import os
@@ -122,8 +149,11 @@ psycopg.connect(os.environ["CI_ADMIN_DSN"], connect_timeout=3).close()' 2>/dev/n
   sleep 2
 done
 
+ensure_roles
+
 echo "== public CI (public snapshot)"
 echo "   postgres: ${PGUSER}@${PGHOST}:${PGPORT}"
+echo "   roles:    heimdal_reader (created if missing)"
 echo "   test DB:  ${HEIMDAL_TEST_DB}"
 echo "   not run:  clone tests, baseline projection/acceptance, real-PDF fixtures"
 echo "             (none of them is in the public snapshot; each SKIP says why)"

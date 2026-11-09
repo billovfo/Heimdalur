@@ -18,8 +18,8 @@ def test_workflow_is_pinned_and_public_only():
     assert "push:" in text and "pull_request:" in text
     assert "branches: [main]" in text
     assert "ubuntu-latest" in text
-    assert "actions/checkout@v4" in text
-    assert "actions/setup-python@v5" in text
+    assert "actions/checkout@v5" in text
+    assert "actions/setup-python@v6" in text
     assert "python-version: '3.14'" in text
     assert "allow-prereleases: true" in text
     assert "postgres:18" in text
@@ -43,6 +43,16 @@ def test_public_runner_never_uses_private_inputs():
 def test_public_runner_is_valid_shell():
     result = subprocess.run(["bash", "-n", str(SCRIPT)], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+def test_public_runner_creates_the_reader_role_before_the_gate():
+    """A fresh postgres:18 service has no heimdal_reader; schema.sql grants to it."""
+    text = SCRIPT.read_text(encoding="utf-8")
+    assert "heimdal_reader" in text
+    assert "FROM pg_roles WHERE rolname" in text
+    assert "IF NOT EXISTS" in text
+    assert "CREATE ROLE %I LOGIN" in text
+    assert text.index("\nensure_roles\n") < text.index("HEIMDAL_GATE_INLINE=1 tools/gate.sh")
 
 
 def test_workflow_is_guarded_to_the_public_repo():
